@@ -1,0 +1,50 @@
+#' Network visualization groups options
+#'
+#' Network visualization groups options. For full documentation, have a look at \link{visDocumentation}.
+#'
+#' @param graph : a visNetwork object
+#' @param useDefaultGroups : Boolean. Default to true. If your nodes have groups defined that are not in the Groups module, the module loops over the groups it does have, allocating one for each unknown group. When all are used, it goes back to the first group. By setting this to false, the default groups will not be used in this cycle. 
+#' @param groupname : String. Name of target group.
+#' @param ... : \link{visNodes}. You can add multiple groups containing styling information that applies to a certain subset of groups. All options described in the nodes module that make sense can be used here (you're not going to set the same id or x,y position for a group of nodes)
+#'
+#' @examples
+#'
+#' nodes <- data.frame(id = 1:10, label = paste("Label", 1:10), 
+#'  group = sample(c("A", "B"), 10, replace = TRUE))
+#' edges <- data.frame(from = c(2,5,10), to = c(1,2,10))
+#'
+#' visNetwork(nodes, edges, legend = TRUE) %>%
+#'  visGroups(groupname = "A", color = "red", shape = "database") %>%
+#'  visGroups(groupname = "B", color = "yellow", shape = "triangle")
+#'  
+#'@seealso \link{visNodes} for nodes options, \link{visEdges} for edges options, \link{visGroups} for groups options, 
+#'\link{visLayout} & \link{visHierarchicalLayout} for layout, \link{visPhysics} for physics, \link{visInteraction} for interaction, ...
+#'
+#'
+#' @export
+#'
+
+visGroups <- function(graph,
+                      useDefaultGroups = NULL,
+                      groupname = NULL,
+                      ...){
+
+  groups <- list()
+  groups$useDefaultGroups = useDefaultGroups
+  graph$x$options$groups <- mergeLists(graph$x$options$groups, groups)
+  
+  params <- list(...)
+  
+  if(length(params) > 0){
+    if(is.null(groupname)){
+      stop("Must have a groupname to identify group")
+    }
+    
+    groups <- list(list(...))
+    names(groups) <- groupname
+    
+    graph$x$options$groups <- mergeLists(graph$x$options$groups, groups)
+  }
+  
+  graph
+}

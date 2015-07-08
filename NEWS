@@ -1,0 +1,24 @@
+visNetwork 0.0.4
+--------------------------------------------------------------------------------
+  
+  * remove bootstrap dependance
+  * move to vis.js 4.4.0 so, a lot of changes...
+    * new visConfigure function
+    * new visInteraction function
+    * new visLayout function
+    * remove visTooltip
+    * move and rename argument as vis.js change...
+    * initializa some clustering function....
+    * ....
+  
+visNetwork 0.0.3
+--------------------------------------------------------------------------------
+  
+  * add shiny interaction when use nodesIdSelection
+
+visNetwork 0.0.2
+--------------------------------------------------------------------------------
+  
+  * Move highlight.nearest argument from visNetwork to visOptions, and rename as highlightNearest
+  * Move id.selection argument from visNetwork to visOptions, and rename as nodesIdSelection
+  * Move legend.width argument to visNetwork

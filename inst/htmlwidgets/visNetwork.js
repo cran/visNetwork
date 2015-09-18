@@ -25,6 +25,15 @@ if (!Function.prototype.bind) {
   };
 }
 
+function clone(obj) {
+    if(obj === null || typeof(obj) != 'object')
+        return obj;    
+    var temp = new obj.constructor(); 
+    for(var key in obj)
+        temp[key] = clone(obj[key]);    
+    return temp;
+}
+
 HTMLWidgets.widget({
   
   name: 'visNetwork',
@@ -140,6 +149,19 @@ HTMLWidgets.widget({
       graph.setAttribute('style', 'float:right; width:100%;height:100%');
     }
     
+    // fontAwesome unicode
+    if(x.options.groups){
+      for (var gr in x.options.groups){
+        if(x.options.groups[gr].icon){
+          x.options.groups[gr].icon.code = JSON.parse( '"'+'\\u' + x.options.groups[gr].icon.code + '"');
+        }
+      }
+    }
+    
+    if(x.options.nodes.icon){
+        x.options.nodes.icon.code = JSON.parse( '"'+'\\u' + x.options.nodes.icon.code + '"');
+    }
+
     document.getElementById("maindiv"+el.id).appendChild(graph);
     
     //*************************
@@ -175,7 +197,12 @@ HTMLWidgets.widget({
       };
       
       if(x.options.groups){
-        optionslegend.groups = x.options.groups;
+        optionslegend.groups = clone(x.options.groups);
+        for (var grp in optionslegend.groups) {
+          if(optionslegend.groups[grp].shape === "icon"){
+            optionslegend.groups[grp].icon.size = 50;
+          }
+        }
       }
       
       instance.legend = new vis.Network(document.getElementById("legend"+el.id), datalegend, optionslegend);
@@ -206,6 +233,7 @@ HTMLWidgets.widget({
       };
     } 
     
+
     var options = x.options;
     
     //*************************
@@ -266,7 +294,7 @@ HTMLWidgets.widget({
     
     // create network
     instance.network = new vis.Network(document.getElementById("graph"+el.id), data, options);
-
+    
     // add Events
     for (var key in x.events) {
       instance.network.on(key, x.events[key]);
@@ -698,17 +726,22 @@ HTMLWidgets.widget({
     //*************************
     //resize
     //*************************
-    window.onresize = function() {
-      //alert("resize");
+    
+    /*window.onresize = function() {
+
       if(instance.network)
         instance.network.fit();
       if(instance.legend)
         instance.legend.fit();
-    }
+    } */
       
   },
   
   resize: function(el, width, height, instance) {
+      if(instance.network)
+        instance.network.fit();
+      if(instance.legend)
+        instance.legend.fit();
   }
   
 });

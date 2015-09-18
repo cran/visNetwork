@@ -42,7 +42,7 @@ visNetwork(nodes, edges) %>%
   visGroups(groupname = "A", color = "darkblue") %>%    # darkblue for group "A"
   visGroups(groupname = "B", color = "red")             # red for group "B"
 
-## ----, echo=FALSE--------------------------------------------------------
+## ---- echo=FALSE---------------------------------------------------------
 nb <- 10
 nodes <- data.frame(id = 1:nb, label = paste("Label", 1:nb),
  group = sample(LETTERS[1:3], nb, replace = TRUE), value = 1:nb,
@@ -62,7 +62,7 @@ visNetwork(nodes, edges, width = "100%",  legend = TRUE)
 ## ------------------------------------------------------------------------
 visNetwork(nodes, edges, width = "100%") %>% visOptions(highlightNearest = TRUE, nodesIdSelection = TRUE)
 
-## ----, echo = FALSE------------------------------------------------------
+## ---- echo = FALSE-------------------------------------------------------
 nodes <- data.frame(id = 1:nb, label = paste("Label", 1:nb),
  group = sample(1:nb, nb, replace = TRUE), value = 1:nb,
  title = paste0("<p>", 1:nb,"<br>Tooltip !</p>"), stringsAsFactors = FALSE)
@@ -80,7 +80,7 @@ visNetwork(nodes, edges, width = "100%") %>% visInteraction(navigationButtons = 
 ## ------------------------------------------------------------------------
 visNetwork(nodes, edges, width = "100%") %>% visOptions(manipulation = TRUE)
 
-## ----, echo = FALSE------------------------------------------------------
+## ---- echo = FALSE-------------------------------------------------------
 nodes <- data.frame(id = 1:7)
 
 edges <- data.frame(from = c(1,2,2,2,3,3),
@@ -97,18 +97,40 @@ visNetwork(nodes, edges, width = "100%") %>% visEdges(arrow = "from") %>%
 visNetwork(nodes, edges, width = "100%") %>% 
   visInteraction(dragNodes = FALSE, dragView = FALSE, zoomView = FALSE)
 
-## ----, eval = FALSE------------------------------------------------------
+## ------------------------------------------------------------------------
+nodes <- data.frame(id = 1:3, group = c("B", "A", "B"))
+edges <- data.frame(from = c(1,2), to = c(2,3))
+
+visNetwork(nodes, edges, width = "100%", legend = TRUE) %>%
+  visGroups(groupname = "A", shape = "icon", icon = list(code = "f0c0", size = 75)) %>%
+  visGroups(groupname = "B", shape = "icon", icon = list(code = "f007", color = "red")) %>%
+  addFontAwesome()
+
+## ---- eval = TRUE, echo = TRUE-------------------------------------------
+nodes <- data.frame(id = 1:10, label = paste("Label", 1:10), 
+   group = sample(c("A", "B"), 10, replace = TRUE))
+
+edges <- data.frame(from = c(2,5,10), to = c(1,2,10))
+
+visNetwork(nodes, edges, legend = TRUE, width = "100%") %>%
+   visGroups(groupname = "A", color = "red", shape = "square") %>%
+   visGroups(groupname = "B", color = "yellow", shape = "triangle") %>%
+   visClusteringByColor(colors = c("red")) %>%
+   visClusteringByGroup(groups = c("B"))
+
+
+## ---- eval = FALSE-------------------------------------------------------
+#  output$mynetwork <- renderVisNetwork({... visOptions(nodesIdSelection = TRUE)}) # created input$mynetwork_selected
+#  
+
+## ---- eval = FALSE-------------------------------------------------------
 #  network <- visNetwork(nodes, edges, width = "100%")
 #  htmlwidgets::saveWidget(network, "network.html")
 
 ## ------------------------------------------------------------------------
 visNetwork(dot = 'dinetwork {1 -> 1 -> 2; 2 -> 3; 2 -- 4; 2 -> 1 }', width = "100%")
 
-## ----, eval = FALSE------------------------------------------------------
+## ---- eval = FALSE-------------------------------------------------------
 #  # don't run here
 #  visNetwork(gephi = 'WorldCup2014.json')
-
-## ----, eval = FALSE------------------------------------------------------
-#  output$mynetwork <- renderVisNetwork({... visOptions(nodesIdSelection = TRUE)}) # created input$mynetwork_selected
-#  
 

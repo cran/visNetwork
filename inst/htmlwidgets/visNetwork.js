@@ -42,7 +42,7 @@ HTMLWidgets.widget({
   
   initialize: function(el, width, height) {
     return {
-    }
+    };
   },
   
   renderValue: function(el, x, instance) {
@@ -51,11 +51,18 @@ HTMLWidgets.widget({
     var nodes;
     var edges;
     
-    // highlight nearest variables
+    // highlight nearest variables & selectedBy
     var allNodes;
     var highlightActive = false;
     var nodesDataset ;
     var edgesDataset ;
+    
+    // selectedBy
+    var allSelNodes;
+    var selectActive = false;
+    var nodesSelDataset ;
+    var edgesSelDataset ;
+    
     
     // clustergin by zoom variables
     var clusterIndex = 0;
@@ -64,20 +71,31 @@ HTMLWidgets.widget({
     var clusterFactor;
     var ctrlwait = 0;
     
+    // legend control
+    var addlegend = false;
+    
     // clear el.id (for shiny...)
     document.getElementById(el.id).innerHTML = "";  
     
+    var changeInput = function(id, data) {
+            Shiny.onInputChange(el.id + '_' + id, data);
+    };
+          
     //*************************
     //idselection
     //*************************
     
     // id nodes selection : add a list on top left
     // actually only with nodes + edges data (not dot and gephi)
+    
     if(x.idselection && x.nodes){  
       var option;
       //Create and append select list
       var selnodes = HTMLWidgets.dataframeToD3(x.nodes);
       var selectList = document.createElement("select");
+      
+      selectList.setAttribute('class', 'dropdown');
+      selectList.setAttribute('style', 'width: 150px; height: 26px');
       
       selectList.id = "nodeSelect"+el.id;
       
@@ -85,25 +103,22 @@ HTMLWidgets.widget({
       
       option = document.createElement("option");
       option.value = "";
-      option.text = "";
+      option.text = "Select by id";
       selectList.appendChild(option);
       
       //Create and append the options
       for (var i = 0; i < selnodes.length; i++) {
         option = document.createElement("option");
-        option.value = selnodes[i]['id'];
-        if(selnodes[i]['label']){
-          option.text = selnodes[i]['label'];
+        option.value = selnodes[i].id;
+        if(selnodes[i].label){
+          option.text = selnodes[i].label;
         }else{
-          option.text = selnodes[i]['id'];
+          option.text = selnodes[i].id;
         }
         selectList.appendChild(option);
       }
       
       if (window.Shiny){
-        var changeInput = function(id, data) {
-          Shiny.onInputChange(el.id + '_' + id, data);
-        };
         changeInput('selected', document.getElementById("nodeSelect"+el.id).value);
       }
       
@@ -119,12 +134,75 @@ HTMLWidgets.widget({
           neighbourhoodHighlight(instance.network.getSelection());
         }
         if (window.Shiny){
-          var changeInput = function(id, data) {
-            Shiny.onInputChange(el.id + '_' + id, data);
-          };
           changeInput('selected', document.getElementById("nodeSelect"+el.id).value);
         }
+        if(x.selectedBy !== undefined){
+          selectNode = document.getElementById('selectedBy'+el.id);
+          selectNode.value = "";
+          if (window.Shiny){
+            changeInput('selectedBy', "");
+          }
+        }
       };
+      var hr = document.createElement("hr");
+      hr.setAttribute('style', 'height:0px; visibility:hidden; margin-bottom:-1px;');
+      document.getElementById(el.id).appendChild(hr);  
+      
+    }
+    
+    //*************************
+    //selectedBy
+    //*************************
+    
+    // selectedBy : add a list on top left
+    // actually only with nodes + edges data (not dot and gephi)
+    if(x.selectedBy !== undefined){  
+      var option2;
+      
+      //Create and append select list
+      var selnodes2 = HTMLWidgets.dataframeToD3(x.nodes);
+      var selectList2 = document.createElement("select");
+      
+      selectList2.setAttribute('class', 'dropdown');
+      selectList2.setAttribute('style', 'width: 150px; height: 26px');
+      
+      selectList2.id = "selectedBy"+el.id;
+      
+      document.getElementById(el.id).appendChild(selectList2);
+      
+      option2 = document.createElement("option");
+      option2.value = "";
+      option2.text = "Select by " + x.selectedBy;
+      selectList2.appendChild(option2);
+      
+      //Create and append the options
+      for (var i2 = 0; i2 < x.selectedValues.length; i2++) {
+        option2 = document.createElement("option");
+        option2.value = x.selectedValues[i2];
+        option2.text = x.selectedValues[i2];
+        selectList2.appendChild(option2);
+      }
+      
+      selectList2.onchange =  function(){
+        if(instance.network){
+          selectedBy = document.getElementById("selectedBy"+el.id).value;
+          selectedHighlight(selectedBy);
+        }
+        if (window.Shiny){
+          changeInput('selectedBy', document.getElementById("selectedBy"+el.id).value);
+        }
+        if(x.idselection){
+          selectNode = document.getElementById('nodeSelect'+el.id);
+          selectNode.value = "";
+          if (window.Shiny){
+            changeInput('selected', "");
+          }
+        }
+      };
+      
+      if (window.Shiny){
+        changeInput('selectedBy', document.getElementById("selectedBy"+el.id).value);
+      }
     }
     
     // divide page
@@ -136,15 +214,27 @@ HTMLWidgets.widget({
     var graph = document.createElement('div');
     graph.id = "graph"+el.id;
     
-    if(x.groups && x.legend){
-      var legendwidth = x.legendWidth*100;
+    if(x.legend !== undefined){
+      if((x.groups && x.legend.useGroups) || (x.legend.nodes !== undefined) || (x.legend.edges !== undefined)){
+        addlegend = true;
+      }
+    }
+    
+    if(addlegend){
+      var legendwidth = x.legend.width*100;
       var legend = document.createElement('div');
+      
+      var pos = x.legend.position;
+      var pos2 = "right";
+      if(pos == "right"){
+        pos2 = "left";
+      }
+      
       legend.id = "legend"+el.id;
-      legend.setAttribute('style', 'float:left; width:'+legendwidth+'%;height:100%');
+      legend.setAttribute('style', 'float:' + pos + '; width:'+legendwidth+'%;height:100%');
       document.getElementById("maindiv"+el.id).appendChild(legend);
       
-      graph.setAttribute('style', 'float:right; width:'+(100-legendwidth)+'%;height:100%');
-      
+      graph.setAttribute('style', 'float:' + pos2 + '; width:'+(100-legendwidth)+'%;height:100%');
     }else{
       graph.setAttribute('style', 'float:right; width:100%;height:100%');
     }
@@ -167,22 +257,12 @@ HTMLWidgets.widget({
     //*************************
     //legend
     //*************************
-    if(x.groups && x.legend){
+    if(addlegend){
       
       var legendnodes = new vis.DataSet();
-      
-      var mynetwork = document.getElementById('legend'+el.id);
-      var lx = - mynetwork.clientWidth / 2 + 50;
-      var ly = - mynetwork.clientWidth / 2 + 50;
-      var step = 70;
-      for (g = 0; g < x.groups.length; g++){
-        legendnodes.add({id: g, x : lx, y : ly+g*step, label: x.groups[g], group: x.groups[g], value: 1, mass:0});
-      }
-      
-      var datalegend = {
-        nodes: legendnodes, 
-        edges: null
-      };
+      var legendedges = null;
+      var datalegend;
+      var tmpnodes;
       
       var optionslegend = {
         interaction:{
@@ -196,17 +276,90 @@ HTMLWidgets.widget({
         }
       };
       
-      if(x.options.groups){
-        optionslegend.groups = clone(x.options.groups);
-        for (var grp in optionslegend.groups) {
-          if(optionslegend.groups[grp].shape === "icon"){
-            optionslegend.groups[grp].icon.size = 50;
+      var mynetwork = document.getElementById('legend'+el.id);
+      var lx = - mynetwork.clientWidth / 2 + 50;
+      var ly = - mynetwork.clientWidth / 2 + 50;
+      var step = 70;
+
+      if(x.groups && x.legend.useGroups){
+    
+        for (var g1 = 0; g1 < x.groups.length; g1++){
+          legendnodes.add({id: null, x : lx, y : ly+g1*step, label: x.groups[g1], group: x.groups[g1], value: 1, mass:0});
+        }
+      
+        if(x.options.groups){
+          optionslegend.groups = clone(x.options.groups);
+          for (var grp in optionslegend.groups) {
+            if(optionslegend.groups[grp].shape === "icon"){
+              optionslegend.groups[grp].icon.size = 50;
+            }
           }
         }
       }
       
-      instance.legend = new vis.Network(document.getElementById("legend"+el.id), datalegend, optionslegend);
+      if(x.legend.nodes !== undefined){
+        
+        tmpnodes = x.legend.nodes;
+        if(tmpnodes.length === undefined){
+          tmpnodes = new Array(tmpnodes);
+        }
+        
+        for (var nd in tmpnodes){
+          if(tmpnodes[nd].icon){
+            tmpnodes[nd].icon.code = JSON.parse( '"'+'\\u' + tmpnodes[nd].icon.code + '"');
+          }
+        }
+
+        for (var g = 0; g < tmpnodes.length; g++){
+          tmpnodes[g].x = lx;
+          tmpnodes[g].y = ly+(g+legendnodes.length)*step;
+          if(tmpnodes[g].value === undefined && tmpnodes[g].size === undefined){
+            tmpnodes[g].value = 1;
+          }
+          if(tmpnodes[g].id !== undefined){
+            tmpnodes[g].id = null;
+          }
+          tmpnodes[g].mass = 0;
+        }
+        legendnodes.add(tmpnodes);
+      }
       
+      if(x.legend.edges !== undefined){
+        legendedges = x.legend.edges;
+        if(legendedges.length === undefined){
+          legendedges = new Array(legendedges);
+        }
+
+        var ctrl = legendnodes.length;
+        
+        for (var edg = 0; edg < (legendedges.length); edg++){
+          
+          legendedges[edg].from = edg*2+1;
+          legendedges[edg].to = edg*2+2;
+          legendedges[edg].physics = false;
+          legendedges[edg].smooth = false;
+          legendedges[edg].value = undefined;
+
+          if(legendedges[edg].arrows === undefined){
+            legendedges[edg].arrows = 'to';
+          }
+          
+          if(legendedges[edg].width === undefined){
+            legendedges[edg].width = 1;
+          }
+
+          legendnodes.add({id: edg*2+1, x : lx - mynetwork.clientWidth/3, y : ly+ctrl*step, size : 0.0001, hidden : true, shape : "square", mass:0});
+          legendnodes.add({id: edg*2+2, x : lx + mynetwork.clientWidth/3, y : ly+ctrl*step, size : 0.0001, hidden : true, shape : "square", mass:0});
+          ctrl = ctrl+1;
+        }
+      }
+      
+      datalegend = {
+        nodes: legendnodes, 
+        edges: legendedges       
+      };
+          
+      instance.legend = new vis.Network(document.getElementById("legend"+el.id), datalegend, optionslegend);
     }
     
     if(x.nodes){
@@ -296,8 +449,89 @@ HTMLWidgets.widget({
     instance.network = new vis.Network(document.getElementById("graph"+el.id), data, options);
     
     // add Events
-    for (var key in x.events) {
-      instance.network.on(key, x.events[key]);
+    if(x.events !== undefined){
+      for (var key in x.events) {
+        instance.network.on(key, x.events[key]);
+      }
+    }
+
+    //*************************
+    // Selected Highlight
+    //*************************
+  
+    function selectedHighlight(value) {
+    
+      var sel = x.selectedBy;
+          
+      if(sel == "label"){
+        sel = "hiddenLabel";
+      }
+      
+      if(sel == "color"){
+        sel = "hiddenColor";
+      }
+    
+      if (value !== "") {
+      
+        selectActive = true;
+        
+        // mark all nodes as hard to read.
+        for (var nodeId in allSelNodes) {
+          if (allSelNodes[nodeId].hiddenColor === undefined & allSelNodes[nodeId].color !== 'rgba(200,200,200,0.5)') {
+            allSelNodes[nodeId].hiddenColor = allSelNodes[nodeId].color;
+          }
+          allSelNodes[nodeId].color = 'rgba(200,200,200,0.5)';
+          if (allSelNodes[nodeId].hiddenLabel === undefined) {
+            allSelNodes[nodeId].hiddenLabel = allSelNodes[nodeId].label;
+            allSelNodes[nodeId].label = undefined;
+          }
+        
+          if(allSelNodes[nodeId][sel] === value){
+            if (allSelNodes[nodeId].hiddenColor !== undefined) {
+              allSelNodes[nodeId].color = allSelNodes[nodeId].hiddenColor;
+            }else{
+              allSelNodes[nodeId].color = undefined;
+            }
+            if (allSelNodes[nodeId].hiddenLabel !== undefined) {
+              allSelNodes[nodeId].label = allSelNodes[nodeId].hiddenLabel;
+              allSelNodes[nodeId].hiddenLabel = undefined;
+            }
+          }
+        }
+      }
+      else if (selectActive === true) {
+      // reset all nodes
+        for (var nodeId in allSelNodes) {
+          if (allSelNodes[nodeId].hiddenColor !== undefined) {
+            allSelNodes[nodeId].color = allSelNodes[nodeId].hiddenColor;
+            allSelNodes[nodeId].hiddenColor = undefined;
+          }else{
+            allSelNodes[nodeId].color = undefined;
+          }
+          if (allSelNodes[nodeId].hiddenLabel !== undefined) {
+            allSelNodes[nodeId].label = allSelNodes[nodeId].hiddenLabel;
+            allSelNodes[nodeId].hiddenLabel = undefined;
+          }
+        }
+      
+        selectActive = false
+      }
+    
+      // transform the object into an array
+      var updateArray = [];
+      for (nodeId in allSelNodes) {
+        if (allSelNodes.hasOwnProperty(nodeId)) {
+          updateArray.push(allSelNodes[nodeId]);
+        }
+      }
+      nodesSelDataset.update(updateArray);
+    } 
+  
+   // actually only with nodes + edges data (not dot and gephi)
+    if(x.selectedBy !== undefined && x.nodes){
+      nodesSelDataset = nodes; 
+      edgesSelDataset = edges;
+      allSelNodes = nodesSelDataset.get({returnType:"Object"});
     }
     
     //*************************
@@ -322,7 +556,7 @@ HTMLWidgets.widget({
         highlightActive = true;
         var i,j;
         var selectedNode = params.nodes[0];
-        var degrees = 2;
+        var degrees = x.degree;
         
         // mark all nodes as hard to read.
         for (var nodeId in allNodes) {
@@ -335,16 +569,29 @@ HTMLWidgets.widget({
             allNodes[nodeId].label = undefined;
           }
         }
-        var connectedNodes = instance.network.getConnectedNodes(selectedNode);
+        
+        if(degrees > 0){
+          var connectedNodes = instance.network.getConnectedNodes(selectedNode);
+        }else{
+          var connectedNodes = [selectedNode];
+        }
+        
         var allConnectedNodes = [];
         
-        // get the second degree nodes
-        for (i = 1; i < degrees; i++) {
-          for (j = 0; j < connectedNodes.length; j++) {
-            allConnectedNodes = allConnectedNodes.concat(instance.network.getConnectedNodes(connectedNodes[j]));
+        // get the nodes to color
+        if(degrees >= 2){
+          for (i = 2; i <= degrees; i++) {
+            var currentlength = connectedNodes.length;
+            for (j = 0; j < currentlength; j++) {
+              connectedNodes = connectedNodes.concat(instance.network.getConnectedNodes(connectedNodes[j]));
+            }
           }
         }
         
+        // nodes to just label
+        for (j = 0; j < connectedNodes.length; j++) {
+            allConnectedNodes = allConnectedNodes.concat(instance.network.getConnectedNodes(connectedNodes[j]));
+        }
 
         // all second degree nodes get a different color and their label back
         for (i = 0; i < allConnectedNodes.length; i++) {
@@ -388,6 +635,15 @@ HTMLWidgets.widget({
             changeInput('selected', "");
           }
         }
+        
+        if(x.selectedBy !== undefined){
+          selectNode = document.getElementById('selectedBy'+el.id);
+          selectNode.value = "";
+          if (window.Shiny){
+            changeInput('selectedBy', "");
+          }
+        }
+        
         // reset all nodes
 
         for (var nodeId in allNodes) {
@@ -405,6 +661,13 @@ HTMLWidgets.widget({
         
         highlightActive = false
       }
+      else if(x.selectedBy !== undefined){
+        selectNode = document.getElementById('selectedBy'+el.id);
+        selectNode.value = "";
+        if (window.Shiny){
+          changeInput('selectedBy', "");
+        }
+      }
       
       // transform the object into an array
       var updateArray = [];
@@ -416,23 +679,36 @@ HTMLWidgets.widget({
       nodesDataset.update(updateArray);
     }
     
-    function onClickIDSlection(selectedItems) {
+    function onClickIDSelection(selectedItems) {
       var selectNode;
       var changeInput = function(id, data) {
         Shiny.onInputChange(el.id + '_' + id, data);
       };
       
-      if (selectedItems.nodes.length !== 0) {
-        selectNode = document.getElementById('nodeSelect'+el.id);
-        selectNode.value = selectedItems.nodes;
-        if (window.Shiny){
-          changeInput('selected', selectNode.value);
-        }
-      }else{
-        selectNode = document.getElementById('nodeSelect'+el.id);
-        selectNode.value = "";
-        if (window.Shiny){
-          changeInput('selected', "");
+      if(x.idselection){
+        if (selectedItems.nodes.length !== 0) {
+          selectNode = document.getElementById('nodeSelect'+el.id);
+          selectNode.value = selectedItems.nodes;
+          if (window.Shiny){
+            changeInput('selected', selectNode.value);
+          }
+        }else{
+          selectNode = document.getElementById('nodeSelect'+el.id);
+          selectNode.value = "";
+          if (window.Shiny){
+            changeInput('selected', "");
+          }
+        } 
+      }
+      
+      if(x.selectedBy !== undefined){
+        if (selectedItems.nodes.length === 0) {
+          selectNode = document.getElementById('selectedBy'+el.id);
+          selectNode.value = "";
+          selectedHighlight("");
+          if (window.Shiny){
+            changeInput('selectedBy', "");
+          }
         }
       }
     }
@@ -443,8 +719,8 @@ HTMLWidgets.widget({
       edgesDataset = edges;
       allNodes = nodesDataset.get({returnType:"Object"});
       instance.network.on("click",neighbourhoodHighlight);
-    }else if(x.idselection && x.nodes){
-      instance.network.on("click",onClickIDSlection);
+    }else if((x.idselection || x.selectedBy !== undefined) && x.nodes){
+      instance.network.on("click",onClickIDSelection);
     }
     
     //*************************

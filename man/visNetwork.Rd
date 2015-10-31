@@ -5,7 +5,7 @@
 \title{Network visualization}
 \usage{
 visNetwork(nodes = NULL, edges = NULL, dot = NULL, gephi = NULL,
-  legend = FALSE, legend.width = 0.2, width = NULL, height = NULL)
+  width = NULL, height = NULL, ...)
 }
 \arguments{
 \item{nodes}{: data.frame with nodes informations. Needed at least column "id". See \link{visNodes}
@@ -33,13 +33,11 @@ See See \link{visEdges}
 
 \item{gephi}{: Json export gephi path file.}
 
-\item{legend}{: Boolean. Default to FALSE. A little bit experimental. Put a legend in case of groups.}
-
-\item{legend.width}{: Number, in [0,...,1]. Default to 0.2}
-
 \item{width}{: Width (optional, defaults to automatic sizing)}
 
 \item{height}{: Height (optional, defaults to automatic sizing)}
+
+\item{...}{: Don't use.}
 }
 \description{
 Network visualization using vis.js library. For full documentation, have a look at \link{visDocumentation}.
@@ -82,12 +80,20 @@ edges <- data.frame(from = trunc(runif(15)*(15-1))+1,
 
 visNetwork(nodes, edges) \%>\% visOptions(highlightNearest = TRUE)
 
-# try a legend...
-visNetwork(nodes, edges, legend = TRUE)
-
 # try an id node selection
 visNetwork(nodes, edges) \%>\%
  visOptions(highlightNearest = TRUE, nodesIdSelection = TRUE)
+
+# or add a selection on another column
+visNetwork(nodes, edges) \%>\%
+ visOptions(selectedBy = "group")
+
+nodes$sel <- sample(c("sel1", "sel2"), nrow(nodes), replace = TRUE)
+visNetwork(nodes, edges) \%>\%
+ visOptions(selectedBy = "sel")
+
+# add legend
+visNetwork(nodes, edges) \%>\% visLegend()
 
 # directed network
 visNetwork(nodes, edges) \%>\%
@@ -128,9 +134,9 @@ visNetwork(nodes, edges) \%>\%
 
 # Save a network
 \dontrun{
-network <- visNetwork(nodes, edges, legend = TRUE) \%>\%
+network <- visNetwork(nodes, edges) \%>\%
  visOptions(highlightNearest = TRUE, nodesIdSelection = TRUE,
- manipulation = TRUE)
+ manipulation = TRUE) \%>\% visLegend()
 
 htmlwidgets::saveWidget(network, "network.html")
 }
@@ -147,6 +153,8 @@ visNetwork(gephi = 'WorldCup2014.json') \%>\% visPhysics(stabilization = FALSE, 
 }
 }
 \seealso{
-\link{visOptions}, \link{visNodes}, \link{visEdges}, \link{visGroups}, \link{visEvents}
+\link{visNodes} for nodes options, \link{visEdges} for edges options, \link{visGroups} for groups options,
+\link{visLegend} for adding legend, \link{visOptions} for custom option, \link{visLayout} & \link{visHierarchicalLayout} for layout,
+\link{visPhysics} for control physics, \link{visInteraction} for interaction, \link{visDocumentation}, \link{visEvents}, \link{visConfigure} ...
 }
 

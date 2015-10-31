@@ -5,6 +5,10 @@ nodes <- data.frame(id = 1:3)
 edges <- data.frame(from = c(1,2), to = c(1,3))
 visNetwork(nodes, edges, width = "100%")
 
+## ---- eval = FALSE-------------------------------------------------------
+#  visDocumentation()
+#  vignette("Introduction-to-visNetwork") # with CRAN version
+
 ## ------------------------------------------------------------------------
 nodes <- data.frame(id = 1:10, 
                     label = paste("Node", 1:10),                                 # add labels on nodes
@@ -36,7 +40,7 @@ visNetwork(nodes, edges, width = "100%")
 nodes <- data.frame(id = 1:5, group = c(rep("A", 2), rep("B", 3)))
 edges <- data.frame(from = c(2,5,3,3), to = c(1,2,4,2))
 
-visNetwork(nodes, edges) %>% 
+visNetwork(nodes, edges, width = "100%") %>% 
   visNodes(shape = "square") %>%                        # square for all nodes
   visEdges(arrow ="to") %>%                             # arrow "to" for all edges
   visGroups(groupname = "A", color = "darkblue") %>%    # darkblue for group "A"
@@ -54,13 +58,34 @@ edges <- data.frame(from = trunc(runif(nb)*(nb-1))+1,
  title = paste0("<p>", 1:nb,"<br>Edge Tooltip !</p>"))
 
 ## ------------------------------------------------------------------------
+visNetwork(nodes, edges, width = "100%") %>% visLegend()
+
+## ------------------------------------------------------------------------
+visNetwork(nodes, edges, width = "100%") %>% 
+  visLegend(useGroups = FALSE, addNodes = data.frame(label = "Nodes", shape = "circle"), 
+            addEdges = data.frame(label = "link", color = "black"))
+
+## ------------------------------------------------------------------------
 visNetwork(nodes, edges, width = "100%") %>% visOptions(highlightNearest = TRUE)
 
 ## ------------------------------------------------------------------------
-visNetwork(nodes, edges, width = "100%",  legend = TRUE)
+visNetwork(nodes, edges, width = "100%") %>% visOptions(highlightNearest = list(enabled =TRUE,
+                                                        degree = 2))
 
 ## ------------------------------------------------------------------------
-visNetwork(nodes, edges, width = "100%") %>% visOptions(highlightNearest = TRUE, nodesIdSelection = TRUE)
+visNetwork(nodes, edges, width = "100%") %>% 
+  visOptions(highlightNearest = TRUE, nodesIdSelection = TRUE)
+
+## ------------------------------------------------------------------------
+# on "authorised" column
+visNetwork(nodes, edges, width = "100%") %>%
+ visOptions(selectedBy = "group")
+
+## ------------------------------------------------------------------------
+# or new column
+nodes$sel <- sample(c("sel1", "sel2"), nrow(nodes), replace = TRUE)
+visNetwork(nodes, edges, width = "100%") %>%
+ visOptions(selectedBy = "sel")
 
 ## ---- echo = FALSE-------------------------------------------------------
 nodes <- data.frame(id = 1:nb, label = paste("Label", 1:nb),
@@ -101,9 +126,10 @@ visNetwork(nodes, edges, width = "100%") %>%
 nodes <- data.frame(id = 1:3, group = c("B", "A", "B"))
 edges <- data.frame(from = c(1,2), to = c(2,3))
 
-visNetwork(nodes, edges, width = "100%", legend = TRUE) %>%
+visNetwork(nodes, edges, width = "100%") %>%
   visGroups(groupname = "A", shape = "icon", icon = list(code = "f0c0", size = 75)) %>%
   visGroups(groupname = "B", shape = "icon", icon = list(code = "f007", color = "red")) %>%
+  visLegend() %>%
   addFontAwesome()
 
 ## ---- eval = TRUE, echo = TRUE-------------------------------------------

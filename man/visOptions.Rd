@@ -6,7 +6,7 @@
 \usage{
 visOptions(graph, width = NULL, height = NULL, highlightNearest = FALSE,
   nodesIdSelection = FALSE, autoResize = NULL, clickToUse = NULL,
-  manipulation = NULL)
+  manipulation = NULL, selectedBy = NULL)
 }
 \arguments{
 \item{graph}{: a visNetwork object}
@@ -15,8 +15,11 @@ visOptions(graph, width = NULL, height = NULL, highlightNearest = FALSE,
 
 \item{height}{: String. Default to "100\%". The height of the network in pixels or as a percentage.}
 
-\item{highlightNearest}{: Custom Option. Boolean. Default to false. Highlight nearest when clicking a node ?
-This options use click event. Not available for DOT and Gephi.}
+\item{highlightNearest}{: Custom Option. Just a Boolean, or a named list. Default to false. Highlight nearest when clicking a node ? This options use click event. Not available for DOT and Gephi.
+\itemize{
+ \item{"enabled"}{ : Boolean. Default to false. Activated or not ?.}
+ \item{"degree"}{ : Integer. Degree of depth of nodes to be colored. Default to 1}
+}}
 
 \item{nodesIdSelection}{:  Custom Option. Boolean. Default to false. A little bit experimental. Add an id node selection. This options use click event. Not available for DOT and Gephi.}
 
@@ -25,12 +28,38 @@ This options use click event. Not available for DOT and Gephi.}
 \item{clickToUse}{: Boolean. Default to false. When a Network is configured to be clickToUse, it will react to mouse, touch, and keyboard events only when active. When active, a blue shadow border is displayed around the Network. The Network is set active by clicking on it, and is changed to inactive again by clicking outside the Network or by pressing the ESC key.}
 
 \item{manipulation}{: Just a Boolean}
+
+\item{selectedBy}{: Custom option. Column name of node data.frame on which you want to add a list selection. Default to NULL}
 }
 \description{
 Network visualization general options. For full documentation, have a look at \link{visDocumentation}.
 }
+\examples{
+# highlight nearest
+nodes <- data.frame(id = 1:15, label = paste("Label", 1:15),
+ group = sample(LETTERS[1:3], 15, replace = TRUE))
+
+edges <- data.frame(from = trunc(runif(15)*(15-1))+1,
+ to = trunc(runif(15)*(15-1))+1)
+
+visNetwork(nodes, edges) \%>\% visOptions(highlightNearest = TRUE)
+visNetwork(nodes, edges) \%>\% visOptions(highlightNearest = list(enabled = TRUE, degree = 2))
+
+# with an id node selection
+visNetwork(nodes, edges) \%>\%
+ visOptions(highlightNearest = TRUE, nodesIdSelection = TRUE)
+
+# or add a selection on another column
+visNetwork(nodes, edges) \%>\%
+ visOptions(selectedBy = "group")
+
+nodes$sel <- sample(c("sel1", "sel2"), nrow(nodes), replace = TRUE)
+visNetwork(nodes, edges) \%>\%
+ visOptions(selectedBy = "sel")
+}
 \seealso{
 \link{visNodes} for nodes options, \link{visEdges} for edges options, \link{visGroups} for groups options,
-\link{visLayout} & \link{visHierarchicalLayout} for layout, \link{visPhysics} for physics, \link{visInteraction} for interaction, ...
+\link{visLegend} for adding legend, \link{visOptions} for custom option, \link{visLayout} & \link{visHierarchicalLayout} for layout,
+\link{visPhysics} for control physics, \link{visInteraction} for interaction, \link{visDocumentation}, \link{visEvents}, \link{visConfigure} ...
 }
 

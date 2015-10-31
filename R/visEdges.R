@@ -82,18 +82,19 @@
 #'}
 #'
 #'@seealso \link{visNodes} for nodes options, \link{visEdges} for edges options, \link{visGroups} for groups options, 
-#'\link{visLayout} & \link{visHierarchicalLayout} for layout, \link{visPhysics} for physics, \link{visInteraction} for interaction, ...
+#'\link{visLegend} for adding legend, \link{visOptions} for custom option, \link{visLayout} & \link{visHierarchicalLayout} for layout, 
+#'\link{visPhysics} for control physics, \link{visInteraction} for interaction, \link{visDocumentation}, \link{visEvents}, \link{visConfigure} ...
 #'
 #' 
 #' @examples
 #' nodes <- data.frame(id = 1:3)
 #' edges <- data.frame(from = c(1,2), to = c(1,3))
 #' 
-#' visNetwork(nodes, edges) %>% visEdges(arrow = 'from')
+#' visNetwork(nodes, edges) %>% visEdges(arrows = 'from')
 #' 
-#' visNetwork(nodes, edges) %>% visEdges(arrow = 'to, from')
+#' visNetwork(nodes, edges) %>% visEdges(arrows = 'to, from')
 #' 
-#' visNetwork(nodes, edges) %>% visEdges(arrow =list(to = list(enabled = TRUE, scaleFactor = 2)))
+#' visNetwork(nodes, edges) %>% visEdges(arrows =list(to = list(enabled = TRUE, scaleFactor = 2)))
 #' 
 #' visNetwork(nodes, edges) %>% visEdges(smooth = FALSE)
 #' 

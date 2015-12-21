@@ -4,7 +4,7 @@
 \alias{visGroups}
 \title{Network visualization groups options}
 \usage{
-visGroups(graph, useDefaultGroups = NULL, groupname = NULL, ...)
+visGroups(graph, useDefaultGroups = TRUE, groupname = NULL, ...)
 }
 \arguments{
 \item{graph}{: a visNetwork object}
@@ -21,15 +21,17 @@ Network visualization groups options. For full documentation, have a look at \li
 \examples{
 nodes <- data.frame(id = 1:10, label = paste("Label", 1:10),
  group = sample(c("A", "B"), 10, replace = TRUE))
-edges <- data.frame(from = c(2,5,10), to = c(1,2,10))
+ edges <- data.frame(from = c(2,5,10), to = c(1,2,10))
 
-visNetwork(nodes, edges, legend = TRUE) \%>\%
+visNetwork(nodes, edges) \%>\%
+ visLegend() \%>\%
  visGroups(groupname = "A", color = "red", shape = "database") \%>\%
  visGroups(groupname = "B", color = "yellow", shape = "triangle")
 }
 \seealso{
 \link{visNodes} for nodes options, \link{visEdges} for edges options, \link{visGroups} for groups options,
 \link{visLegend} for adding legend, \link{visOptions} for custom option, \link{visLayout} & \link{visHierarchicalLayout} for layout,
-\link{visPhysics} for control physics, \link{visInteraction} for interaction, \link{visDocumentation}, \link{visEvents}, \link{visConfigure} ...
+\link{visPhysics} for control physics, \link{visInteraction} for interaction, \link{visNetworkProxy} & \link{visFocus} & \link{visFit} for animation within shiny,
+\link{visDocumentation}, \link{visEvents}, \link{visConfigure} ...
 }
 

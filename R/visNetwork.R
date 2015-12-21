@@ -146,7 +146,8 @@
 #' 
 #'@seealso \link{visNodes} for nodes options, \link{visEdges} for edges options, \link{visGroups} for groups options, 
 #'\link{visLegend} for adding legend, \link{visOptions} for custom option, \link{visLayout} & \link{visHierarchicalLayout} for layout, 
-#'\link{visPhysics} for control physics, \link{visInteraction} for interaction, \link{visDocumentation}, \link{visEvents}, \link{visConfigure} ...
+#'\link{visPhysics} for control physics, \link{visInteraction} for interaction, \link{visNetworkProxy} & \link{visFocus} & \link{visFit} for animation within shiny,
+#'\link{visDocumentation}, \link{visEvents}, \link{visConfigure} ...
 #'
 #' @import htmlwidgets
 #' 
@@ -163,12 +164,19 @@ visNetwork <- function(nodes = NULL, edges = NULL, dot = NULL, gephi = NULL,
   
   if(!is.null(dot)){
     x <- list(dot = dot,
-              options = list(width = '100%', height = "100%", nodes = list(shape = "dot"), manipulation = list(enabled = FALSE)),
-              groups = NULL, width = width, height = height)
+              options = list(width = '100%', height = "100%", nodes = list(shape = "dot"), 
+                             manipulation = list(enabled = FALSE)),
+              groups = NULL, width = width, height = height,
+              idselection = list(enabled = FALSE),
+              byselection = list(enabled = FALSE))
+    
   }else if(!is.null(gephi)){
     x <- list(gephi = jsonlite::fromJSON(txt = gephi, simplifyDataFrame = FALSE),
-              options = list(width = '100%', height = "100%", nodes = list(shape = "dot"), manipulation = list(enabled = FALSE)),
-              groups = NULL, width = width, height = height)
+              options = list(width = '100%', height = "100%", nodes = list(shape = "dot"), 
+                             manipulation = list(enabled = FALSE)),
+              groups = NULL, width = width, height = height,
+              idselection = list(enabled = FALSE),
+              byselection = list(enabled = FALSE))
   }else{
     
     # forward options using x
@@ -177,8 +185,11 @@ visNetwork <- function(nodes = NULL, edges = NULL, dot = NULL, gephi = NULL,
       groups = NULL
     }
     x <- list(nodes = nodes, edges = edges,
-              options = list(width = '100%', height = "100%", nodes = list(shape = "dot"), manipulation = list(enabled = FALSE)),
-              groups = groups, width = width, height = height)
+              options = list(width = '100%', height = "100%", nodes = list(shape = "dot"), 
+                             manipulation = list(enabled = FALSE)),
+              groups = groups, width = width, height = height,
+              idselection = list(enabled = FALSE),
+              byselection = list(enabled = FALSE))
   }
 
   # previous legend control
@@ -225,7 +236,13 @@ visNetwork <- function(nodes = NULL, edges = NULL, dot = NULL, gephi = NULL,
 #'   is useful if you want to save an expression in a variable.
 #'   
 #' @name visNetwork-shiny
+#' @examples 
+#'\dontrun{
 #'
+#' # have a look to : 
+#' shiny::runApp(system.file("shiny", package = "visNetwork"))
+#'
+#'}
 #' @export
 visNetworkOutput <- function(outputId, width = '100%', height = '400px'){
   shinyWidgetOutput(outputId, 'visNetwork', width, height, package = 'visNetwork')

@@ -28,4 +28,12 @@ string and have \code{"px"} appended.}
 Output and render functions for using visNetwork within Shiny
 applications and interactive Rmd documents.
 }
+\examples{
+\dontrun{
+
+# have a look to :
+shiny::runApp(system.file("shiny", package = "visNetwork"))
+
+}
+}
 

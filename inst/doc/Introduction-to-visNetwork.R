@@ -8,6 +8,8 @@ visNetwork(nodes, edges, width = "100%")
 ## ---- eval = FALSE-------------------------------------------------------
 #  visDocumentation()
 #  vignette("Introduction-to-visNetwork") # with CRAN version
+#  # shiny ?
+#  shiny::runApp(system.file("shiny", package = "visNetwork"))
 
 ## ------------------------------------------------------------------------
 nodes <- data.frame(id = 1:10, 

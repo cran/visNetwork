@@ -23,8 +23,8 @@
 #'
 #'@seealso \link{visNodes} for nodes options, \link{visEdges} for edges options, \link{visGroups} for groups options, 
 #'\link{visLegend} for adding legend, \link{visOptions} for custom option, \link{visLayout} & \link{visHierarchicalLayout} for layout, 
-#'\link{visPhysics} for control physics, \link{visInteraction} for interaction, \link{visDocumentation}, \link{visEvents}, \link{visConfigure} ...
-#'
+#'\link{visPhysics} for control physics, \link{visInteraction} for interaction, \link{visNetworkProxy} & \link{visFocus} & \link{visFit} for animation within shiny,
+#'\link{visDocumentation}, \link{visEvents}, \link{visConfigure} ...
 #'
 #'@export
 
@@ -33,18 +33,26 @@ visLayout <- function(graph,
                       improvedLayout = NULL,
                       hierarchical = NULL){
   
+  if(!any(class(graph) %in% c("visNetwork", "visNetwork_Proxy"))){
+    stop("graph must be a visNetwork or a visNetworkProxy object")
+  }
+  
   layout <- list()
   
   layout$randomSeed <- randomSeed
   layout$improvedLayout <- improvedLayout
   layout$hierarchical <- hierarchical
 
-  if("layout"%in%names(graph$x$options)){
-    graph$x$options$layout <- mergeLists(graph$x$options$layout, layout)
+  if(any(class(graph) %in% "visNetwork_Proxy")){
+    options <- list(layout = layout)
+    data <- list(id = graph$id, options = options)
+    graph$session$sendCustomMessage("Options",data)
   }else{
-    graph$x$options$layout <- layout
+    if("layout"%in%names(graph$x$options)){
+      graph$x$options$layout <- mergeLists(graph$x$options$layout, layout)
+    }else{
+      graph$x$options$layout <- layout
+    }
   }
-  
-  
   graph
 }

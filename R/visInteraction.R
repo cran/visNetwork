@@ -30,7 +30,8 @@
 #'
 #'@seealso \link{visNodes} for nodes options, \link{visEdges} for edges options, \link{visGroups} for groups options, 
 #'\link{visLegend} for adding legend, \link{visOptions} for custom option, \link{visLayout} & \link{visHierarchicalLayout} for layout, 
-#'\link{visPhysics} for control physics, \link{visInteraction} for interaction, \link{visDocumentation}, \link{visEvents}, \link{visConfigure} ...
+#'\link{visPhysics} for control physics, \link{visInteraction} for interaction, \link{visNetworkProxy} & \link{visFocus} & \link{visFit} for animation within shiny,
+#'\link{visDocumentation}, \link{visEvents}, \link{visConfigure} ...
 #'
 #' @examples
 #'
@@ -77,6 +78,11 @@ visInteraction <- function(graph,
                        tooltipDelay = NULL,
                        zoomView = NULL){
 
+  
+  if(!any(class(graph) %in% c("visNetwork", "visNetwork_Proxy"))){
+    stop("graph must be a visNetwork or a visNetworkProxy object")
+  }
+  
   interaction <- list()
   interaction$dragNodes <- dragNodes
   interaction$dragView <- dragView
@@ -92,7 +98,12 @@ visInteraction <- function(graph,
   interaction$tooltipDelay <- tooltipDelay
   interaction$zoomView <-zoomView
 
-  graph$x$options$interaction <- interaction
-
+  if(any(class(graph) %in% "visNetwork_Proxy")){
+    options <- list(interaction = interaction)
+    data <- list(id = graph$id, options = options)
+    graph$session$sendCustomMessage("Options",data)
+  }else{
+    graph$x$options$interaction <- interaction
+  }
   graph
 }

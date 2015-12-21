@@ -1,3 +1,14 @@
+visNetwork 0.2.0
+--------------------------------------------------------------------------------
+  
+  * introduce visNetworkProxy object for update & call method from shiny
+  * fix bug placement for edges legend (sorry for that...!)
+  * fix selectedBy with numeric values
+  * introduce new options : can select initial value using 'selectedBy' and 'nodesIdSelection' (selected), 
+  set HTML style (style) and add subset on data (values)
+  * introduce new shiny return when using manipulation = TRUE
+  * to vis.js 4.11.0
+  
 visNetwork 0.1.2
 --------------------------------------------------------------------------------
   

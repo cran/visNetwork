@@ -5,8 +5,8 @@
 \title{Network visualization general options}
 \usage{
 visOptions(graph, width = NULL, height = NULL, highlightNearest = FALSE,
-  nodesIdSelection = FALSE, autoResize = NULL, clickToUse = NULL,
-  manipulation = NULL, selectedBy = NULL)
+  nodesIdSelection = FALSE, selectedBy = NULL, autoResize = NULL,
+  clickToUse = NULL, manipulation = NULL)
 }
 \arguments{
 \item{graph}{: a visNetwork object}
@@ -21,45 +21,107 @@ visOptions(graph, width = NULL, height = NULL, highlightNearest = FALSE,
  \item{"degree"}{ : Integer. Degree of depth of nodes to be colored. Default to 1}
 }}
 
-\item{nodesIdSelection}{:  Custom Option. Boolean. Default to false. A little bit experimental. Add an id node selection. This options use click event. Not available for DOT and Gephi.}
+\item{nodesIdSelection}{:  Custom Option. Just a Boolean, or a named list. Default to false. Add an id node selection creating an HTML select element. This options use click event. Not available for DOT and Gephi.
+\itemize{
+ \item{"enabled"}{ : Boolean. Default to false. Activated or not ?.}
+ \item{"values}{ : Optional. Vector of possible values. Defaut to all id in nodes data.frame.}
+ \item{"selected"}{ : Optional. Integer/Character. Initial id selection. Defaut to NULL}
+ \item{"style"}{ : Character. HTML style of list. Default to 'width: 150px; height: 26px'. Optional.}
+}}
+
+\item{selectedBy}{: Custom option. Character or a named list. Add a multiple selection based on column of node data.frame creating an HTML select element. Not available for DOT and Gephi.
+\itemize{
+ \item{"variable"}{ : Character. Column name of selection variable.}
+ \item{"values}{ : Optional. Vector of possible values. Defaut to all values in nodes data.frame.}
+ \item{"selected"}{ : Optional. Integer/Character. Initial selection. Defaut to NULL}
+ \item{"style"}{ : Optional. Character. HTML style of list. Default to 'width: 150px; height: 26px'. Optional.}
+}}
 
 \item{autoResize}{: Boolean. Default to true. If true, the Network will automatically detect when its container is resized, and redraw itself accordingly. If false, the Network can be forced to repaint after its container has been resized using the function redraw() and setSize().}
 
 \item{clickToUse}{: Boolean. Default to false. When a Network is configured to be clickToUse, it will react to mouse, touch, and keyboard events only when active. When active, a blue shadow border is displayed around the Network. The Network is set active by clicking on it, and is changed to inactive again by clicking outside the Network or by pressing the ESC key.}
 
 \item{manipulation}{: Just a Boolean}
-
-\item{selectedBy}{: Custom option. Column name of node data.frame on which you want to add a list selection. Default to NULL}
 }
 \description{
 Network visualization general options. For full documentation, have a look at \link{visDocumentation}.
 }
 \examples{
-# highlight nearest
 nodes <- data.frame(id = 1:15, label = paste("Label", 1:15),
  group = sample(LETTERS[1:3], 15, replace = TRUE))
 
 edges <- data.frame(from = trunc(runif(15)*(15-1))+1,
  to = trunc(runif(15)*(15-1))+1)
 
+###################
+# highlight nearest
+###################
+
 visNetwork(nodes, edges) \%>\% visOptions(highlightNearest = TRUE)
 visNetwork(nodes, edges) \%>\% visOptions(highlightNearest = list(enabled = TRUE, degree = 2))
 
-# with an id node selection
+##########################
+# nodesIdSelection
+##########################
+
 visNetwork(nodes, edges) \%>\%
  visOptions(highlightNearest = TRUE, nodesIdSelection = TRUE)
 
-# or add a selection on another column
+# add a default selected node ?
+visNetwork(nodes, edges) \%>\%
+ visOptions(highlightNearest = TRUE,
+ nodesIdSelection = list(enabled = TRUE, selected = "1"))
+
+# subset on id values ?
+visNetwork(nodes, edges) \%>\%
+ visOptions(highlightNearest = TRUE,
+ nodesIdSelection = list(enabled = TRUE,
+   selected = "2",
+   values = c(2:10)))
+
+# some style
+visNetwork(nodes, edges) \%>\%
+ visOptions(highlightNearest = TRUE,
+ nodesIdSelection = list(enabled = TRUE, style = 'width: 200px; height: 26px;
+   background: #f8f8f8;
+   color: darkblue;
+   border:none;
+   outline:none;'))
+
+##########################
+# selectedBy
+##########################
+
 visNetwork(nodes, edges) \%>\%
  visOptions(selectedBy = "group")
 
-nodes$sel <- sample(c("sel1", "sel2"), nrow(nodes), replace = TRUE)
+# add a default value ?
 visNetwork(nodes, edges) \%>\%
- visOptions(selectedBy = "sel")
+ visOptions(selectedBy = list(variable = "group", selected = "A"))
+
+# subset on values ?
+visNetwork(nodes, edges) \%>\%
+ visOptions(selectedBy = list(variable = "group",
+   selected = "C",
+   values = c("A", "C")))
+
+# add some style
+visNetwork(nodes, edges) \%>\%
+ visOptions(selectedBy = list(variable = "group", style = 'width: 200px; height: 26px;
+   background: #f8f8f8;
+   color: darkblue;
+   border:none;
+   outline:none;'))
+
+# can also be on new column
+nodes$sample <- sample(c("sample 1", "sample 2"), nrow(nodes), replace = TRUE)
+visNetwork(nodes, edges) \%>\%
+ visOptions(selectedBy = "sample")
 }
 \seealso{
 \link{visNodes} for nodes options, \link{visEdges} for edges options, \link{visGroups} for groups options,
 \link{visLegend} for adding legend, \link{visOptions} for custom option, \link{visLayout} & \link{visHierarchicalLayout} for layout,
-\link{visPhysics} for control physics, \link{visInteraction} for interaction, \link{visDocumentation}, \link{visEvents}, \link{visConfigure} ...
+\link{visPhysics} for control physics, \link{visInteraction} for interaction, \link{visNetworkProxy} & \link{visFocus} & \link{visFit} for animation within shiny,
+\link{visDocumentation}, \link{visEvents}, \link{visConfigure} ...
 }
 

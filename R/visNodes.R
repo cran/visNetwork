@@ -96,8 +96,8 @@
 #'  
 #'@seealso \link{visNodes} for nodes options, \link{visEdges} for edges options, \link{visGroups} for groups options, 
 #'\link{visLegend} for adding legend, \link{visOptions} for custom option, \link{visLayout} & \link{visHierarchicalLayout} for layout, 
-#'\link{visPhysics} for control physics, \link{visInteraction} for interaction, \link{visDocumentation}, \link{visEvents}, \link{visConfigure} ...
-#'
+#'\link{visPhysics} for control physics, \link{visInteraction} for interaction, \link{visNetworkProxy} & \link{visFocus} & \link{visFit} for animation within shiny,
+#'\link{visDocumentation}, \link{visEvents}, \link{visConfigure} ...
 #' 
 #' @examples
 #' nodes <- data.frame(id = 1:3)
@@ -146,6 +146,10 @@ visNodes <- function(graph,
                      scaling = NULL, 
                      shapeProperties = NULL){
 
+  if(!any(class(graph) %in% c("visNetwork", "visNetwork_Proxy"))){
+    stop("graph must be a visNetwork or a visNetworkProxy object")
+  }
+  
   nodes <- list()
 
   nodes$id <- id
@@ -181,7 +185,12 @@ visNodes <- function(graph,
   
   nodes$scaling <- scaling
   
-  graph$x$options$nodes <- mergeLists(graph$x$options$nodes, nodes)
-
+  if(any(class(graph) %in% "visNetwork_Proxy")){
+    options <- list(nodes = nodes)
+    data <- list(id = graph$id, options = options)
+    graph$session$sendCustomMessage("Options",data)
+  }else{
+    graph$x$options$nodes <- mergeLists(graph$x$options$nodes, nodes)
+  }
   graph
 }

@@ -1,8 +1,20 @@
 # visNetwork
-R package, using vis.js library for network visualization. visNetwork is now available on CRAN.
-Have a look to multiple R examples, vis.js documentation (````visDocumentation````), and online help page http://dataknowledge.github.io/visNetwork
 
-# News : have a look to ````visLegend````
+### R package, using vis.js library for network visualization. visNetwork is now available on CRAN.
+
+# News
+
+### have a look to ````visNetworkProxy````
+
+Can now update and call method in shiny on a visNetwork object !
+
+### have a look to ````visLegend````
+
+# Online documentation
+
+### http://dataknowledge.github.io/visNetwork
+
+And have a look to multiple R examples, vis.js documentation (````visDocumentation````). 
 
 ```` 
 install.packages("visNetwork")
@@ -22,4 +34,7 @@ vignette("Introduction-to-visNetwork")
 
 # full javascript documentation
 visDocumentation()
+
+# shiny example
+shiny::runApp(system.file("shiny", package = "visNetwork"))
 ````

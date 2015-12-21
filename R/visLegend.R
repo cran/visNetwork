@@ -61,8 +61,8 @@
 #'  
 #'@seealso \link{visNodes} for nodes options, \link{visEdges} for edges options, \link{visGroups} for groups options, 
 #'\link{visLegend} for adding legend, \link{visOptions} for custom option, \link{visLayout} & \link{visHierarchicalLayout} for layout, 
-#'\link{visPhysics} for control physics, \link{visInteraction} for interaction, \link{visDocumentation}, \link{visEvents}, \link{visConfigure} ...
-#'
+#'\link{visPhysics} for control physics, \link{visInteraction} for interaction, \link{visNetworkProxy} & \link{visFocus} & \link{visFit} for animation within shiny,
+#'\link{visDocumentation}, \link{visEvents}, \link{visConfigure} ...
 #'
 #' @import htmlwidgets
 #'
@@ -75,6 +75,14 @@ visLegend <- function(graph,
                       addEdges = NULL,
                       width =  0.2,
                       position = "left"){
+  
+  if(any(class(graph) %in% "visNetwork_Proxy")){
+    stop("Can't use visLegend with visNetworkProxy object")
+  }
+  
+  if(!any(class(graph) %in% "visNetwork")){
+    stop("graph must be a visNetwork object")
+  }
   
   if(enabled){
     legend <- list()

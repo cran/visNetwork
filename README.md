@@ -4,11 +4,15 @@
 
 # News
 
-### have a look to ````visNetworkProxy````
+* #### new function ````visSave```` to save as html and ````visExport```` to save as png/jpeg (shiny and browser only)
 
-Can now update and call method in shiny on a visNetwork object !
+* #### Better performance with ````visIgraphLayout````
 
-### have a look to ````visLegend````
+* #### have a look to ````visIgraph```` to plot visNetwork object from igraph object (Little bit experimental)
+
+* #### Update network in shiny using  ````visNetworkProxy````
+
+* #### Add custom legend with ````visLegend````
 
 # Online documentation
 

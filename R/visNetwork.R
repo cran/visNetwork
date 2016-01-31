@@ -12,8 +12,7 @@
 #'  \item{...}{}
 #'}
 #'
-#' @param edges : data.frame with edges informations. Needed at least columns "from" and "to".
-#' See See \link{visEdges}
+#' @param edges : data.frame with edges informations. Needed at least columns "from" and "to". See \link{visEdges}
 #' \itemize{
 #'  \item{"from"}{ : node id of begin of the edge}
 #'  \item{"to"}{ : node id of end of the edge}
@@ -62,6 +61,16 @@
 #'                     shadow = c(FALSE, TRUE, FALSE, TRUE))                       # shadow
 #'
 #' visNetwork(nodes, edges) 
+#' 
+#' # use more complex configuration : 
+#' # when it's a list, you can use data.frame with specific notation like this
+#' nodes <- data.frame(id = 1:3, color.background = c("red", "blue", "green"), 
+#'  color.highlight.background = c("red", NA, "red"), shadow.size = c(5, 10, 15))
+#' edges <- data.frame(from = c(1,2), to = c(1,3),
+#'  label = LETTERS[1:2], font.color =c ("red", "blue"), font.size = c(10,20))
+#'
+#' visNetwork(nodes, edges)
+#' 
 #'
 #' # highlight nearest
 #' nodes <- data.frame(id = 1:15, label = paste("Label", 1:15),
@@ -130,8 +139,17 @@
 #'  visOptions(highlightNearest = TRUE, nodesIdSelection = TRUE,
 #'  manipulation = TRUE) %>% visLegend()
 #'  
-#' htmlwidgets::saveWidget(network, "network.html")
+#' network %>% visSave(file = "network.html")
+#' # same as
+#' visSave(network, file = "network.html")
 #' }
+#' 
+#' # Export as png/jpeg (shiny or browser only)
+#' \dontrun{
+#' visNetwork(nodes, edges) %>% 
+#'  visExport()
+#' }
+#' 
 #' # DOT language
 #' visNetwork(dot = 'dinetwork {1 -> 1 -> 2; 2 -> 3; 2 -- 4; 2 -> 1 }')
 #' 

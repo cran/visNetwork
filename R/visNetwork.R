@@ -30,6 +30,12 @@
 #' 
 #' @param height	: Height (optional, defaults to automatic sizing)
 #' 
+#'@param main : For add a title. Character or a named list.
+#'\itemize{
+#'  \item{"text"}{ : Character. Title.}
+#'  \item{"style"}{ : Optional. Character. HTML style of title. Default to 'font-family:Georgia, Times New Roman, Times, serif;font-weight:bold;font-size:20px;text-align:center;'.}
+#'}
+#'
 #' @param ... : Don't use.
 #' 
 #' @examples
@@ -40,6 +46,11 @@
 #'
 #' visNetwork(nodes, edges)
 #'
+#' # add a title
+#' visNetwork(nodes, edges, main = "visNetwork minimal example")
+#' visNetwork(nodes, edges, main = list(text = "visNetwork minimal example",
+#'  style = "font-family:Comic Sans MS;color:#ff0000;font-size:15px;text-align:center;"))
+#'  
 #' # customization adding more variables (see visNodes and visEdges)
 #' nodes <- data.frame(id = 1:10, 
 #'                     label = paste("Node", 1:10),                                 # labels
@@ -98,7 +109,7 @@
 #'     
 #' # directed network
 #' visNetwork(nodes, edges) %>% 
-#'  visEdges(arrow = 'from', scaling = list(min = 2, max = 2))
+#'  visEdges(arrows = 'from', scaling = list(min = 2, max = 2))
 #'
 #' # custom navigation
 #' visNetwork(nodes, edges) %>%
@@ -174,19 +185,39 @@
 #' @export
 #' 
 visNetwork <- function(nodes = NULL, edges = NULL, dot = NULL, gephi = NULL,
-                       width = NULL, height = NULL, ...) {
+                       width = NULL, height = NULL, main = NULL, ...) {
 
   if(is.null(nodes) & is.null(edges) & is.null(dot) & is.null(gephi)){
     stop("Must 'dot' data, or 'gephi' data, or 'nodes' and 'edges' data.")
   }
-  
+
+  # main
+  if(!is.null(main)){
+    if(is.list(main)){
+      if(any(!names(main)%in%c("text", "style"))){
+        stop("Invalid 'main' argument")
+      }
+      if(!"text"%in%names(main)){
+        stop("Needed a 'text' value using a list for 'main'")
+      }
+      if(!"style"%in%names(main)){
+        main$style <- 'font-family:Georgia, Times New Roman, Times, serif;font-weight:bold;font-size:20px;text-align:center;'
+      }
+    }else if(!inherits(main, "character")){
+      stop("Invalid 'main' argument. Not a character")
+    }else {
+      main <- list(text = main, 
+                   style = 'font-family:Georgia, Times New Roman, Times, serif;font-weight:bold;font-size:20px;text-align:center;')
+    }
+  }
+ 
   if(!is.null(dot)){
     x <- list(dot = dot,
               options = list(width = '100%', height = "100%", nodes = list(shape = "dot"), 
                              manipulation = list(enabled = FALSE)),
               groups = NULL, width = width, height = height,
               idselection = list(enabled = FALSE),
-              byselection = list(enabled = FALSE))
+              byselection = list(enabled = FALSE), main = main)
     
   }else if(!is.null(gephi)){
     x <- list(gephi = jsonlite::fromJSON(txt = gephi, simplifyDataFrame = FALSE),
@@ -194,7 +225,7 @@ visNetwork <- function(nodes = NULL, edges = NULL, dot = NULL, gephi = NULL,
                              manipulation = list(enabled = FALSE)),
               groups = NULL, width = width, height = height,
               idselection = list(enabled = FALSE),
-              byselection = list(enabled = FALSE))
+              byselection = list(enabled = FALSE), main = main)
   }else{
     
     # forward options using x
@@ -207,7 +238,7 @@ visNetwork <- function(nodes = NULL, edges = NULL, dot = NULL, gephi = NULL,
                              manipulation = list(enabled = FALSE)),
               groups = groups, width = width, height = height,
               idselection = list(enabled = FALSE),
-              byselection = list(enabled = FALSE))
+              byselection = list(enabled = FALSE), main = main)
   }
 
   # previous legend control
@@ -238,38 +269,3 @@ visNetwork <- function(nodes = NULL, edges = NULL, dot = NULL, gephi = NULL,
     package = 'visNetwork'
   )
 }
-
-#' Shiny bindings for visNetwork
-#' 
-#' Output and render functions for using visNetwork within Shiny 
-#' applications and interactive Rmd documents.
-#' 
-#' @param outputId : output variable to read from
-#' @param width,height Must be a valid CSS unit (like \code{"100\%"},
-#'   \code{"400px"}, \code{"auto"}) or a number, which will be coerced to a
-#'   string and have \code{"px"} appended.
-#' @param expr An expression that generates a visNetwork
-#' @param env The environment in which to evaluate \code{expr}.
-#' @param quoted Is \code{expr} a quoted expression (with \code{quote()})? This 
-#'   is useful if you want to save an expression in a variable.
-#'   
-#' @name visNetwork-shiny
-#' @examples 
-#'\dontrun{
-#'
-#' # have a look to : 
-#' shiny::runApp(system.file("shiny", package = "visNetwork"))
-#'
-#'}
-#' @export
-visNetworkOutput <- function(outputId, width = '100%', height = '400px'){
-  shinyWidgetOutput(outputId, 'visNetwork', width, height, package = 'visNetwork')
-}
-
-#' @rdname visNetwork-shiny
-#' @export
-renderVisNetwork <- function(expr, env = parent.frame(), quoted = FALSE) {
-  if (!quoted) { expr <- substitute(expr) } # force quoted
-  shinyRenderWidget(expr, visNetworkOutput, env, quoted = TRUE)
-}
-

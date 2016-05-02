@@ -1,3 +1,30 @@
+visNetwork 1.0.0
+--------------------------------------------------------------------------------
+
+  * really lot of (good) changes in 0.2.2, so let's go to 1.0.0
+  
+visNetwork 0.2.2
+--------------------------------------------------------------------------------
+
+  * fix / improve highlightNearest with high degree (can now have the entire sub-network)
+  * can now set highlightNearest when hover a node, and also use another click / hover event
+  * enabled highlightNearest with icons && image, and all combinaisons !
+  * new visSelectNodes, visSelectEdges & visSetSelection to select data in shiny
+  * add visSetOptions, to set many parameters in one time
+  * add visMoveNode & visUnselectAll
+  * enabled multiple groups selection
+  * can now add a title to network & legend (main argument in visNetwork/visLegend function)
+  * fix passing directly icon in nodes data.frame
+  * add ionicons icons possibilities. See ?addIonicons
+  * update font-awesome to 4.5.0
+  * fix some bad interactions when highlightNearest/selectedBy/nodesIdSelection are set together, and using visUpdateNodes / visOptions with proxy
+  * new visRemoveNodes & visRemoveEdges to remove data in shiny
+  * new visUpdateNodes & visUpdateEdges to update data in shiny
+  * enable visOptions with visNetworkProxy
+  * add randomSeed to visIgraphLayout
+  * add quick support for label.cex and label.color with ``visIgraph``
+  * to vis.js 4.15.0
+  
 visNetwork 0.2.1
 --------------------------------------------------------------------------------
   

@@ -24,12 +24,12 @@
 visSetData <- function(graph, nodes = NULL, edges = NULL){
   
   if(!any(class(graph) %in% "visNetwork_Proxy")){
-    stop("Can't use visFit with visNetwork object. Only within shiny & using visNetworkProxy")
+    stop("Can't use visSetData with visNetwork object. Only within shiny & using visNetworkProxy")
   }
   
   data <- list(id = graph$id, nodes = nodes, edges = edges)
   
-  graph$session$sendCustomMessage("SetData", data)
+  graph$session$sendCustomMessage("visShinySetData", data)
   
   graph
 }

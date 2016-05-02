@@ -12,6 +12,9 @@
 #'@param physics : Boolean. Default to FALSE. Enabled physics on nodes ?
 #'@param smooth : Boolean. Default to FALSE. Use smooth edges ?
 #'@param type : Character Type of scale from igrah to vis.js. "square" (defaut) render in a square limit by height. "full" use width and height to scale in a rectangle.
+#'@param randomSeed : Number. The nodes are randomly positioned initially. This means that the settled result is different every time. If you provide a random seed manually, the layout will be the same every time.
+#'@param layoutMatrix : in case of layout = 'layout.norm'. the 'layout' argument (A matrix with two or three columns, the layout to normalize)
+#'@param ... : Adding arguments to layout function
 #'
 #'@examples
 #'
@@ -37,11 +40,21 @@
 #'visNetwork(nodes, edges) %>% 
 #'  visIgraphLayout(layout = "layout_in_circle") %>%
 #'  visNodes(size = 10) %>%
-#'  visOptions(highlightNearest = T, nodesIdSelection = T)
+#'  visOptions(highlightNearest = list(enabled = T, hover = T), 
+#'    nodesIdSelection = T)
 #'  
 #'# keep physics with smooth curves ?
 #'visNetwork(nodes, edges) %>% 
 #'  visIgraphLayout(physics = TRUE, smooth = TRUE) %>%
+#'  visNodes(size = 10)
+#'
+#'# fix radomSeed to keep position
+#'visNetwork(nodes, edges) %>% 
+#'  visIgraphLayout(randomSeed = 123) %>%
+#'  visNodes(size = 10)
+#'  
+#'visNetwork(nodes, edges) %>% 
+#'  visIgraphLayout(randomSeed = 123) %>%
 #'  visNodes(size = 10)
 #'}
 #'@seealso \link{visNodes} for nodes options, \link{visEdges} for edges options, \link{visGroups} for groups options, 
@@ -57,10 +70,12 @@ visIgraphLayout <- function(graph,
                             layout = "layout_nicely",
                             physics = FALSE, 
                             smooth = FALSE,
-                            type = "square"){
+                            type = "square", 
+                            randomSeed = NULL, 
+                            layoutMatrix = NULL, ...){
   
   if(any(class(graph) %in% "visNetwork_Proxy")){
-    stop("Can't use visClusteringOutliers with visNetworkProxy object")
+    stop("Can't use visIgraphLayout with visNetworkProxy object")
   }
   
   if(!any(class(graph) %in% "visNetwork")){
@@ -89,8 +104,19 @@ visIgraphLayout <- function(graph,
   
   ig <- igraph::graph_from_data_frame(graph$x$edges, directed = TRUE, 
                                       vertices = graph$x$nodes)
-  coord <- ctrl$objs[[1]](ig)
   
+  if(!is.null(randomSeed)){
+    set.seed(randomSeed)
+  }
+  if("layout.norm" %in% layout){
+    if (is.null(layoutMatrix)) {
+      stop("'layout.norm' requires a layout argument (a matrix with two or three columns), passed by layoutMatrix argument")
+    }
+    coord <- ctrl$objs[[1]](layout = layoutMatrix, ...)
+  } else {
+    coord <- ctrl$objs[[1]](graph = ig, ...)
+  }
+
   graph$x$nodes$x <- coord[, 1]
   graph$x$nodes$y <- coord[, 2]
   

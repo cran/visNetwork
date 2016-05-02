@@ -16,7 +16,7 @@
 #'  visClusteringOutliers(1)
 #' 
 #'  
-#'  @export
+#' @export
 visClusteringOutliers <- function(graph, clusterFactor = 0.9, stabilize = FALSE){
  
   if(any(class(graph) %in% "visNetwork_Proxy")){
@@ -175,7 +175,7 @@ visClusteringByGroup <- function(graph, groups){
 #' Network visualization clustering options - by node id
 #' 
 #' @param graph : a visNetwork object
-#' @param nodes : Character/vector. gid of nodes we want to cluster
+#' @param nodes : Character/vector. id of nodes we want to cluster
 #' 
 #' @examples
 #'

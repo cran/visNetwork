@@ -12,6 +12,9 @@
 #'@param physics : Boolean. Default to FALSE. Enabled physics on nodes ?
 #'@param smooth : Boolean. Default to FALSE. Use smooth edges ?
 #'@param type : Character Type of scale from igrah to vis.js. "square" (defaut) render in a square limit by height. "full" use width and height to scale in a rectangle.
+#'@param randomSeed : Number. The nodes are randomly positioned initially. This means that the settled result is different every time. If you provide a random seed manually, the layout will be the same every time.
+#'@param layoutMatrix : in case of layout = 'layout.norm'. the 'layout' argument (A matrix with two or three columns, the layout to normalize)
+#'@param ... : Adding arguments to layout function
 #'
 #'@name visNetwork-igraph
 #' 
@@ -40,6 +43,8 @@
 #'V(g)$color <- c("green", "grey")
 #'V(g)$size <- 1:8 *5
 #'V(g)$label <- LETTERS[1:8]
+#'V(g)$label.cex = seq(1, 2,length.out = 8)
+#'V(g)$label.color = "red"
 #'visIgraph(g, layout = "layout.circle", idToLabel = FALSE)  
 #'
 #'g <- graph.full(5)
@@ -48,6 +53,9 @@
 #'E(g)$color <- "red"
 #'E(g)[ weight < 0.5 ]$width <- 4
 #'E(g)[ weight < 0.5 ]$color <- "green"
+#'E(g)$label <- LETTERS[1:10]
+#'E(g)$label.cex = seq(1, 2,length.out = 10)
+#'E(g)$label.color = "red"
 #'visIgraph(g)
 #'
 #'# color vertices of the largest component
@@ -79,7 +87,9 @@ visIgraph <- function(igraph,
                       layout = "layout_nicely",
                       physics = FALSE, 
                       smooth = FALSE,
-                      type = "square"){
+                      type = "square",
+                      randomSeed = NULL, 
+                      layoutMatrix = NULL, ...){
   
   if(!any(class(igraph) %in% "igraph")){
     stop("igraph must be a igraph object")
@@ -110,7 +120,9 @@ visIgraph <- function(igraph,
   }
   
   graph <- visNetwork(nodes = visdata$nodes, edges = visdata$edges) %>%
-    visIgraphLayout(layout = layout, type = type, physics = physics, smooth = smooth)
+    visIgraphLayout(layout = layout, type = type, physics = physics, 
+                    smooth = smooth, randomSeed = randomSeed, 
+                    layoutMatrix = layoutMatrix, ...)
   if(directed){
     graph <- visEdges(graph, arrows = "to")
   }
@@ -145,6 +157,15 @@ toVisNetworkData <- function(igraph,
     }
   }
   
+  if("label.cex" %in% colnames(nodes)){
+      colnames(nodes) <- gsub("^label.cex$", "font.size", colnames(nodes))
+      nodes$font.size <- nodes$font.size*40
+  }
+  
+  if("label.color" %in% colnames(nodes)){
+    colnames(nodes) <- gsub("^label.color$", "font.color", colnames(nodes))
+  }
+  
   nodes <- nodes[, c("id", setdiff(colnames(nodes), "id")), drop = FALSE]
   
   if(idToLabel){
@@ -152,6 +173,15 @@ toVisNetworkData <- function(igraph,
   }
   
   edges <- igraphdata$edges
+  
+  if("label.cex" %in% colnames(edges)){
+    colnames(edges) <- gsub("^label.cex$", "font.size", colnames(edges))
+    edges$font.size <- edges$font.size*40
+  }
+  
+  if("label.color" %in% colnames(edges)){
+    colnames(edges) <- gsub("^label.color$", "font.color", colnames(edges))
+  }
   
   list(nodes= nodes, edges = edges)
 }

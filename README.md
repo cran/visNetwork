@@ -4,26 +4,32 @@
 
 # News
 
+* #### Update network in shiny using  ````visNetworkProxy```` (lot of functionalities,  ````?visNetworkProxy````)
+
+* #### Enabled ``highlightNearest`` & ``selectedBy`` with ``icons`` and / or ``image``
+
+* #### Enabled hover for``highlightNearest`` and fix/improve performance with high ``degree``
+
+* ####   multiple groups selection / title to network & legend / ionicons icons possibilities. See ?addIonicons
+
 * #### new function ````visSave```` to save as html and ````visExport```` to save as png/jpeg (shiny and browser only)
 
 * #### Better performance with ````visIgraphLayout````
 
 * #### have a look to ````visIgraph```` to plot visNetwork object from igraph object (Little bit experimental)
 
-* #### Update network in shiny using  ````visNetworkProxy````
-
 * #### Add custom legend with ````visLegend````
 
 # Online documentation
 
-### http://dataknowledge.github.io/visNetwork
+### http://datastorm-open.github.io/visNetwork
 
 And have a look to multiple R examples, vis.js documentation (````visDocumentation````). 
 
 ```` 
 install.packages("visNetwork")
 
-# devtools::install_github("dataknowledge/visNetwork") for developpement version
+# devtools::install_github("datastorm-open/visNetwork") for developpement version
 
 require(visNetwork)
 ?visNetwork

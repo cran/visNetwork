@@ -24,13 +24,13 @@
 visGetPositions <- function(graph, nodes = NULL, input = paste0(graph$id, "_positions")){
   
   if(!any(class(graph) %in% "visNetwork_Proxy")){
-    stop("Can't use visFit with visNetwork object. Only within shiny & using visNetworkProxy")
+    stop("Can't use visGetPositions with visNetwork object. Only within shiny & using visNetworkProxy")
   }
   
   data <- list(id = graph$id, input = input)
   data$nodes <- nodes
   
-  graph$session$sendCustomMessage("GetPositions", data)
+  graph$session$sendCustomMessage("visShinyGetPositions", data)
   
   graph
 }

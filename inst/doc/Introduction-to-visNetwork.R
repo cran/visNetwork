@@ -44,7 +44,7 @@ edges <- data.frame(from = c(2,5,3,3), to = c(1,2,4,2))
 
 visNetwork(nodes, edges, width = "100%") %>% 
   visNodes(shape = "square") %>%                        # square for all nodes
-  visEdges(arrow ="to") %>%                             # arrow "to" for all edges
+  visEdges(arrows ="to") %>%                             # arrow "to" for all edges
   visGroups(groupname = "A", color = "darkblue") %>%    # darkblue for group "A"
   visGroups(groupname = "B", color = "red")             # red for group "B"
 
@@ -79,12 +79,7 @@ visNetwork(nodes, edges, width = "100%") %>%
   visOptions(highlightNearest = TRUE, nodesIdSelection = TRUE)
 
 ## ------------------------------------------------------------------------
-# on "authorised" column
-visNetwork(nodes, edges, width = "100%") %>%
- visOptions(selectedBy = "group")
-
-## ------------------------------------------------------------------------
-# or new column
+# can be the column you want
 nodes$sel <- sample(c("sel1", "sel2"), nrow(nodes), replace = TRUE)
 visNetwork(nodes, edges, width = "100%") %>%
  visOptions(selectedBy = "sel")
@@ -99,7 +94,7 @@ edges <- data.frame(from = trunc(runif(nb)*(nb-1))+1,
  title = paste0("<p>", 1:nb,"<br>Edge Tooltip !</p>"))
 
 ## ------------------------------------------------------------------------
-visNetwork(nodes, edges, width = "100%") %>% visEdges(arrow = 'from')
+visNetwork(nodes, edges, width = "100%") %>% visEdges(arrows = 'from')
 
 ## ------------------------------------------------------------------------
 visNetwork(nodes, edges, width = "100%") %>% visInteraction(navigationButtons = TRUE)
@@ -114,10 +109,10 @@ edges <- data.frame(from = c(1,2,2,2,3,3),
  to = c(2,3,4,5,6,7))
 
 ## ------------------------------------------------------------------------
-visNetwork(nodes, edges, width = "100%") %>% visEdges(arrow = "from") %>% 
+visNetwork(nodes, edges, width = "100%") %>% visEdges(arrows = "from") %>% 
   visHierarchicalLayout() # same as   visLayout(hierarchical = TRUE) 
 
-visNetwork(nodes, edges, width = "100%") %>% visEdges(arrow = "from") %>% 
+visNetwork(nodes, edges, width = "100%") %>% visEdges(arrows = "from") %>% 
   visHierarchicalLayout(direction = "LR")
 
 ## ------------------------------------------------------------------------
@@ -153,7 +148,7 @@ visNetwork(nodes, edges, legend = TRUE, width = "100%") %>%
 
 ## ---- eval = FALSE-------------------------------------------------------
 #  network <- visNetwork(nodes, edges, width = "100%")
-#  htmlwidgets::saveWidget(network, "network.html")
+#  visSave(network, file = "network.html")
 
 ## ------------------------------------------------------------------------
 visNetwork(dot = 'dinetwork {1 -> 1 -> 2; 2 -> 3; 2 -- 4; 2 -> 1 }', width = "100%")

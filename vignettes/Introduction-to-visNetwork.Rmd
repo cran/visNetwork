@@ -1,6 +1,6 @@
 ---
 title: "Introduction to visNetwork"
-author: "B. Thieurmel - DataKnowledge"
+author: "B. Thieurmel - DataStorm"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
@@ -9,7 +9,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-**visNetwork** is a R package for network visualization, using **vis.js** javascript library (http://visjs.org). All the remarks and bugs returns are welcome on github : https://github.com/DataKnowledge/visNetwork.
+**visNetwork** is a R package for network visualization, using **vis.js** javascript library (http://visjs.org). All the remarks and bugs returns are welcome on github : https://github.com/datastorm-open/visNetwork.
 
 ## Minimal example
 
@@ -37,7 +37,7 @@ vignette("Introduction-to-visNetwork") # with CRAN version
 shiny::runApp(system.file("shiny", package = "visNetwork"))
 ```
 
-Or visit our online help page : http://dataknowledge.github.io/visNetwork/.
+Or visit our online help page : http://datastorm-open.github.io/visNetwork/.
 
 ## Simple individual nodes and edges customization
 
@@ -85,7 +85,7 @@ edges <- data.frame(from = c(2,5,3,3), to = c(1,2,4,2))
 
 visNetwork(nodes, edges, width = "100%") %>% 
   visNodes(shape = "square") %>%                        # square for all nodes
-  visEdges(arrow ="to") %>%                             # arrow "to" for all edges
+  visEdges(arrows ="to") %>%                             # arrow "to" for all edges
   visGroups(groupname = "A", color = "darkblue") %>%    # darkblue for group "A"
   visGroups(groupname = "B", color = "red")             # red for group "B"
 ```
@@ -148,18 +148,11 @@ visNetwork(nodes, edges, width = "100%") %>%
 New feature in __visNetwork_0.1.2__ : select some nodes by the values of a column using **selectedBy** option :
 
 ```{r}
-# on "authorised" column
-visNetwork(nodes, edges, width = "100%") %>%
- visOptions(selectedBy = "group")
-```
-
-```{r}
-# or new column
+# can be the column you want
 nodes$sel <- sample(c("sel1", "sel2"), nrow(nodes), replace = TRUE)
 visNetwork(nodes, edges, width = "100%") %>%
  visOptions(selectedBy = "sel")
 ```
-
 
 ## Directed Network
 ```{r, echo = FALSE}
@@ -173,7 +166,7 @@ edges <- data.frame(from = trunc(runif(nb)*(nb-1))+1,
 ```
 
 ```{r}
-visNetwork(nodes, edges, width = "100%") %>% visEdges(arrow = 'from')
+visNetwork(nodes, edges, width = "100%") %>% visEdges(arrows = 'from')
 ```
 
 ## Custom navigation
@@ -201,10 +194,10 @@ edges <- data.frame(from = c(1,2,2,2,3,3),
 ```
 
 ```{r}
-visNetwork(nodes, edges, width = "100%") %>% visEdges(arrow = "from") %>% 
+visNetwork(nodes, edges, width = "100%") %>% visEdges(arrows = "from") %>% 
   visHierarchicalLayout() # same as   visLayout(hierarchical = TRUE) 
 
-visNetwork(nodes, edges, width = "100%") %>% visEdges(arrow = "from") %>% 
+visNetwork(nodes, edges, width = "100%") %>% visEdges(arrows = "from") %>% 
   visHierarchicalLayout(direction = "LR")
 ```
 
@@ -260,7 +253,7 @@ visNetwork(nodes, edges, legend = TRUE, width = "100%") %>%
 
 ## Use in Shiny
 
-With *visNetworkOutput* and *renderVisNetwork*. Using with shiny, and enabled options *nodesIdSelection*, you can access to new input with current selection value :
+With *visNetworkOutput* and *renderVisNetwork*. Using with shiny, and enabled options *nodesIdSelection*, you can access to new input with current selection value. Morevoer, you can do a lot of things with *visNetworkProxy*
 
 ```{r, eval = FALSE}
 output$mynetwork <- renderVisNetwork({... visOptions(nodesIdSelection = TRUE)}) # created input$mynetwork_selected
@@ -280,7 +273,7 @@ You can also control :
 
 ```{r, eval = FALSE}
 network <- visNetwork(nodes, edges, width = "100%")
-htmlwidgets::saveWidget(network, "network.html")
+visSave(network, file = "network.html")
 ```
 
 ## Use DOT language data 

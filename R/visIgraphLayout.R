@@ -28,34 +28,28 @@
 #'
 #'# with defaut layout
 #'visNetwork(nodes, edges) %>% 
-#'  visIgraphLayout() %>%
-#'  visNodes(size = 10)
+#'  visIgraphLayout()
 #'
 #'# use full space
 #'visNetwork(nodes, edges) %>% 
-#'  visIgraphLayout(type = "full") %>%
-#'  visNodes(size = 10)
+#'  visIgraphLayout(type = "full")
 #'
 #'# in circle ?
 #'visNetwork(nodes, edges) %>% 
 #'  visIgraphLayout(layout = "layout_in_circle") %>%
-#'  visNodes(size = 10) %>%
 #'  visOptions(highlightNearest = list(enabled = T, hover = T), 
 #'    nodesIdSelection = T)
 #'  
 #'# keep physics with smooth curves ?
 #'visNetwork(nodes, edges) %>% 
-#'  visIgraphLayout(physics = TRUE, smooth = TRUE) %>%
-#'  visNodes(size = 10)
+#'  visIgraphLayout(physics = TRUE, smooth = TRUE)
 #'
 #'# fix radomSeed to keep position
 #'visNetwork(nodes, edges) %>% 
-#'  visIgraphLayout(randomSeed = 123) %>%
-#'  visNodes(size = 10)
+#'  visIgraphLayout(randomSeed = 123)
 #'  
 #'visNetwork(nodes, edges) %>% 
-#'  visIgraphLayout(randomSeed = 123) %>%
-#'  visNodes(size = 10)
+#'  visIgraphLayout(randomSeed = 123)
 #'}
 #'@seealso \link{visNodes} for nodes options, \link{visEdges} for edges options, \link{visGroups} for groups options, 
 #'\link{visLegend} for adding legend, \link{visOptions} for custom option, \link{visLayout} & \link{visHierarchicalLayout} for layout, 
@@ -120,7 +114,7 @@ visIgraphLayout <- function(graph,
   graph$x$nodes$x <- coord[, 1]
   graph$x$nodes$y <- coord[, 2]
   
-  to <- c(-2, 2)
+  to <- c(-1, 1)
   from <- range(graph$x$nodes$x, na.rm = TRUE, finite = TRUE)
   graph$x$nodes$x <- (graph$x$nodes$x - from[1])/diff(from) * diff(to) + to[1]
   

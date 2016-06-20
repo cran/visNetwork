@@ -4,18 +4,21 @@
 \alias{visEvents}
 \title{Network visualization events}
 \usage{
-visEvents(graph, click = NULL, doubleClick = NULL, oncontext = NULL,
-  hold = NULL, release = NULL, select = NULL, selectNode = NULL,
-  selectEdge = NULL, deselectNode = NULL, deselectEdge = NULL,
-  dragStart = NULL, dragging = NULL, dragEnd = NULL, hoverNode = NULL,
-  blurNode = NULL, hoverEdge = NULL, blurEdge = NULL, zoom = NULL,
-  showPopup = NULL, hidePopup = NULL, startStabilizing = NULL,
-  stabilizationProgress = NULL, stabilizationIterationsDone = NULL,
-  stabilized = NULL, resize = NULL, initRedraw = NULL,
-  beforeDrawing = NULL, afterDrawing = NULL, animationFinished = NULL)
+visEvents(graph, type = "on", click = NULL, doubleClick = NULL,
+  oncontext = NULL, hold = NULL, release = NULL, select = NULL,
+  selectNode = NULL, selectEdge = NULL, deselectNode = NULL,
+  deselectEdge = NULL, dragStart = NULL, dragging = NULL,
+  dragEnd = NULL, hoverNode = NULL, blurNode = NULL, hoverEdge = NULL,
+  blurEdge = NULL, zoom = NULL, showPopup = NULL, hidePopup = NULL,
+  startStabilizing = NULL, stabilizationProgress = NULL,
+  stabilizationIterationsDone = NULL, stabilized = NULL, resize = NULL,
+  initRedraw = NULL, beforeDrawing = NULL, afterDrawing = NULL,
+  animationFinished = NULL)
 }
 \arguments{
 \item{graph}{: a visNetwork object}
+
+\item{type}{: Character. "on" (Default) to full listener, "once" to set an event listener only once, or "off" to disable a listener.}
 
 \item{click}{: Fired when the user clicks the mouse or taps on a touchscreen device.}
 
@@ -77,6 +80,7 @@ visEvents(graph, click = NULL, doubleClick = NULL, oncontext = NULL,
 }
 \description{
 Network visualization events. For full documentation, have a look at \link{visDocumentation}.
+Use \code{type = "once"} to set an event listener only once, and \code{type = "off"} to disable all the related events.
 }
 \examples{
 
@@ -89,6 +93,15 @@ visNetwork(nodes, edges) \%>\%
      dragEnd = "function(properties) {
      alert('finsih to drag');}")
 
+# set one 
+visNetwork(nodes, edges) \%>\%
+ visEvents(type = "once", select = "function() {
+     alert('first selection');}") \%>\%
+ visEvents(select = "function(properties) {
+     alert('selected nodes: ' + properties.nodes);}", 
+     dragEnd = "function(properties) {
+     alert('finsih to drag');}")
+     
 
 }
 \seealso{

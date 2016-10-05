@@ -32,6 +32,8 @@
 #'  \item{\code{\link{visRemoveEdges}}}{ : Remove edges}
 #'  \item{\code{\link{visSelectNodes}}}{ :Select nodes}
 #'  \item{\code{\link{visSelectEdges}}}{ : Select edges}
+#'  \item{\code{\link{visGetNodes}}}{ :Get nodes}
+#'  \item{\code{\link{visGetEdges}}}{ : Get edges}
 #'  \item{\code{\link{visSetSelection}}}{ : Select edges/nodes}
 #'  \item{and also...}{ : \code{\link{visRedraw}}, \code{\link{visStabilize}}, \code{\link{visSetData}}, \code{\link{visGetPositions}},
 #'  , \code{\link{visMoveNode}}, \code{\link{visUnselectAll}}}
@@ -46,6 +48,7 @@
 #'
 #'}
 #' @export
+#' @references See online documentation \url{http://datastorm-open.github.io/visNetwork/}
 visNetworkOutput <- function(outputId, width = '100%', height = '400px'){
   shinyWidgetOutput(outputId, 'visNetwork', width, height, package = 'visNetwork')
 }

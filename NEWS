@@ -1,3 +1,18 @@
+visNetwork 1.0.2
+--------------------------------------------------------------------------------
+
+  * fix some bad interactions with dplyr & data.table
+  * fix visSelect... & visRemove.. when passing only one id greater than 9
+  * add updateOptions to visUpdateNodes & visRemoveNodes and fix update of options using this functions with proxy
+  * add useLabels option for nodeIdSelection
+  * Fix bad interaction with columns order & visIgraphLayout
+  * add visGetNodes & visGetEdges to get data using shiny
+  * add submain and footer argument
+  * change export height estimation
+  * Fix visInteraction bug using visOptions together
+  * Fix passing dashes options + add example
+  * Fix timevis bad interaction
+  
 visNetwork 1.0.1
 --------------------------------------------------------------------------------
 

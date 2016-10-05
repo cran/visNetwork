@@ -116,8 +116,28 @@
 #' 
 #' visNetwork(nodes, edges) %>% visEdges(shadow = list(enabled = TRUE, size = 5))
 #' 
+#' ## dashes control
+#' nodes <- data.frame(id = 1:3)
+#' edges <- data.frame(from = c(1,2), to = c(1,3))
+#' 
+#' # enabled globally
+#' visNetwork(nodes, edges) %>% visEdges(dashes = TRUE)
+#' 
+#' # set configuration individualy 
+#' # have to use specific notation...
+#' nodes <- data.frame(id = 1:3)
+#' edges <- data.frame(from = c(1,2), to = c(1,3),
+#'      dashes = c("[10,10,2,2]", "false"))
+#' 
+#' visNetwork(nodes, edges)
+#' 
+#' edges <- data.frame(from = c(1,2), to = c(1,3),
+#'      dashes = c("[10,10,2,2]", "[2]"))
+#' 
+#' visNetwork(nodes, edges)
+#' 
 #' @export
-
+#' @references See online documentation \url{http://datastorm-open.github.io/visNetwork/}
 visEdges <- function(graph,
                      title = NULL,
                      value = NULL,

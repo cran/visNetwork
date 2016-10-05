@@ -59,7 +59,7 @@
 #' @importFrom  utils getAnywhere
 #' 
 #'@export
-
+#'@references See online documentation \url{http://datastorm-open.github.io/visNetwork/}
 visIgraphLayout <- function(graph,
                             layout = "layout_nicely",
                             physics = FALSE, 
@@ -97,7 +97,7 @@ visIgraphLayout <- function(graph,
   igraphlayout <- list(type = type)
   
   ig <- igraph::graph_from_data_frame(graph$x$edges, directed = TRUE, 
-                                      vertices = graph$x$nodes)
+                                      vertices = graph$x$nodes[,c("id", setdiff(names(graph$x$nodes), "id"))])
   
   if(!is.null(randomSeed)){
     set.seed(randomSeed)

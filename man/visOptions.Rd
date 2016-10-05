@@ -29,6 +29,7 @@ visOptions(graph, width = NULL, height = NULL, highlightNearest = FALSE,
  \item{"values}{ : Optional. Vector of possible values. Defaut to all id in nodes data.frame.}
  \item{"selected"}{ : Optional. Integer/Character. Initial id selection. Defaut to NULL}
  \item{"style"}{ : Character. HTML style of list. Default to 'width: 150px; height: 26px'. Optional.}
+ \item{"useLabels"}{ : Boolean. Use labels instead of id ? Default to TRUE. Optional.}
 }}
 
 \item{selectedBy}{: Custom option. Character or a named list. Add a multiple selection based on column of node data.frame creating an HTML select element. Not available for DOT and Gephi.
@@ -80,7 +81,7 @@ visNetwork(nodes, edges) \%>\% visHierarchicalLayout() \%>\% visEdges(arrows = "
 ##########################
 # nodesIdSelection
 ##########################
-
+ 
 visNetwork(nodes, edges) \%>\% 
  visOptions(highlightNearest = TRUE, nodesIdSelection = TRUE)
 
@@ -89,12 +90,11 @@ visNetwork(nodes, edges) \%>\%
  visOptions(highlightNearest = TRUE, 
  nodesIdSelection = list(enabled = TRUE, selected = "1"))
  
-# subset on id values ?
+# subset on id values & don't use labels ?
 visNetwork(nodes, edges) \%>\% 
  visOptions(highlightNearest = TRUE, 
  nodesIdSelection = list(enabled = TRUE, 
-   selected = "2",
-   values = c(2:10)))
+   selected = "2", values = c(2:10), useLabels = FALSE))
  
 # some style
 visNetwork(nodes, edges) \%>\% 
@@ -108,7 +108,12 @@ visNetwork(nodes, edges) \%>\%
 ##########################
 # selectedBy
 ##########################
+nodes <- data.frame(id = 1:15, label = paste("Label", 1:15),
+ group = sample(LETTERS[1:3], 15, replace = TRUE))
 
+edges <- data.frame(from = trunc(runif(15)*(15-1))+1,
+ to = trunc(runif(15)*(15-1))+1)
+ 
 visNetwork(nodes, edges) \%>\% 
  visOptions(selectedBy = "group")
  
@@ -142,6 +147,9 @@ nodes$group <- sample(c("group 1", "group 2", "group 1, group 2, group 3"),
 visNetwork(nodes, edges) \%>\% 
  visOptions(selectedBy = list(variable = "group", multiple = TRUE))
   
+}
+\references{
+See online documentation \url{http://datastorm-open.github.io/visNetwork/}
 }
 \seealso{
 \link{visNodes} for nodes options, \link{visEdges} for edges options, \link{visGroups} for groups options, 

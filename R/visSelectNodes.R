@@ -21,7 +21,7 @@
 #'}
 #'
 #'@export
-
+#'@references See online documentation \url{http://datastorm-open.github.io/visNetwork/}
 visSelectNodes <- function(graph, id, highlightEdges = TRUE, clickEvent = TRUE){
 
   if(!any(class(graph) %in% "visNetwork_Proxy")){
@@ -30,6 +30,12 @@ visSelectNodes <- function(graph, id, highlightEdges = TRUE, clickEvent = TRUE){
 
   stopifnot(is.logical(highlightEdges))
   stopifnot(is.logical(clickEvent))
+  
+  if(!is.null(id)){
+    if(length(id) == 1){
+      id <- list(id)
+    }
+  }
   
   data <- list(id = graph$id, selid = id, highlightEdges = highlightEdges, clickEvent = clickEvent)
   

@@ -4,7 +4,7 @@
 \alias{visUpdateNodes}
 \title{Function to update nodes information, with shiny only.}
 \usage{
-visUpdateNodes(graph, nodes)
+visUpdateNodes(graph, nodes, updateOptions = T)
 }
 \arguments{
 \item{graph}{: a \code{\link{visNetworkProxy}}  object}
@@ -18,6 +18,8 @@ visUpdateNodes(graph, nodes)
  \item{"title"}{ : tooltip of the node}
  \item{...}{}
 }}
+
+\item{updateOptions}{: Boolean. Update options (nodesIdSelection & selectedBy) if needed ? Default to TRUE.}
 }
 \description{
 Function to update nodes information, with shiny only. You can also use this function passing new nodes.
@@ -31,6 +33,9 @@ shiny::runApp(system.file("shiny", package = "visNetwork"))
 
 }
 
+}
+\references{
+See online documentation \url{http://datastorm-open.github.io/visNetwork/}
 }
 \seealso{
 \link{visNodes} for nodes options, \link{visEdges} for edges options, \link{visGroups} for groups options, 

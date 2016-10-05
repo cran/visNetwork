@@ -18,6 +18,7 @@
 #'  \item{"values}{ : Optional. Vector of possible values. Defaut to all id in nodes data.frame.}
 #'  \item{"selected"}{ : Optional. Integer/Character. Initial id selection. Defaut to NULL}
 #'  \item{"style"}{ : Character. HTML style of list. Default to 'width: 150px; height: 26px'. Optional.}
+#'  \item{"useLabels"}{ : Boolean. Use labels instead of id ? Default to TRUE. Optional.}
 #'}
 #'@param selectedBy : Custom option. Character or a named list. Add a multiple selection based on column of node data.frame creating an HTML select element. Not available for DOT and Gephi.
 #'\itemize{
@@ -62,7 +63,7 @@
 #' ##########################
 #' # nodesIdSelection
 #' ##########################
-#' 
+#'  
 #' visNetwork(nodes, edges) %>% 
 #'  visOptions(highlightNearest = TRUE, nodesIdSelection = TRUE)
 #'
@@ -71,12 +72,11 @@
 #'  visOptions(highlightNearest = TRUE, 
 #'  nodesIdSelection = list(enabled = TRUE, selected = "1"))
 #'  
-#' # subset on id values ?
+#' # subset on id values & don't use labels ?
 #' visNetwork(nodes, edges) %>% 
 #'  visOptions(highlightNearest = TRUE, 
 #'  nodesIdSelection = list(enabled = TRUE, 
-#'    selected = "2",
-#'    values = c(2:10)))
+#'    selected = "2", values = c(2:10), useLabels = FALSE))
 #'  
 #' # some style
 #' visNetwork(nodes, edges) %>% 
@@ -90,7 +90,12 @@
 #' ##########################
 #' # selectedBy
 #' ##########################
-#' 
+#' nodes <- data.frame(id = 1:15, label = paste("Label", 1:15),
+#'  group = sample(LETTERS[1:3], 15, replace = TRUE))
+#'
+#' edges <- data.frame(from = trunc(runif(15)*(15-1))+1,
+#'  to = trunc(runif(15)*(15-1))+1)
+#'  
 #' visNetwork(nodes, edges) %>% 
 #'  visOptions(selectedBy = "group")
 #'  
@@ -130,7 +135,7 @@
 #'\link{visDocumentation}, \link{visEvents}, \link{visConfigure} ...
 #'
 #'@export
-
+#'@references See online documentation \url{http://datastorm-open.github.io/visNetwork/}
 visOptions <- function(graph,
                        width = NULL,
                        height = NULL,
@@ -223,10 +228,10 @@ visOptions <- function(graph,
     #############################
     # nodesIdSelection
     #############################
-    idselection <- list(enabled = FALSE, style = 'width: 150px; height: 26px')
+    idselection <- list(enabled = FALSE, style = 'width: 150px; height: 26px', useLabels = TRUE)
     if(is.list(nodesIdSelection)){
-      if(any(!names(nodesIdSelection)%in%c("enabled", "selected", "style", "values"))){
-        stop("Invalid 'nodesIdSelection' argument. List can have 'enabled', 'selected', 'style', 'values'")
+      if(any(!names(nodesIdSelection)%in%c("enabled", "selected", "style", "values", "useLabels"))){
+        stop("Invalid 'nodesIdSelection' argument. List can have 'enabled', 'selected', 'style', 'values', 'useLabels'")
       }
       if("selected"%in%names(nodesIdSelection)){
         if(any(class(graph) %in% "visNetwork")){
@@ -242,12 +247,24 @@ visOptions <- function(graph,
         idselection$enabled <- TRUE
       }
       
+      if("useLabels"%in%names(nodesIdSelection)){
+        idselection$useLabels <- nodesIdSelection$useLabels
+      }else if(any(class(graph) %in% "visNetwork_Proxy")){
+        idselection$useLabels <- NULL
+      }
+      
       if("style"%in%names(nodesIdSelection)){
         idselection$style <- nodesIdSelection$style
+      }else if(any(class(graph) %in% "visNetwork_Proxy")){
+        idselection$style <- NULL
       }
       
     }else if(is.logical(nodesIdSelection)){
       idselection$enabled <- nodesIdSelection
+      if(any(class(graph) %in% "visNetwork_Proxy")){
+        idselection$useLabels <- NULL
+        idselection$style <- NULL
+      }
     }else{
       stop("Invalid 'nodesIdSelection' argument")
     }
@@ -288,14 +305,24 @@ visOptions <- function(graph,
         
         if("style"%in%names(selectedBy)){
           byselection$style <- selectedBy$style
+        }else if(any(class(graph) %in% "visNetwork_Proxy")){
+          byselection$style <- NULL
         }
         
         if("multiple"%in%names(selectedBy)){
           byselection$multiple <- selectedBy$multiple
+        }else if(any(class(graph) %in% "visNetwork_Proxy")){
+          byselection$multiple <- NULL
         }
         
       }else if(is.character(selectedBy)){
         byselection$variable <- selectedBy
+        
+        if(any(class(graph) %in% "visNetwork_Proxy")){
+          byselection$style <- NULL
+          byselection$multiple <- NULL
+        }
+
       }else{
         stop("Invalid 'selectedBy' argument. Must a 'character' or a 'list'")
       }
@@ -304,7 +331,11 @@ visOptions <- function(graph,
         byselection$enabled <- TRUE
         
         if("values"%in%names(selectedBy)){
-          byselection$values <- selectedBy$values
+          if(length(selectedBy$values) > 1){
+            byselection$values <- selectedBy$values
+          } else {
+            byselection$values <- list(selectedBy$values)
+          }
         }
         
         if("selected"%in%names(byselection)){
@@ -331,6 +362,12 @@ visOptions <- function(graph,
             byselection$values <- selectedBy$values
           }
           
+          if("values"%in%names(byselection)){
+            if(length(byselection$values) == 1){
+              byselection$values <- list(byselection$values)
+            }
+          }
+
           if("selected"%in%names(byselection)){
             if(!byselection$selected%in%byselection$values){
               stop(byselection$selected, " not in data/selection. selectedBy$selected must be a valid value.")

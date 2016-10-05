@@ -18,14 +18,22 @@
 #'
 #'}
 #'
+#'@references See online documentation \url{http://datastorm-open.github.io/visNetwork/}
+#' 
 #'@export
-
+#'@references See online documentation \url{http://datastorm-open.github.io/visNetwork/}
 visRemoveEdges <- function(graph, id){
 
   if(!any(class(graph) %in% "visNetwork_Proxy")){
     stop("Can't use visRemoveEdges with visNetwork object. Only within shiny & using visNetworkProxy")
   }
 
+  if(!is.null(id)){
+    if(length(id) == 1){
+      id <- list(id)
+    }
+  }
+  
   data <- list(id = graph$id, rmid = id)
   
   graph$session$sendCustomMessage("visShinyRemoveEdges", data)

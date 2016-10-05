@@ -62,7 +62,7 @@
 #'   visInteraction(keyboard = TRUE)
 #'  
 #'@export
-
+#'@references See online documentation \url{http://datastorm-open.github.io/visNetwork/}
 visInteraction <- function(graph,
                        dragNodes = NULL,
                        dragView = NULL,
@@ -103,7 +103,7 @@ visInteraction <- function(graph,
     data <- list(id = graph$id, options = options)
     graph$session$sendCustomMessage("visShinyOptions",data)
   }else{
-    graph$x$options$interaction <- interaction
+    graph$x$options$interaction <- mergeLists(graph$x$options$interaction, interaction)
   }
   graph
 }

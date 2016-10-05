@@ -1,10 +1,10 @@
-#' Function to select edge(s) from network, with shiny only.
+#' Function to get nodes data, with shiny only.
 #'
-#' Function to select edges(s) from network, with shiny only. 
+#' Function to get nodes data, with shiny only
 #' 
-#'@param graph : a \code{\link{visNetworkProxy}}  object
-#'@param id : vector of id, edges(s) to select
-#'
+#' @param graph : a \code{\link{visNetworkProxy}}  object
+#' @param input : name of shiny input created. Default to paste0(graph$id, "_nodes")
+#' 
 #'@seealso \link{visNodes} for nodes options, \link{visEdges} for edges options, \link{visGroups} for groups options, 
 #'\link{visLegend} for adding legend, \link{visOptions} for custom option, \link{visLayout} & \link{visHierarchicalLayout} for layout, 
 #'\link{visPhysics} for control physics, \link{visInteraction} for interaction, \link{visNetworkProxy} & \link{visFocus} & \link{visFit} for animation within shiny,
@@ -20,21 +20,15 @@
 #'
 #'@export
 #'@references See online documentation \url{http://datastorm-open.github.io/visNetwork/}
-visSelectEdges <- function(graph, id){
-
+visGetNodes <- function(graph, input = paste0(graph$id, "_nodes")){
+  
   if(!any(class(graph) %in% "visNetwork_Proxy")){
-    stop("Can't use visSelectEdges with visNetwork object. Only within shiny & using visNetworkProxy")
-  }
-
-  if(!is.null(id)){
-    if(length(id) == 1){
-      id <- list(id)
-    }
+    stop("Can't use visGetNodes with visNetwork object. Only within shiny & using visNetworkProxy")
   }
   
-  data <- list(id = graph$id, selid = id)
+  data <- list(id = graph$id, input = input)
   
-  graph$session$sendCustomMessage("visShinySelectEdges", data)
-
+  graph$session$sendCustomMessage("visShinyGetNodes", data)
+  
   graph
 }

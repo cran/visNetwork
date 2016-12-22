@@ -1,7 +1,7 @@
 Package: visNetwork
 Title: Network Visualization using 'vis.js' Library
-Version: 1.0.2
-Date: 2016-10-05
+Version: 1.0.3
+Date: 2016-12-22
 Authors@R: c(
     person(family = "Almende B.V.", role = c("aut", "cph"),
        comment = "vis.js library in htmlwidgets/lib, http://visjs.org, http://www.almende.com/home"),
@@ -20,9 +20,9 @@ Suggests: knitr, igraph
 VignetteBuilder: knitr
 RoxygenNote: 5.0.1
 NeedsCompilation: no
-Packaged: 2016-10-05 14:39:19 UTC; Benoit
+Packaged: 2016-12-22 11:24:45 UTC; benoit
 Author: Almende B.V. [aut, cph] (vis.js library in htmlwidgets/lib,
     http://visjs.org, http://www.almende.com/home),
   Benoit Thieurmel [aut, cre] (R interface)
 Repository: CRAN
-Date/Publication: 2016-10-05 18:17:57
+Date/Publication: 2016-12-22 23:38:13

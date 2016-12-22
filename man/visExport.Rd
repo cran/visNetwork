@@ -6,16 +6,16 @@
 \usage{
 visExport(graph, type = "png", name = "network",
   label = paste0("Export as ", type), background = "#fff",
-  float = "right", style = NULL, loadDependencies = TRUE)
+  float = "right", style = NULL, loadDependencies = TRUE, ...)
 }
 \arguments{
 \item{graph}{: a visNetwork object}
 
-\item{type}{: Type of export. One of "png" (default) or "jpeg"}
+\item{type}{: Type of export. One of "png" (default), "jpeg" or "pdf"}
 
 \item{name}{: name of imgage, default to "network"}
 
-\item{label}{: Label on button, default to "Export as png/jpeg"}
+\item{label}{: Label on button, default to "Export as png/jpeg/pdf"}
 
 \item{background}{: background color, default to white (#fff)}
 
@@ -23,10 +23,12 @@ visExport(graph, type = "png", name = "network",
 
 \item{style}{: button css style.}
 
-\item{loadDependencies}{/ Boolean. TRUE by default. Load libraries for export (fileSaver, Blob, canvastoBlob,html2canvas)}
+\item{loadDependencies}{/ Boolean. TRUE by default. Load libraries for export (fileSaver, Blob, canvastoBlob, html2canvas, jsPDF)}
+
+\item{...}{: arguments for \link{addExport}}
 }
 \description{
-Network export configuration. This function only work within shiny or a web browser (not in RStudio)
+Network export configuration. This function only work within shiny or a web browser.
 }
 \examples{
 
@@ -49,9 +51,6 @@ visNetwork(nodes, edges) \%>\%
 See online documentation \url{http://datastorm-open.github.io/visNetwork/}
 }
 \seealso{
-\link{visNodes} for nodes options, \link{visEdges} for edges options, \link{visGroups} for groups options, 
-\link{visLegend} for adding legend, \link{visOptions} for custom option, \link{visLayout} & \link{visHierarchicalLayout} for layout, 
-\link{visPhysics} for control physics, \link{visInteraction} for interaction, \link{visNetworkProxy} & \link{visFocus} & \link{visFit} for animation within shiny,
-\link{visDocumentation}, \link{visEvents}, \link{visConfigure} ...
+\link{visSave}
 }
 

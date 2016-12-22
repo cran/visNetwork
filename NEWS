@@ -1,3 +1,19 @@
+visNetwork 1.0.3
+--------------------------------------------------------------------------------
+
+  * new hideColor argument to control hidden nodes & edges
+  * add pdf export
+  * enabled layout_with_sugiyama with visIgraphLayout
+  * To vis.js 4.17.0
+  * enabled passing nodes & edges as list
+  * fix igraghLayout with rmarkdown and tabset
+  * fix some bugs and add some options on legend
+  * fix passing customScalingFunction using visGroups
+  * fix reset options using unselectAll
+  * add visNearestNodes function
+  * store positions of nodes before rendering with visGetNodes
+  * add delay on tooltip popup (so you can click on a link...!)
+  
 visNetwork 1.0.2
 --------------------------------------------------------------------------------
 

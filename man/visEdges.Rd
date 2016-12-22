@@ -40,7 +40,7 @@ visEdges(graph, title = NULL, value = NULL, label = NULL, length = NULL,
 
 \item{labelHighlightBold}{: Boolean. Default to    true. Determines whether or not the label becomes bold when the edge is selected.}
 
-\item{color}{: Named list or String. Default to named list. Color information of the edge in every situation. When the edge only needs a single color, a color value like 'rgb(120,32,14)', '#ffffff' or 'red'</code> can be supplied instead of an object.
+\item{color}{: Named list or String. Default to named list. Color information of the edge in every situation. Can be 'rgba(120,32,14,1)', '#97C2FC' or 'red'.
 \itemize{
  \item{"color"}{ : String. Default to '#848484. The color of the border of the node when it is not selected or hovered over (assuming hover is enabled in the interaction module).}
  \item{"highlight "}{ : String. Default to '#848484'. The color the edge when it is selected.}
@@ -66,6 +66,7 @@ visEdges(graph, title = NULL, value = NULL, label = NULL, length = NULL,
    \itemize{
      \item{"enabled"}{ : Boolean. Default to false. Toggle the arrow on or off. This option is optional, if undefined and the scaleFactor property is set, enabled will be set to true.}
      \item{"scaleFactor"}{ : Number. Default to 1. The scale factor allows you to change the size of the arrowhead.}
+     \item{"type"}{ : Character. Default to 'arrow'. The type of endpoint. Also possible is 'circle'.}
    }
  }
  \item{"middle"}{ : Named list or Boolean. Default to Named list. Exactly the same as the to object but with an arrowhead in the center node of the edge.}
@@ -118,7 +119,8 @@ visNetwork(nodes, edges) \%>\% visEdges(arrows = 'from')
 
 visNetwork(nodes, edges) \%>\% visEdges(arrows = 'to, from')
 
-visNetwork(nodes, edges) \%>\% visEdges(arrows =list(to = list(enabled = TRUE, scaleFactor = 2)))
+visNetwork(nodes, edges) \%>\% visEdges(arrows =list(to = list(enabled = TRUE, 
+ scaleFactor = 2, type = 'circle')))
 
 visNetwork(nodes, edges) \%>\% visEdges(smooth = FALSE)
 

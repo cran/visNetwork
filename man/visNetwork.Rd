@@ -46,13 +46,13 @@ visNetwork(nodes = NULL, edges = NULL, dot = NULL, gephi = NULL,
 \item{submain}{: For add a subtitle. Character or a named list.
 \itemize{
  \item{"text"}{ : Character. Subtitle.}
- \item{"style"}{ : Optional. Character. HTML style of title. Default to 'font-family:Georgia, Times New Roman, Times, serif;font-size:12px;text-align:center;'.}
+ \item{"style"}{ : Optional. Character. HTML style of submain. Default to 'font-family:Georgia, Times New Roman, Times, serif;font-size:12px;text-align:center;'.}
 }}
 
 \item{footer}{: For add a footer. Character or a named list.
 \itemize{
  \item{"text"}{ : Character. footer.}
- \item{"style"}{ : Optional. Character. HTML style of title. Default to 'font-family:Georgia, Times New Roman, Times, serif;font-size:12px;text-align:center;'.}
+ \item{"style"}{ : Optional. Character. HTML style of footer. Default to 'font-family:Georgia, Times New Roman, Times, serif;font-size:12px;text-align:center;'.}
 }}
 
 \item{...}{: Don't use.}
@@ -209,4 +209,3 @@ See online documentation \url{http://datastorm-open.github.io/visNetwork/}
 \link{visPhysics} for control physics, \link{visInteraction} for interaction, \link{visNetworkProxy} & \link{visFocus} & \link{visFit} for animation within shiny,
 \link{visDocumentation}, \link{visEvents}, \link{visConfigure} ...
 }
-

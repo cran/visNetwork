@@ -4,16 +4,16 @@
 \alias{visSave}
 \title{Save a a visNetwork object to an HTML file}
 \usage{
-visSave(graph, file, selfcontained = TRUE)
+visSave(graph, file, selfcontained = TRUE, background = "white")
 }
 \arguments{
 \item{graph}{: a visNetwork object}
 
-\item{file}{File to save HTML into}
+\item{file}{: File to save HTML into. See \link{saveWidget}}
 
-\item{selfcontained}{Whether to save the HTML as a single self-contained file
-(with external resources base64 encoded) or a file with external resources
-placed in an adjacent directory.}
+\item{selfcontained}{: Whether to save the HTML as a single self-contained file (with external resources base64 encoded) or a file with external resources placed in an adjacent directory.}
+
+\item{background}{: Text string giving the html background color of the widget. Defaults to white.}
 }
 \description{
 Save a a visNetwork object to an HTML file for sharing with others. The HTML can
@@ -29,7 +29,7 @@ edges <- data.frame(from = c(1,2), to = c(2,3))
 network <- visNetwork(nodes, edges)
 network
 
-network \%>\% visSave(file = "network.html")
+network \%>\% visSave(file = "network.html", background = "black")
 # same as
 visSave(network, file = "network.html")
 
@@ -41,4 +41,3 @@ See online documentation \url{http://datastorm-open.github.io/visNetwork/}
 \seealso{
 \link{visExport}
 }
-

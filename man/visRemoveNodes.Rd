@@ -4,7 +4,7 @@
 \alias{visRemoveNodes}
 \title{Function to remove nodes from network, with shiny only.}
 \usage{
-visRemoveNodes(graph, id, updateOptions = T)
+visRemoveNodes(graph, id, updateOptions = TRUE, legend = FALSE)
 }
 \arguments{
 \item{graph}{: a \code{\link{visNetworkProxy}}  object}
@@ -12,6 +12,8 @@ visRemoveNodes(graph, id, updateOptions = T)
 \item{id}{: vector of id, nodes to remove}
 
 \item{updateOptions}{: Boolean. Update options (nodesIdSelection & selectedBy) if needed ? Default to TRUE.}
+
+\item{legend}{: Boolean. Remove nodes on legend ? Default to FALSE}
 }
 \description{
 Function to remove nodes from network, with shiny only.
@@ -34,4 +36,3 @@ See online documentation \url{http://datastorm-open.github.io/visNetwork/}
 \link{visPhysics} for control physics, \link{visInteraction} for interaction, \link{visNetworkProxy} & \link{visFocus} & \link{visFit} for animation within shiny,
 \link{visDocumentation}, \link{visEvents}, \link{visConfigure} ...
 }
-

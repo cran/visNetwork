@@ -39,13 +39,13 @@
 #'@param submain : For add a subtitle. Character or a named list.
 #'\itemize{
 #'  \item{"text"}{ : Character. Subtitle.}
-#'  \item{"style"}{ : Optional. Character. HTML style of title. Default to 'font-family:Georgia, Times New Roman, Times, serif;font-size:12px;text-align:center;'.}
+#'  \item{"style"}{ : Optional. Character. HTML style of submain. Default to 'font-family:Georgia, Times New Roman, Times, serif;font-size:12px;text-align:center;'.}
 #'}
 #'
 #'@param footer : For add a footer. Character or a named list.
 #'\itemize{
 #'  \item{"text"}{ : Character. footer.}
-#'  \item{"style"}{ : Optional. Character. HTML style of title. Default to 'font-family:Georgia, Times New Roman, Times, serif;font-size:12px;text-align:center;'.}
+#'  \item{"style"}{ : Optional. Character. HTML style of footer. Default to 'font-family:Georgia, Times New Roman, Times, serif;font-size:12px;text-align:center;'.}
 #'}
 #' @param ... : Don't use.
 #' 
@@ -212,11 +212,17 @@ visNetwork <- function(nodes = NULL, edges = NULL, dot = NULL, gephi = NULL,
     }
     if(is.data.frame(nodes)){
       nodesToDataframe <- TRUE
+      # unique id
+      if(anyDuplicated(nodes$id)){
+        stop("nodes must have unique ids")
+      }
     }else if(is.list(nodes)){
       nodesToDataframe <- FALSE
     }else{
       stop("nodes must be a data.frame or a list")
     }
+  } else {
+    nodesToDataframe <- FALSE
   }
   
   if(!is.null(edges)){
@@ -230,6 +236,8 @@ visNetwork <- function(nodes = NULL, edges = NULL, dot = NULL, gephi = NULL,
     }else{
       stop("edges must be a data.frame or a list")
     }
+  } else {
+    edgesToDataframe <- FALSE
   }
 
   # main

@@ -8,27 +8,35 @@
 #'@param highlightNearest : Custom Option. Just a Boolean, or a named list. Default to false. Highlight nearest when clicking a node ? Not available for DOT and Gephi.
 #'\itemize{
 #'  \item{"enabled"}{ : Boolean. Default to false. Activated or not ?.}
-#'  \item{"degree"}{ : Integer. Degree of depth of nodes to be colored. Default to 1. Set high number to have the entire sub-network. In case of "hierarchical" algorithm, you can also pass a list(from = 1, to = 1) to control degree in both direction}
-#'  \item{"hover"}{ : Boolean. Enable highlightNearest alos hovering a node ? Default to FALSE}
-#'  \item{"algorithm"}{ : String. highlightNearest algorithm. "all" highlight all nodes, without taking direction information. "hierarchical" look only at inputs/outputs nodes.}
-#'  \item{"hideColor"}{ : String. Color for hidden nodes/edges. Use a rgba definition. Defaut to rgba(200,200,200,0.5)}
+#'  \item{"degree"}{ : Optional. Integer. Degree of depth of nodes to be colored. Default to 1. Set high number to have the entire sub-network. In case of "hierarchical" algorithm, you can also pass a list(from = 1, to = 1) to control degree in both direction}
+#'  \item{"hover"}{ : Optional. Boolean. Enable highlightNearest alos hovering a node ? Default to FALSE}
+#'  \item{"algorithm"}{ : Optional. String. highlightNearest algorithm. "all" highlight all nodes, without taking direction information. "hierarchical" look only at inputs/outputs nodes.}
+#'  \item{"hideColor"}{ : Optional. String. Color for hidden nodes/edges. Use a rgba definition. Defaut to rgba(200,200,200,0.5)}
+#'  \item{"labelOnly"}{ : Optional. Boolean. Keep just label for nodes on degree + 1 ? Default to TRUE}
 #'}
 #'@param nodesIdSelection :  Custom Option. Just a Boolean, or a named list. Default to false. Add an id node selection creating an HTML select element. This options use click event. Not available for DOT and Gephi.
 #'\itemize{
 #'  \item{"enabled"}{ : Boolean. Default to false. Activated or not ?.}
-#'  \item{"values}{ : Optional. Vector of possible values. Defaut to all id in nodes data.frame.}
+#'  \item{"values}{ : Optional. Vector of possible values (node's id), and so order is preserve. Defaut to all id in nodes data.frame.}
 #'  \item{"selected"}{ : Optional. Integer/Character. Initial id selection. Defaut to NULL}
-#'  \item{"style"}{ : Character. HTML style of list. Default to 'width: 150px; height: 26px'. Optional.}
-#'  \item{"useLabels"}{ : Boolean. Use labels instead of id ? Default to TRUE. Optional.}
+#'  \item{"style"}{ : Optional. Character. HTML style of list. Default to 'width: 150px; height: 26px'.}
+#'  \item{"useLabels"}{ : Optional. Boolean. Use labels instead of id ? Default to TRUE.}
 #'}
 #'@param selectedBy : Custom option. Character or a named list. Add a multiple selection based on column of node data.frame creating an HTML select element. Not available for DOT and Gephi.
 #'\itemize{
 #'  \item{"variable"}{ : Character. Column name of selection variable.}
 #'  \item{"values}{ : Optional. Vector of possible values. Defaut to all values in nodes data.frame.}
 #'  \item{"selected"}{ : Optional. Integer/Character. Initial selection. Defaut to NULL}
-#'  \item{"style"}{ : Optional. Character. HTML style of list. Default to 'width: 150px; height: 26px'. Optional.}
+#'  \item{"style"}{ : Optional. Character. HTML style of list. Default to 'width: 150px; height: 26px'.}
 #'  \item{"multiple"}{ : Optional. Boolean. Default to FALSE. If TRUE, you can affect multiple groups per nodes using a comma ("gr1,gr2")}
-#'  \item{"hideColor"}{ : String. Color for hidden nodes/edges. Use a rgba definition. Defaut to rgba(200,200,200,0.5)}
+#'  \item{"hideColor"}{ : Optional. String. Color for hidden nodes/edges. Use a rgba definition. Defaut to rgba(200,200,200,0.5)}
+#'}
+#'@param collapse : Custom option. Just a Boolean, or a named list. Collapse / Uncollapse nodes using double-click. In dev.
+#'\itemize{
+#'  \item{"enabled"}{ : Boolean. Default to false. Activated or not ?}
+#'  \item{"fit"}{ : Optional. Boolean. Default to FALSE. Call fit method after collapse/uncollapse event ?}
+#'  \item{"resetHighlight"}{ : Optional. Boolean. Default to TRUE to reset highlighted nodes after collapse/uncollapse event.}
+#'  \item{"clusterOptions"}{ : Optional. List. Defaut to NULL. A list of all options you want to pass to cluster collapsed node}
 #'}
 #'@param autoResize : Boolean. Default to true. If true, the Network will automatically detect when its container is resized, and redraw itself accordingly. If false, the Network can be forced to repaint after its container has been resized using the function redraw() and setSize(). 
 #'@param clickToUse : Boolean. Default to false. When a Network is configured to be clickToUse, it will react to mouse, touch, and keyboard events only when active. When active, a blue shadow border is displayed around the Network. The Network is set active by clicking on it, and is changed to inactive again by clicking outside the Network or by pressing the ESC key.
@@ -94,6 +102,28 @@
 #'    outline:none;'))   
 #'  
 #' ##########################
+#' # collapse
+#' ##########################
+#'  
+#' nodes <- data.frame(id = 1:15, label = paste("Label", 1:15),
+#'  group = sample(LETTERS[1:3], 15, replace = TRUE))
+#'
+#' edges <- data.frame(from = trunc(runif(15)*(15-1))+1,
+#'  to = trunc(runif(15)*(15-1))+1)
+#'  
+#' # keeping all parent node attributes  
+#' visNetwork(nodes, edges) %>% visEdges(arrows = "to") %>%
+#'  visOptions(collapse = TRUE)
+#'
+#' # setting some properties  
+#' visNetwork(nodes, edges) %>% visEdges(arrows = "to") %>%
+#'  visOptions(collapse = list(enabled = TRUE, clusterOptions = list(shape = "square"))) 
+#'    
+#' # enable / disable open cluster (proxy only) : 
+#' # visEvents(type = "off", doubleClick = "networkOpenCluster")
+#' # visEvents(type = "on", doubleClick = "networkOpenCluster")  
+#'  
+#' ##########################
 #' # selectedBy
 #' ##########################
 #' nodes <- data.frame(id = 1:15, label = paste("Label", 1:15),
@@ -135,6 +165,14 @@
 #' visNetwork(nodes, edges) %>% 
 #'  visOptions(selectedBy = list(variable = "group", multiple = TRUE))
 #'   
+#' ##########################
+#' # collapse
+#' ##########################
+#' visNetwork(nodes, edges) %>% 
+#'  visEdges(arrows = "to") %>% 
+#'  visOptions(collapse = list(enabled = TRUE, 
+#'    clusterOptions = list(shape = "square")))
+#'   
 #'@seealso \link{visNodes} for nodes options, \link{visEdges} for edges options, \link{visGroups} for groups options, 
 #'\link{visLegend} for adding legend, \link{visOptions} for custom option, \link{visLayout} & \link{visHierarchicalLayout} for layout, 
 #'\link{visPhysics} for control physics, \link{visInteraction} for interaction, \link{visNetworkProxy} & \link{visFocus} & \link{visFit} for animation within shiny,
@@ -148,6 +186,7 @@ visOptions <- function(graph,
                        highlightNearest = FALSE,
                        nodesIdSelection = FALSE,
                        selectedBy = NULL,
+                       collapse = FALSE,
                        autoResize = NULL,
                        clickToUse = NULL,
                        manipulation = NULL){
@@ -180,14 +219,44 @@ visOptions <- function(graph,
     highlight <- list(enabled = FALSE)
     idselection <- list(enabled = FALSE)
     byselection <- list(enabled = FALSE)
+    list_collapse <- list(enabled = FALSE, fit = FALSE, resetHighlight = TRUE)
   }else{
-    
+    #############################
+    # collapse
+    #############################
+    list_collapse <- list(enabled = FALSE, fit = FALSE, resetHighlight = TRUE, clusterOptions = NULL)
+    if(is.list(collapse)){
+      if(any(!names(collapse)%in%c("enabled", "fit", "resetHighlight", "clusterOptions"))){
+        stop("Invalid 'collapse' argument")
+      }
+      
+      if("enabled"%in%names(collapse)){
+        stopifnot(is.logical(collapse$enabled))
+        list_collapse$enabled <- collapse$enabled
+      }
+      if("fit"%in%names(collapse)){
+        stopifnot(is.logical(collapse$fit))
+        list_collapse$fit <- collapse$fit
+      }
+      if("resetHighlight"%in%names(collapse)){
+        stopifnot(is.logical(collapse$resetHighlight))
+        list_collapse$resetHighlight <- collapse$resetHighlight
+      }
+      if("clusterOptions"%in%names(collapse)){
+        stopifnot(is.list(collapse$clusterOptions))
+        list_collapse$clusterOptions <- collapse$clusterOptions
+      }
+    } else {
+      stopifnot(is.logical(collapse))
+      list_collapse$enabled <- collapse
+    }
+      
     #############################
     # highlightNearest
     #############################
-    highlight <- list(enabled = FALSE, hoverNearest = FALSE, degree = 1, algorithm = "all", hideColor = 'rgba(200,200,200,0.5)')
+    highlight <- list(enabled = FALSE, hoverNearest = FALSE, degree = 1, algorithm = "all", hideColor = 'rgba(200,200,200,0.5)', labelOnly = TRUE)
     if(is.list(highlightNearest)){
-      if(any(!names(highlightNearest)%in%c("enabled", "degree", "hover", "algorithm", "hideColor"))){
+      if(any(!names(highlightNearest)%in%c("enabled", "degree", "hover", "algorithm", "hideColor", "labelOnly"))){
         stop("Invalid 'highlightNearest' argument")
       }
       
@@ -212,6 +281,11 @@ visOptions <- function(graph,
         }
       }
       
+      if("labelOnly"%in%names(highlightNearest)){
+        stopifnot(is.logical(highlightNearest$labelOnly))
+        highlight$labelOnly <- highlightNearest$labelOnly
+      }
+      
       if("hover"%in%names(highlightNearest)){
         stopifnot(is.logical(highlightNearest$hover))
         highlight$hoverNearest <- highlightNearest$hover
@@ -229,11 +303,23 @@ visOptions <- function(graph,
     
     if(highlight$enabled && any(class(graph) %in% "visNetwork")){
       if(!"label"%in%colnames(graph$x$nodes)){
-        graph$x$nodes$label <- as.character(graph$x$nodes$id)
+        if(is.data.frame(graph$x$nodes)){
+          graph$x$nodes$label <- as.character(graph$x$nodes$id)
+        } else if(is.list(graph$x$nodes)){
+          ctrl <- lapply(1:length(graph$x$nodes), function(x){
+            graph$x$nodes[[x]]$label <<- as.character(graph$x$nodes[[x]]$id)
+          })
+        }
       }
-      if(!"group"%in%colnames(graph$x$nodes)){
-        graph$x$nodes$group <- 1
-      }
+      # if(!"group"%in%colnames(graph$x$nodes)){
+      #   if(is.data.frame(graph$x$nodes)){
+      #     graph$x$nodes$group <- 1
+      #   } else if(is.list(graph$x$nodes)){
+      #     ctrl <- lapply(1:length(graph$x$nodes), function(x){
+      #       graph$x$nodes[[x]]$group <<- 1
+      #     })
+      #   }
+      # }
     }
     
     #############################
@@ -337,7 +423,7 @@ visOptions <- function(graph,
           byselection$style <- NULL
           byselection$multiple <- NULL
         }
-
+        
       }else{
         stop("Invalid 'selectedBy' argument. Must a 'character' or a 'list'")
       }
@@ -382,7 +468,7 @@ visOptions <- function(graph,
               byselection$values <- list(byselection$values)
             }
           }
-
+          
           if("selected"%in%names(byselection)){
             if(!byselection$selected%in%byselection$values){
               stop(byselection$selected, " not in data/selection. selectedBy$selected must be a valid value.")
@@ -391,11 +477,23 @@ visOptions <- function(graph,
           }
           
           if(!"label"%in%colnames(graph$x$nodes)){
-            graph$x$nodes$label <- ""
+            if(is.data.frame(graph$x$nodes)){
+              graph$x$nodes$label <- ""
+            } else if(is.list(graph$x$nodes)){
+              ctrl <- lapply(1:length(graph$x$nodes), function(x){
+                graph$x$nodes[[x]]$label <<- ""
+              })
+            }
           }
-          if(!"group"%in%colnames(graph$x$nodes)){
-            graph$x$nodes$group <- 1
-          }
+          # if(!"group"%in%colnames(graph$x$nodes)){
+          #   if(is.data.frame(graph$x$nodes)){
+          #     graph$x$nodes$group <- 1
+          #   } else if(is.list(graph$x$nodes)){
+          #     ctrl <- lapply(1:length(graph$x$nodes), function(x){
+          #       graph$x$nodes[[x]]$group <<- 1
+          #     })
+          #   }
+          # }
         }
       }
     }
@@ -404,7 +502,7 @@ visOptions <- function(graph,
   # x <- list(highlight = highlightNearest, hoverNearest = hoverNearest, degree = degree, 
   #           idselection = idselection, byselection = byselection)
   
-  x <- list(highlight = highlight, idselection = idselection, byselection = byselection)
+  x <- list(highlight = highlight, idselection = idselection, byselection = byselection, collapse = list_collapse)
   
   if(highlight$hoverNearest){
     graph <- visInteraction(graph, hover = TRUE)
@@ -423,6 +521,9 @@ visOptions <- function(graph,
     }
     if(missing(selectedBy)){
       x$byselection <- NULL
+    }
+    if(missing(collapse)){
+      x$collapse <- NULL
     }
     
     data <- list(id = graph$id, options = x)

@@ -9,7 +9,7 @@ visEdges(graph, title = NULL, value = NULL, label = NULL, length = NULL,
   id = NULL, physics = NULL, selectionWidth = NULL,
   selfReferenceSize = NULL, labelHighlightBold = NULL, color = NULL,
   font = NULL, arrows = NULL, arrowStrikethrough = NULL, smooth = NULL,
-  shadow = NULL, scaling = NULL)
+  shadow = NULL, scaling = NULL, widthConstraint = NULL, chosen = NULL)
 }
 \arguments{
 \item{graph}{: a visNetwork object}
@@ -42,7 +42,7 @@ visEdges(graph, title = NULL, value = NULL, label = NULL, length = NULL,
 
 \item{color}{: Named list or String. Default to named list. Color information of the edge in every situation. Can be 'rgba(120,32,14,1)', '#97C2FC' or 'red'.
 \itemize{
- \item{"color"}{ : String. Default to '#848484. The color of the border of the node when it is not selected or hovered over (assuming hover is enabled in the interaction module).}
+ \item{"color"}{ : String. Default to '#848484. The color of the edge when it is not selected or hovered over (assuming hover is enabled in the interaction module).}
  \item{"highlight "}{ : String. Default to '#848484'. The color the edge when it is selected.}
  \item{"hover"}{ : String. Default to '#848484'. The color the edge when the mouse hovers over it (assuming hover is enabled in the interaction module).}
  \item{"inherit"}{ : String or Boolean. Default to 'from'. When color, highlight or hover are defined, inherit is set to false! Supported options are: true, false, 'from','to','both'.}
@@ -57,7 +57,8 @@ visEdges(graph, title = NULL, value = NULL, label = NULL, length = NULL,
  \item{"background"}{ : String. Default to undefined. When not undefined but a color string, a background rectangle will be drawn behind the label in the supplied color.}
  \item{"strokeWidth"}{ : Number. Default to 2. As an alternative to the background rectangle, a stroke can be drawn around the text. When a value higher than 0 is supplied, the stroke will be drawn.}
  \item{"strokeColor"}{ : String. Default to '#ffffff'. This is the color of the stroke assuming the value for stroke is higher than 0.}
- \item{"align"}{ : String. Default tp 'horizontal'. Possible options: 'horizontal','top','middle','bottom'. The alignment determines how the label is aligned over the edge. The default value horizontal aligns the label horizontally, regardless of the orientation of the edge. When an option other than horizontal is chosen, the label will align itself according to the edge.}
+ \item{"align"}{ : String. Default to 'horizontal'. Possible options: 'horizontal','top','middle','bottom'. The alignment determines how the label is aligned over the edge. The default value horizontal aligns the label horizontally, regardless of the orientation of the edge. When an option other than horizontal is chosen, the label will align itself according to the edge.}
+ \item{"vadjust, multi, bold, ital, boldital, mono"}{See \link{visDocumentation}}
 }}
 
 \item{arrows}{: Named list or String. To draw an arrow with default settings a string can be supplied. For example: 'to, from,middle' or 'to;from', any combination with any seperating symbol is fine. If you want to control the size of the arrowheads, you can supply an object.
@@ -107,6 +108,13 @@ visEdges(graph, title = NULL, value = NULL, label = NULL, length = NULL,
  }
  \item{"customScalingFunction"}{ : Function. If nodes have value fields, this function determines how the size of the nodes are scaled based on their values.}
 }}
+
+\item{widthConstraint}{: Number, boolean or list. If false (defaut), no widthConstraint is applied. If a number is specified, the maximum width of the edge's label is set to the value. The edge's label's lines will be broken on spaces to stay below the maximum.
+\itemize{
+  \item{"maximum"}{ : Boolean. If a number is specified, the maximum width of the edge's label is set to the value. The edge's label's lines will be broken on spaces to stay below the maximum.}
+}}
+
+\item{chosen}{: See \link{visDocumentation}}
 }
 \description{
 Network visualization edges options. For full documentation, have a look at \link{visDocumentation}.
@@ -169,4 +177,3 @@ See online documentation \url{http://datastorm-open.github.io/visNetwork/}
 \link{visPhysics} for control physics, \link{visInteraction} for interaction, \link{visNetworkProxy} & \link{visFocus} & \link{visFit} for animation within shiny,
 \link{visDocumentation}, \link{visEvents}, \link{visConfigure} ...
 }
-

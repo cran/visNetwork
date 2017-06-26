@@ -1,5 +1,4 @@
 [![Rdoc](http://www.rdocumentation.org/badges/version/visNetwork)](http://www.rdocumentation.org/packages/visNetwork)
-
 [![Rdoc](http://www.rdocumentation.org/api/badges/Direct/visNetwork)](http://www.rdocumentation.org/packages/visNetwork)
 
 
@@ -14,6 +13,26 @@
 And have a look to multiple R examples, vis.js documentation (````visDocumentation````). 
 
 # News
+
+## ``2.0.0`` dev version
+
+* #### Add support for edges color/label using ``highlightNearest/selectedBy``
+
+* #### New proxy methods : ``visGetBoundingBox``, ``visGetConnectedEdges``, ``visGetConnectedNodes``, ``visGetEdges``, ``visGetNodes``, ``visGetPositions``, ``visGetScale``, ``visGetSelectedEdges``, ``visGetSelectedNodes``, ``visGetSelection``, ``visGetViewPosition``
+
+* #### init ``visTree``, to visualize rpart object, ``visTreeEditor`` and ``visTreeModuleServer``
+
+## ``1.0.3`` available on CRAN
+
+* #### New ``hideColor`` argument to control hidden nodes & edges using ``highlightNearest/selectedBy``
+
+* #### Add ``pdf export``
+
+* #### New ``visNearestNodes`` function
+
+* #### Store positions of nodes before rendering with ``visGetNodes``
+
+* #### Add delay on tooltip popup (so you can click on a link...!)
 
 ## ``1.0.2`` available on CRAN
 
@@ -38,7 +57,7 @@ And have a look to multiple R examples, vis.js documentation (````visDocumentati
 ```` 
 install.packages("visNetwork")
 
-# devtools::install_github("datastorm-open/visNetwork") for developpement version
+# devtools::install_github("datastorm-open/visNetwork") for development version
 
 require(visNetwork)
 ?visNetwork

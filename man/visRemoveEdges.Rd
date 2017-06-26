@@ -4,12 +4,14 @@
 \alias{visRemoveEdges}
 \title{Function to remove edges from network, with shiny only.}
 \usage{
-visRemoveEdges(graph, id)
+visRemoveEdges(graph, id, legend = FALSE)
 }
 \arguments{
 \item{graph}{: a \code{\link{visNetworkProxy}}  object}
 
 \item{id}{: vector of id, edges to remove}
+
+\item{legend}{: Boolean. Remove edges on legend ? Default to FALSE}
 }
 \description{
 Function to remove edges from network, with shiny only.
@@ -34,4 +36,3 @@ See online documentation \url{http://datastorm-open.github.io/visNetwork/}
 \link{visPhysics} for control physics, \link{visInteraction} for interaction, \link{visNetworkProxy} & \link{visFocus} & \link{visFit} for animation within shiny,
 \link{visDocumentation}, \link{visEvents}, \link{visConfigure} ...
 }
-

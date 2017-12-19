@@ -1,6 +1,6 @@
 #' Visualize Recursive Partitioning and Regression Trees (rpart object)
 #' 
-#' Visualize Recursive Partitioning and Regression Trees \code{rpart}. Have a look to \code{visTreeEditor} to edity and get back network, or to \code{visTreeModuleServer} to use custom tree module in R
+#' Visualize Recursive Partitioning and Regression Trees \code{rpart}. Have a look to \link{visTreeEditor} to edity and get back network, or to \link{visTreeModuleServer} to use custom tree module in R
 #' 
 #' @param object \code{rpart}, rpart object
 #' @param main For add a title. See \link{visNetwork}
@@ -49,7 +49,10 @@
 #' 
 #' @return a visNetwork object 
 #' 
-#' @seealso \link{visTreeEditor}, \link{visTreeModuleServer}
+#' @seealso \link{visTreeEditor}, \link{visTreeModuleServer}, \link{visNetworkEditor}
+#'
+#' @references See online documentation \url{http://datastorm-open.github.io/visNetwork/}
+#'
 #' @examples
 #' 
 #' \dontrun{
@@ -77,10 +80,10 @@
 #'  edgesFontAlign = "middle", edgesFontSize = 20)
 #' 
 #' # disable rules in tooltip, and render tooltip faster
-#' # disable hover highlight
+#' # enable hover highlight
 #' visTree(res, rules = FALSE, tooltipDelay = 0, 
 #'  highlightNearest = list(enabled = TRUE, degree = list(from = 50000, to = 0), 
-#'  hover = FALSE, algorithm = "hierarchical"))
+#'  hover = TRUE, algorithm = "hierarchical"))
 #' 
 #' # Change color with data.frame
 #' colorVar <- data.frame(variable = names(solder), 
@@ -434,6 +437,22 @@ visTree <- function(object,
     edges <- NULL
   }
   
+  # ------------------------------
+  # Coordinate
+  # if(coordinates){
+    # rpartcoParams <- list(uniform = TRUE, branch = 0.2, nspace = 0.2, minbranch = 0.3)
+    # Xp <- rpart:::rpartco(object, rpartcoParams)$x
+    # nodes$x <- Xp * 100
+    # nodes$y <- nodes$level * 150
+    # nodes$y <- nodes$y - mean(nodes$y)
+    # nodes$x <- nodes$x - mean(nodes$x)
+    # 
+    # intervalPositionX <- max(nodes$x)
+    # CorrectPosition <- legendWidth*intervalPositionX
+    # nodes$x <- nodes$x + CorrectPosition / 8
+    # nodes$x <- nodes$x  / (1 + legendWidth)
+  # }
+
   tree <- visNetwork(nodes = nodes, edges = edges, height = height, width = width, main = main,
                      submain = submain, footer = footer) %>% 
     visHierarchicalLayout(direction = direction) %>%
@@ -490,8 +509,6 @@ visTree <- function(object,
 #                        background: -moz-linear-gradient(colorMax,',',colorMin,');
 #                        background: linear-gradient(colorMax,',',colorMin,');">Test gradient color</div>'
 # ,
-
-
 
 .parent <- function(x) {
   if (x[1] != 1) {
@@ -665,12 +682,13 @@ visTree <- function(object,
 
 #' Run and edit a visTree, and get back in R
 #'
-#' Packages : shiny, rpart, colourpicker, shinyWidgets
+#' Needed packages : shiny, rpart, colourpicker, shinyWidgets
 #' 
 #' @param  data  \code{rpart or data.drame}
 #' @param  ...  all arguments except \code{object} present in \link{visTree}
 #' 
 #' @examples
+#' 
 #' \dontrun{
 #' 
 #' net <- visTreeEditor(data = iris)
@@ -683,26 +701,29 @@ visTree <- function(object,
 #' 
 #' @importFrom  utils packageVersion
 #' 
-#' 
+#' @seealso \link{visTree}, \link{visTreeModuleServer}, \link{visNetworkEditor}
+#'
+#' @references See online documentation \url{http://datastorm-open.github.io/visNetwork/}
+#'
 visTreeEditor <- function(data, ...){
 
-  if(!requireNamespace("shiny")){
-    stop("visTreeModule require 'shiny' package")
+  if(!requireNamespace("shiny", quietly = TRUE)){
+    stop("visTreeEditor require 'shiny' package")
   } else {
     if(packageVersion("shiny") < '1.0.0'){
-      stop("visTreeModule require 'shiny' 1.0.0 or more")
+      stop("visTreeEditor require 'shiny' 1.0.0 or more")
     }
   }
   
-  if(!requireNamespace("colourpicker")){
-    stop("visTreeModule require 'colourpicker' package")
+  if(!requireNamespace("colourpicker", quietly = TRUE)){
+    stop("visTreeEditor require 'colourpicker' package")
   }
   
-  if(!requireNamespace("shinyWidgets")){
-    stop("visTreeModule require 'shinyWidgets' package")
+  if(!requireNamespace("shinyWidgets", quietly = TRUE)){
+    stop("visTreeEditor require 'shinyWidgets' package")
   }
   
-  if(!requireNamespace("rpart")){
+  if(!requireNamespace("rpart", quietly = TRUE)){
     stop("visTreeModule require 'rpart' package")
   }
   

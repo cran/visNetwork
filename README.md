@@ -14,15 +14,21 @@ And have a look to multiple R examples, vis.js documentation (````visDocumentati
 
 # News
 
-## ``2.0.0`` available on CRAN
+## ``2.0.2`` available on CRAN
 
-* ### Add support for edges color/label using ``highlightNearest/selectedBy``
-
-* ### New ``collapse`` features (``?visOptions``)
-
-* ### New proxy methods : ``visGetBoundingBox``, ``visGetConnectedEdges``, ``visGetConnectedNodes``, ``visGetEdges``, ``visGetNodes``, ``visGetPositions``, ``visGetScale``, ``visGetSelectedEdges``, ``visGetSelectedNodes``, ``visGetSelection``, ``visGetViewPosition``
-
-* ### init ``visTree``, to visualize rpart object, ``visTreeEditor`` and ``visTreeModuleServer``
+  * ### New ``visHclust`` for visualize Hierarchical cluster analysis
+  * ### New ``visNetworkEditor`` and module ``visNetworkEditorUI`` to use ``visConfigure`` javascript functionnalities in R and shiny
+  * ### Add ``zoom`` to ``visLegend``
+  * ### to vis.js 4.20.1
+  * ### Add ``input$network_initialized`` 
+  * ### Add ``background`` to ``visNetwork``
+  * ### Fix ``visTreeEditor`` bug using rpart object
+  * ### ``visTreeEditor`` : add complexity parameters
+  * ### Fix ``layout`` control in ``visIgraph`` & ``visIgraphLayout``
+  * ### Add support for edges color/label using ``highlightNearest/selectedBy``
+  * ### New ``collapse`` features (``?visOptions``)
+  * ### New proxy methods : ``visGetBoundingBox``, ``visGetConnectedEdges``, ``visGetConnectedNodes``, ``visGetEdges``, ``visGetNodes``, ``visGetPositions``, ``visGetScale``, ``visGetSelectedEdges``, ``visGetSelectedNodes``, ``visGetSelection``, ``visGetViewPosition``
+  * ### init ``visTree``, to visualize rpart object, ``visTreeEditor`` and ``visTreeModuleServer``
 
 ![alt text](https://github.com/datastorm-open/visNetwork/blob/master/inst/img/tree_example.png)
 

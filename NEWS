@@ -1,4 +1,17 @@
-visNetwork 1.0.4
+visNetwork 2.0.2
+--------------------------------------------------------------------------------
+
+  * New ``visHclust`` for visualize Hierarchical cluster analysis
+  * New ``visNetworkEditor`` and module ``visNetworkEditorUI`` to use ``visConfigure`` javascript functionnalities in R and shiny
+  * Add ``zoom`` to ``visLegend``
+  * to vis.js 4.20.1
+  * Add ``input$network_initialized`` 
+  * Add ``background`` to ``visNetwork``
+  * Fix ``visTreeEditor`` bug using rpart object
+  * ``visTreeEditor`` : add complexity parameters
+  * Fix ``layout`` control in ``visIgraph`` & ``visIgraphLayout``
+  
+visNetwork 2.0.0
 --------------------------------------------------------------------------------
 
   * add support for edges color/label using highlight/selectedBy

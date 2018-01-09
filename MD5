@@ -1,7 +1,7 @@
-b3b6458ac6714704d71315903c8ddd21 *DESCRIPTION
+adf9f2fcb1c6f6207bbbbc729574b19d *DESCRIPTION
 33df9c544e24fce34daa94f1763b5283 *LICENSE
 2354827841a2cb6d159d6ba8ecd27999 *NAMESPACE
-dd4ef2ea397e0a965bdc50ef779ea53c *NEWS
+1a747e4651b3b236e816abb9d76750e4 *NEWS
 99f519e69a71ce4c150049a89c468cf4 *R/dependencies.R
 e405657918e49b45f261af3925f44d3e *R/utils.R
 1e73654464f83c3d66baa00c5723c70a *R/visClustering.R
@@ -51,7 +51,7 @@ ba68f49c15cbbe4acdf8b38c03e5470b *build/vignette.rds
 7fb79035b3e39da8872e27332d11e8f2 *inst/NOTICE
 91e87762f9d2fda1f6fbeb2c6098f0af *inst/doc/Introduction-to-visNetwork.R
 dee4e9d1f3ee85ffdf9a9132f67c854e *inst/doc/Introduction-to-visNetwork.Rmd
-9d99bbbb88598eb0f6c3b1096d83e994 *inst/doc/Introduction-to-visNetwork.html
+d1b11c97769a38525e8a2ee9c8a1a9a7 *inst/doc/Introduction-to-visNetwork.html
 8c6ad2433e82a311530e4ebe3aebf39f *inst/doc/css/bootstrap-theme.css
 006d9779ee6076a657daf47fce1a2957 *inst/doc/css/bootstrap-theme.css.map
 95eb835999f0c2f1f3218d46e6c30137 *inst/doc/css/bootstrap-theme.min.css

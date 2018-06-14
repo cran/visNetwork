@@ -32,6 +32,7 @@ visOptions(graph, width = NULL, height = NULL, highlightNearest = FALSE,
  \item{"selected"}{ : Optional. Integer/Character. Initial id selection. Defaut to NULL}
  \item{"style"}{ : Optional. Character. HTML style of list. Default to 'width: 150px; height: 26px'.}
  \item{"useLabels"}{ : Optional. Boolean. Use labels instead of id ? Default to TRUE.}
+ \item{"main"}{ : Optional. Default to "Select by id"}
 }}
 
 \item{selectedBy}{: Custom option. Character or a named list. Add a multiple selection based on column of node data.frame creating an HTML select element. Not available for DOT and Gephi.
@@ -42,6 +43,7 @@ visOptions(graph, width = NULL, height = NULL, highlightNearest = FALSE,
  \item{"style"}{ : Optional. Character. HTML style of list. Default to 'width: 150px; height: 26px'.}
  \item{"multiple"}{ : Optional. Boolean. Default to FALSE. If TRUE, you can affect multiple groups per nodes using a comma ("gr1,gr2")}
  \item{"hideColor"}{ : Optional. String. Color for hidden nodes/edges. Use a rgba definition. Defaut to rgba(200,200,200,0.5)}
+ \item{"main"}{ : Optional. Default to "Select by variable"}
 }}
 
 \item{collapse}{: Custom option. Just a Boolean, or a named list. Collapse / Uncollapse nodes using double-click. In dev.

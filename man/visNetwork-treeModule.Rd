@@ -6,8 +6,9 @@
 \alias{visTreeModuleUI}
 \title{Module shiny for visualize and customize a \code{rpart} tree}
 \usage{
-visTreeModuleServer(input, output, session, data, main = "", submain = "",
-  footer = "", direction = "UD", fallenLeaves = FALSE, rules = TRUE,
+visTreeModuleServer(input, output, session, data, tooltip_data = NULL,
+  tooltipColumns = "", main = "", submain = "", footer = "",
+  direction = "UD", fallenLeaves = FALSE, rules = TRUE,
   simplifyRules = TRUE, shapeVar = "dot", shapeY = "square",
   colorVar = NULL, colorY = NULL, colorEdges = "#8181F7",
   nodesFontSize = 16, edgesFontSize = 14, edgesFontAlign = "horizontal",
@@ -32,11 +33,17 @@ visTreeModuleUI(id, rpartParams = TRUE, visTreeParams = TRUE,
 
 \item{data}{\code{reactive}, a \code{data.frame} or a \code{rpart} result. Must be a reactive object}
 
-\item{main}{For add a title. See \link{visNetwork}}
+\item{tooltip_data}{\code{reactive}, a \code{data.frame}. if \code{data} is a \code{rpart}, 
+data.frame used to build tree in order to plot \code{sparkline}}
 
-\item{submain}{For add a subtitle. See \link{visNetwork}}
+\item{tooltipColumns}{\code{numeric}, indice of columns used in tooltip. All by default.
+So, we add boxplot / pie focus on sub-population vs all population using \code{sparkline} package. \code{NULL} to disable.}
 
-\item{footer}{For add a footer. See \link{visNetwork}}
+\item{main}{Title. See \link{visNetwork}}
+
+\item{submain}{Subtitle. See \link{visNetwork}}
+
+\item{footer}{Footer. See \link{visNetwork}}
 
 \item{direction}{\code{character}, The direction of the hierarchical layout.
 The available options are: UD, DU, LR, RL. To simplify:
@@ -52,7 +59,7 @@ up-down, down-up, left-right, right-left. Default UD. See \link{visHierarchicalL
 
 \item{shapeY}{\code{character}, shape for terminal nodes See \link{visNodes}}
 
-\item{colorVar}{\code{character} colors to use or \code{data.frame} To set color of variables. 2 columns :
+\item{colorVar}{\code{character}, colors to use or \code{data.frame} To set color of variables. 2 columns :
 \itemize{
   \item{"variable"}{ : names of variables}
   \item{"color"}{ : colors (in hexa). See examples}
@@ -65,7 +72,7 @@ up-down, down-up, left-right, right-left. Default UD. See \link{visHierarchicalL
 }
 if regression tree : \code{character}, 2 colors (min and max, in hexa)}
 
-\item{colorEdges}{\code{character} color of edges, in hexa. Default to #8181F7}
+\item{colorEdges}{\code{character}, color of edges, in hexa. Default to #8181F7}
 
 \item{nodesFontSize}{\code{numeric}, size of labels of nodes. Default to 16}
 
@@ -116,11 +123,12 @@ if regression tree : \code{character}, 2 colors (min and max, in hexa)}
 \item{quitButton}{\code{boolean}, add a button to quit module and get back network in R ?}
 }
 \description{
-Needed packages : shiny, rpart, colourpicker, shinyWidgets
+Needed packages : shiny, rpart, colourpicker, shinyWidgets, sparkline
 }
 \examples{
 \dontrun{
 
+require(rpart)
 # simple module editor on rpart
 data <- iris
 shiny::shinyApp(ui = shiny::fluidPage(
@@ -129,12 +137,13 @@ visTreeModuleUI(id = "id1", rpartParams = FALSE, visTreeParams = FALSE)),
  shiny::callModule(visTreeModuleServer, "id1", data = shiny::reactive(rpart(data)))
 })
 
-# full module editor on rpart
+# full module editor on rpart + data.frame for sparkline
 data <- iris
 shiny::shinyApp(ui = shiny::fluidPage(
  visTreeModuleUI(id = "id1", rpartParams = FALSE, visTreeParams = TRUE)), 
  server = function(input, output, session) {
- shiny::callModule(visTreeModuleServer, "id1", data = shiny::reactive(rpart(data)))
+ shiny::callModule(visTreeModuleServer, "id1", data = shiny::reactive(rpart(data)), 
+ tooltip_data = data)
 })
 
 # module on data.frame

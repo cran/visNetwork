@@ -3,9 +3,12 @@
 #' Visualize Recursive Partitioning and Regression Trees \code{rpart}. Have a look to \link{visTreeEditor} to edity and get back network, or to \link{visTreeModuleServer} to use custom tree module in R
 #' 
 #' @param object \code{rpart}, rpart object
-#' @param main For add a title. See \link{visNetwork}
-#' @param submain For add a subtitle. See \link{visNetwork}
-#' @param footer For add a footer. See \link{visNetwork}
+#' @param data \code{data.frame}, adding mini-graphics in tooltips using \code{sparkline} and \code{tooltipColumns} ?
+#' @param tooltipColumns \code{numeric}, indice of columns used in tooltip. All by default.
+#' So, we add boxplot / pie focus on sub-population vs all population using \code{sparkline} package. \code{NULL} to disable.
+#' @param main Title. See \link{visNetwork}
+#' @param submain Subtitle. See \link{visNetwork}
+#' @param footer Footer. See \link{visNetwork}
 #' @param direction \code{character}, The direction of the hierarchical layout.
 #' The available options are: UD, DU, LR, RL. To simplify:
 #' up-down, down-up, left-right, right-left. Default UD. See \link{visHierarchicalLayout} 
@@ -16,7 +19,7 @@
 #' @param legendFontSize \code{numeric}, size of labels of nodes in legend. Default to 16
 #' @param legendNodesSize \code{numeric}, size of nodes in legend. Default to 22
 #' @param edgesFontAlign \code{character}, for edges only. Default tp 'horizontal'. Possible options: 'horizontal' (Default),'top','middle','bottom'. See \link{visEdges}  
-#' @param colorVar \code{character} colors to use or \code{data.frame} To set color of variables. 2 columns :
+#' @param colorVar \code{character}, colors to use or \code{data.frame} To set color of variables. 2 columns :
 #' \itemize{
 #'   \item{"variable"}{ : names of variables}
 #'   \item{"color"}{ : colors (in hexa). See examples}
@@ -27,7 +30,7 @@
 #'   \item{"color"}{ : colors (in hexa)}
 #' }
 #' if regression tree : \code{character}, 2 colors (min and max, in hexa)
-#' @param colorEdges \code{character} color of edges, in hexa. Default to #8181F7
+#' @param colorEdges \code{character}, color of edges, in hexa. Default to #8181F7
 #' @param legend \code{boolean}, add legend ? Default TRUE. \link{visLegend}
 #' @param legendWidth \code{numeric}, legend width, between 0 and 1. Default 0.1
 #' @param legendNcol \code{numeric}, number of columns in legend. Default 1
@@ -61,7 +64,7 @@
 #' 
 #' # Basic classification tree
 #' res <- rpart(Species~., data=iris)
-#' visTree(res, main = "Iris classification Tree")
+#' visTree(res, data = iris, main = "Iris classification Tree")
 #' 
 #' # Basic regression tree
 #' res <- rpart(Petal.Length~., data=iris)
@@ -70,7 +73,8 @@
 #' # Complex tree
 #' data("solder")
 #' res <- rpart(Opening~., data = solder, control = rpart.control(cp = 0.00005))
-#' visTree(res, height = "800px", nodesPopSize = TRUE, minNodeSize = 10, maxNodeSize = 30)
+#' visTree(res, data = solder, nodesPopSize = TRUE, minNodeSize = 10, 
+#'   maxNodeSize = 30, height = "800px")
 #' 
 #' # ----- Options
 #' res <- rpart(Opening~., data = solder, control = rpart.control(cp = 0.005))
@@ -98,6 +102,12 @@
 #' visTree(res, colorEdges = "#000099", 
 #'     colorVar = substring(rainbow(6), 1, 7), 
 #'     colorY = c("blue", "green", "orange"))
+#'     
+#'     
+#'  # Use visNetwork functions to add more options
+#' visTree(res) %>% 
+#'     visOptions(highlightNearest = TRUE)
+#' 
 #' 
 #' }
 #' 
@@ -108,6 +118,8 @@
 #' @importFrom grDevices rgb
 #' 
 visTree <- function(object,
+                    data = NULL,
+                    tooltipColumns = if(!is.null(data)){1:ncol(data)} else {NULL},
                     main = "",
                     submain = "",
                     footer = "",
@@ -176,6 +188,8 @@ visTree <- function(object,
   if(!is.null(colorEdges)){
     stopifnot("character" %in% class(colorEdges))
   }
+  
+  
   stopifnot("logical" %in% class(legend))
   stopifnot("numeric" %in% class(legendWidth) | "integer" %in% class(legendWidth))
   stopifnot("numeric" %in% class(legendNcol) | "integer" %in% class(legendNcol))
@@ -189,6 +203,18 @@ visTree <- function(object,
   stopifnot("character" %in% class(width))
   stopifnot("character" %in% class(shapeVar))
   stopifnot("character" %in% class(shapeY))
+  
+  if(!is.null(tooltipColumns)){
+    stopifnot(class(tooltipColumns)[1] %in% c("numeric", "integer"))
+    stopifnot(!is.null(data))
+    stopifnot(max(tooltipColumns) <= ncol(data))
+  }
+  
+  if(!is.null(tooltipColumns) | rules){
+    if(!requireNamespace("sparkline", quietly = TRUE)){
+      stop("'sparkline' package is needed for this function")
+    }
+  }
   
   # ------------------------------
   # get information from rpart object
@@ -239,7 +265,7 @@ visTree <- function(object,
     
     edgesLabelsFull <- edgesLabels
     formatLabels <- function(x){
-      ifelse(nchar(x)  >10, paste0(substr(x, 1, 7), "..."), x)
+      ifelse(nchar(x)  > 10, paste0(substr(x, 1, 7), "..."), x)
     }
     edgesLabels <- sapply(edgesLabels, formatLabels)
     
@@ -278,7 +304,6 @@ visTree <- function(object,
                               " (", effectif[,i], ")")
     }
     statsNodes <- apply(probsHtml, 1, function(x){paste0(x, collapse = "<br>")})
-    statsNodes <- paste('<hr>', statsNodes)
   }else{
     # Regression TREE
     varNodes <- round(object$frame$dev/(object$frame$n - 1),digits)
@@ -339,6 +364,67 @@ visTree <- function(object,
   }
   
   # ------------------------------
+  # Sparklines for nodes
+  labelComplete <- NULL
+  if(!is.null(data) & !is.null(tooltipColumns)){
+
+    data <- data[, tooltipColumns, drop = FALSE]
+
+    nodesNames <- as.integer(rownames(object$frame))
+    classDtaIn <- unlist(lapply(data, function(X){class(X)[1]}))
+    classDtaIn <- classDtaIn%in%c("numeric", "integer")
+    dataNum <- data[,classDtaIn, drop = FALSE]
+    
+    if(ncol(dataNum) > 0){
+      minPop <- apply(dataNum, 2, min)
+      maxPop <- apply(dataNum, 2, max)
+      meanPop <- colMeans(dataNum)
+      popSpkl <- apply(dataNum,2, function(X){
+        .addSparkLineOnlyJs(X, type = "box")
+      })
+      
+      labelComplete <- sapply(nodesNames, function(Z){
+        .giveLabelsFromDfWhichInvisible(subsetRpart(object, dataNum, Z),
+                                        popSpkl, minPop, maxPop, meanPop)
+      })
+    }
+  
+    dataOthr <- data[,!classDtaIn, drop = FALSE]
+    
+    if(ncol(dataOthr) > 0){
+      popSpkl <- apply(dataOthr,2, function(X){
+        Y <- sort(table(X))
+        spl <- .addSparkLineOnlyJs(Y , type = "pie", labels = names(Y))
+        Y <- data.frame(Y)
+        Y$X <- ifelse(nchar(as.character(Y$X) ) > 9,
+                      paste0(substr(Y$X, 1, 8), "..."), as.character(Y$X))
+        modP <-  Y$X[length(Y$X)]
+        paste0(spl, " On pop. (mode: <b>", modP, "</b>)")
+      })
+      
+      namOrder <- lapply(dataOthr, function(X){
+        names(sort(table(X)))
+      })
+      labelComplete <-paste(labelComplete, sapply(nodesNames, function(Z){
+        .giveLabelsFromDfChrInvisible(subsetRpart(object, dataOthr, Z),
+                                      popSpkl, namOrder)} ) )
+    }
+    
+    labelComplete <- paste0('<hr class = "rPartvisNetwork">
+        <div class ="showOnMe"><div style="text-align:center;"><U style="color:blue;" class = "classActivePointer">Details</U></div>
+                            <div class="showMeRpartTTp" style="display:none;margin-top: -15px">
+                            ',labelComplete,
+                            '</script>',
+                            '<script type="text/javascript">',
+                            '$(document).ready(function(){
+                            $(".showOnMe").click(function(){
+                            $(".showMeRpartTTp").toggle();
+                            $.sparkline_display_visible();
+                            });
+                        });</script>','</div></div>')
+  }
+  
+  # ------------------------------
   # Terminal nodes colors
   ind_terminal <- which(nodes_var == "<leaf>")
   if(!is.null(attributes(object)$ylevels)){
@@ -367,19 +453,41 @@ visTree <- function(object,
   }
   
   if(rules) {
-    finalHtmlRules <-  paste0('<hr class="rPartvisNetwork"><div class="rPartvisNetworkTooltipShowhim" style="color:blue;">
-          <U>RULES</U><div class="rPartvisNetworkTooltipShowme" style="color:black;">', tooltipRules,'</div></div>')
+    idToSample <- length(tooltipRules)
+    idS <- sapply(1:idToSample, function(X){paste0(sample(LETTERS, 15), collapse = "")})
+    idS <- paste0("myIdToDisplay", idS)
+    
+    # <div onclick="toggle_visibility(\'',idS,'\')">
+    #   <U>RULES</U></div><div id="',idS,'">', 
+    # tooltipRules,'</div>
+      
+    finalHtmlRules <-  paste0(
+'<hr class = "rPartvisNetwork">
+<div class ="showOnMe2"><div style="text-align:center;"><U style="color:blue;" class = "classActivePointer">Rules</U></div>
+<div class="showMeRpartTTp2" style="display:none;">
+',tooltipRules,
+'</script>',
+'<script type="text/javascript">',
+'$(document).ready(function(){
+$(".showOnMe2").click(function(){
+$(".showMeRpartTTp2").toggle();
+$.sparkline_display_visible();
+});
+  });</script>','</div></div>
+
+')
   }else{
     finalHtmlRules <- ""
   }
   
   finalNodesTooltip <- paste0(
-    '<div style="text-align:center;">', "N% : <b>",
+    '<div style="text-align:center;">', "N : <b>",
     round(object$frame$n/object$frame$n[1],digits)*100, 
     "%</b> (", object$frame$n,")<br>", "Complexity : <b>",
     round(object$frame$complexity, digits),
     "</b><br>", statsNodes,
-    ifelse(!unlist(lapply(tooltipRules, is.null)), finalHtmlRules, ""), '</div>')
+    ifelse(!unlist(lapply(tooltipRules, is.null)), finalHtmlRules, ""), '</div>',
+    labelComplete)
   
   # ------------------------------
   # Nodes size on population
@@ -440,19 +548,19 @@ visTree <- function(object,
   # ------------------------------
   # Coordinate
   # if(coordinates){
-    # rpartcoParams <- list(uniform = TRUE, branch = 0.2, nspace = 0.2, minbranch = 0.3)
-    # Xp <- rpart:::rpartco(object, rpartcoParams)$x
-    # nodes$x <- Xp * 100
-    # nodes$y <- nodes$level * 150
-    # nodes$y <- nodes$y - mean(nodes$y)
-    # nodes$x <- nodes$x - mean(nodes$x)
-    # 
-    # intervalPositionX <- max(nodes$x)
-    # CorrectPosition <- legendWidth*intervalPositionX
-    # nodes$x <- nodes$x + CorrectPosition / 8
-    # nodes$x <- nodes$x  / (1 + legendWidth)
+  # rpartcoParams <- list(uniform = TRUE, branch = 0.2, nspace = 0.2, minbranch = 0.3)
+  # Xp <- rpart:::rpartco(object, rpartcoParams)$x
+  # nodes$x <- Xp * 100
+  # nodes$y <- nodes$level * 150
+  # nodes$y <- nodes$y - mean(nodes$y)
+  # nodes$x <- nodes$x - mean(nodes$x)
+  # 
+  # intervalPositionX <- max(nodes$x)
+  # CorrectPosition <- legendWidth*intervalPositionX
+  # nodes$x <- nodes$x + CorrectPosition / 8
+  # nodes$x <- nodes$x  / (1 + legendWidth)
   # }
-
+  
   tree <- visNetwork(nodes = nodes, edges = edges, height = height, width = width, main = main,
                      submain = submain, footer = footer) %>% 
     visHierarchicalLayout(direction = direction) %>%
@@ -481,6 +589,10 @@ visTree <- function(object,
   if(export){
     tree <- tree%>%visExport()
   }
+  if(!is.null(labelComplete) | rules){
+    tree <- tree %>% sparkline::spk_add_deps() 
+  }
+  
   tree
 }
 
@@ -581,6 +693,13 @@ visTree <- function(object,
   results <- list(L = lsplit, R = rsplit)
   return(results)
 }
+
+subsetRpart <- function(tree,data,  node = 1L) {
+  wh <- sapply(as.integer(rownames(tree$frame)), .parent)
+  wh <- unique(unlist(wh[sapply(wh, function(x) node %in% x)]))
+  data[rownames(tree$frame)[tree$where] %in% wh[wh >= node], , drop = FALSE]
+}
+
 
 .generateVarColor <- function(colorVar, nodes_var, SortLabel){
   if(is.null(colorVar)){
@@ -685,7 +804,7 @@ visTree <- function(object,
 #' Needed packages : shiny, rpart, colourpicker, shinyWidgets
 #' 
 #' @param  data  \code{rpart or data.drame}
-#' @param  ...  all arguments except \code{object} present in \link{visTree}
+#' @param  ...  all arguments except \code{object} present in \link{visTreeModuleServer}
 #' 
 #' @examples
 #' 
@@ -693,6 +812,8 @@ visTree <- function(object,
 #' 
 #' net <- visTreeEditor(data = iris)
 #' net <- visTreeEditor(data = rpart(iris), main = "visTree Editor")
+#' net <- visTreeEditor(data = rpart(iris), tooltip_data = iris, 
+#'     main = "visTree Editor")
 #' net
 #' 
 #' }
@@ -706,26 +827,8 @@ visTree <- function(object,
 #' @references See online documentation \url{http://datastorm-open.github.io/visNetwork/}
 #'
 visTreeEditor <- function(data, ...){
-
-  if(!requireNamespace("shiny", quietly = TRUE)){
-    stop("visTreeEditor require 'shiny' package")
-  } else {
-    if(packageVersion("shiny") < '1.0.0'){
-      stop("visTreeEditor require 'shiny' 1.0.0 or more")
-    }
-  }
   
-  if(!requireNamespace("colourpicker", quietly = TRUE)){
-    stop("visTreeEditor require 'colourpicker' package")
-  }
-  
-  if(!requireNamespace("shinyWidgets", quietly = TRUE)){
-    stop("visTreeEditor require 'shinyWidgets' package")
-  }
-  
-  if(!requireNamespace("rpart", quietly = TRUE)){
-    stop("visTreeModule require 'rpart' package")
-  }
+  .ctrlPckTree()
   
   if("rpart" %in% class(data)){
     rpartParams <- FALSE
@@ -735,62 +838,78 @@ visTreeEditor <- function(data, ...){
   return(shiny::runApp(shiny::shinyApp(ui = shiny::fluidPage(
     visTreeModuleUI(id = "visTreeEditor", rpartParams = rpartParams, visTreeParams = TRUE, quitButton = TRUE)), 
     server = function(input, output, session) {
-      shiny::callModule(visTreeModuleServer, id = "visTreeEditor" ,data = shiny::reactive(data), ...)
+      shiny::callModule(visTreeModuleServer, id = "visTreeEditor", data = shiny::reactive(data), ...)
     })))
 }
 
 
-# 
-# # object =rpart(Species~., data=iris,control = rpart.control(cp = 0.02))
-# object <- rpart(Petal.Length~., data=iris, control = rpart.control(cp = 0.02))
-# object <- rpart(Species~., data=iris, control = rpart.control(cp = 1))
+.giveLabelsFromDfWhichInvisible <- function(df, popSpkl = NULL, minPop = NULL, maxPop = NULL, meanPop = NULL){
+  df <- df[!is.na(df[,1]),, drop = FALSE]
+  clM <- colMeans(df)
+  if(!is.null(popSpkl)){
+    nm <- names(df)
+    re <- list()
+    for(i in nm){
+      re[[i]] <- paste0("<br>", popSpkl[[i]],' : On pop. (mean:<b>', round(meanPop[i],2),"</b>)","<br>",
+                        .addSparkLineOnlyJs(df[,i], type = "box",
+                                            min = minPop[[i]], max = maxPop[[i]]),
+                        " : On grp. (mean:<b>", round(clM[i], 2),"</b>)")
+    }
+  }
+  re <- unlist(re)
+  paste(paste("<br> <b>",names(clM), ": </b>", re, collapse = ""))
+  
+}
 
-# object <- rpart(Solder~., data = solder, control = rpart.control(cp = 0.005))
-# # object <- rpart(Opening~., data = solder, control = rpart.control(cp = 0.005))
-# # # # #
-# # # object =rpart(Petal.Length~., data=iris)
-# main = ""
-# submain = ""
-# footer = ""
-# direction = "UD"
-# fallenLeaves = FALSE
-# rules = TRUE
-# simplifyRules = TRUE
-# shapeVar = "dot"
-# shapeY = "square"
-# colorVar = NULL
-# colorY = NULL
-# # 
-# # colorVar <- data.frame(variable = names(solder),
-# #   color = c("#339933", "#b30000","#4747d1","#88cc00", "#9900ff","#247856"))
-# # colorVar <- colorVar[1:2,]
-# # # colorY <- data.frame(modality = unique(solder$Opening),
-# # #  color = c("#AA00AA", "#CDAD15", "#213478"))
-# # # colorY <- c("red", "green")
-# # 
-# colorEdges = "#8181F7"
-# nodesFontSize = 16
-# edgesFontSize = 14
-# edgesFontAlign = "horizontal"
-# legendNodesSize = 22
-# legendFontSize = 16
-# legend = TRUE
-# legendWidth = 0.1
-# legendNcol = 1
-# nodesPopSize = FALSE
-# minNodeSize = 15
-# maxNodeSize = 30
-# highlightNearest =  list(enabled = TRUE,
-#                          degree = list(from = 50000, to = 0), hover = TRUE,
-#                          algorithm = "hierarchical")
-# collapse = list(enabled = TRUE, fit = TRUE, resetHighlight = TRUE,
-#                 clusterOptions = list(fixed = TRUE, physics = FALSE))
-# updateShape = TRUE
-# tooltipDelay = 500
-# digits = 3
-# height = "500px"
-# width = "100%"
-# export = T
-# # 
-# # # # r <- rpart(carat ~ cut+color +clarity+ depth+ table +price, data = diamonds, control = rpart.control(cp = 0))
-# # # # r
+
+.giveLabelsFromDfChrInvisible <- function(df, popSpkl, namOrder){
+  nm <- names(df)
+  re <- list()
+  for(i in nm){
+    tbl <- table(df[,i])
+    tbl <- tbl[na.omit(match(namOrder[[i]], names(tbl)))]
+    tbl <- data.frame(tbl)
+    newMod <- namOrder[[i]][!namOrder[[i]]%in%tbl$Var1]
+    if(length(newMod) > 0){
+      tbl <- rbind(tbl, data.frame(Var1 = newMod, Freq = 0))
+    }
+    namOrder
+    tbl$Var1 <- ifelse(nchar(as.character(tbl$Var1) ) > 9, paste0(substr(tbl$Var1, 1, 8), "..."), as.character(tbl$Var1))
+    re[[i]] <- paste0(.addSparkLineOnlyJs(tbl$Freq, type = "pie", labels = tbl$Var1), "On grp. (mode:<b>", tbl[which.max(tbl$Freq),]$Var1,"</b>)")
+    
+  }
+  re <- unlist(re)
+  paste(paste("<br> <b>",names(re), ": </b><br>", popSpkl, "<br>",
+              re, collapse = ""))
+}
+
+
+
+
+.addSparkLineOnlyJs <- function(vect, min = NULL, max = NULL, type = "line", labels = NULL){
+  if(is.null(min))min <- min(vect)
+  if(is.null(max))max <- max(vect)
+  drun <- sample(LETTERS, 15, replace = TRUE)
+  drun <- paste0(drun, collapse = "")
+  if(!is.null(labels)){
+    tltp <- paste0((1:length(labels))-1, ": '", labels, "'", collapse = ",")
+    tltp <- paste0("
+                   tooltipFormat: \'{{offset:offset}} ({{percent.1}}%)\',   tooltipValueLookups: {
+                   \'offset\': { ", tltp, "}}")
+  }else{
+    tltp <- NULL
+  }
+  ttr <- paste0('
+         $(function() {
+         $(".inlinesparkline', drun,'").sparkline([',paste0(vect, collapse = ",") ,'], {
+         type: "',type , '", chartRangeMin: ', min,', chartRangeMax: ', max,'
+         , ', tltp, '
+         }); 
+         });
+         ')
+  
+  paste0('<div class="inlinesparkline', drun,'" style="display: inline-block;">&nbsp;</div>',
+         '<script type="text/javascript">',
+         ttr,
+         '</script>')
+}

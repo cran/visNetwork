@@ -32,6 +32,7 @@
 #'  \item{"multiple"}{ : Optional. Boolean. Default to FALSE. If TRUE, you can affect multiple groups per nodes using a comma ("gr1,gr2")}
 #'  \item{"hideColor"}{ : Optional. String. Color for hidden nodes/edges. Use a rgba definition. Defaut to rgba(200,200,200,0.5)}
 #'  \item{"main"}{ : Optional. Default to "Select by variable"}
+#'  \item{"sort"}{ : Optional. If values is NULL, sort all possible values ?. Defaut to TRUE}
 #'}
 #'@param collapse : Custom option. Just a Boolean, or a named list. Collapse / Uncollapse nodes using double-click. In dev.
 #'\itemize{
@@ -39,10 +40,12 @@
 #'  \item{"fit"}{ : Optional. Boolean. Default to FALSE. Call fit method after collapse/uncollapse event ?}
 #'  \item{"resetHighlight"}{ : Optional. Boolean. Default to TRUE to reset highlighted nodes after collapse/uncollapse event.}
 #'  \item{"clusterOptions"}{ : Optional. List. Defaut to NULL. A list of all options you want to pass to cluster collapsed node}
+#'  \item{"keepCoord"}{ : Optional. Boolean. Default to TRUE to keep nodes coordinates on collapse}
+#'  \item{"labelSuffix"}{ : Optional. Character. Use node label + suffix or just suffix. Default to '(cluster)'}
 #'}
 #'@param autoResize : Boolean. Default to true. If true, the Network will automatically detect when its container is resized, and redraw itself accordingly. If false, the Network can be forced to repaint after its container has been resized using the function redraw() and setSize(). 
 #'@param clickToUse : Boolean. Default to false. When a Network is configured to be clickToUse, it will react to mouse, touch, and keyboard events only when active. When active, a blue shadow border is displayed around the Network. The Network is set active by clicking on it, and is changed to inactive again by clicking outside the Network or by pressing the ESC key.
-#'@param manipulation : Just a Boolean
+#'@param manipulation : Just a Boolean or a list. See \link{visDocumentation}
 #'
 #'@examples
 #' nodes <- data.frame(id = 1:15, label = paste("Label", 1:15),
@@ -166,7 +169,30 @@
 #'  
 #' visNetwork(nodes, edges) %>% 
 #'  visOptions(selectedBy = list(variable = "group", multiple = TRUE))
-#'   
+#'  
+#' ##########################
+#' # manipulation
+#' ##########################
+#'  
+#'visNetwork(nodes, edges) %>% 
+#'  visOptions(manipulation = TRUE)
+#'
+#'visNetwork(nodes, edges) %>% 
+#'  visOptions(manipulation = list(enabled = TRUE, addNode = FALSE, addEdge = FALSE))
+#'
+#'visNetwork(nodes, edges) %>% 
+#'  visOptions(manipulation = list(enabled = TRUE, deleteNode = FALSE, deleteEdge = FALSE))
+#'
+#'visNetwork(nodes, edges) %>% 
+#'  visOptions(manipulation = list(enabled = TRUE, editNode = FALSE, editEdge = FALSE))
+#'
+#'visNetwork(nodes, edges)  %>% 
+#'  visOptions(manipulation = list(enabled = TRUE, 
+#'                                 editEdge = htmlwidgets::JS("function(data, callback) {
+#'                                                            console.info('edit edge')
+#'                                                            }")
+#'                                     )
+#'                                 )
 #' ##########################
 #' # collapse
 #' ##########################
@@ -205,30 +231,36 @@ visOptions <- function(graph,
   if(is.null(manipulation)){
     options$manipulation <- list(enabled = FALSE)
   }else{
-    options$manipulation <- list(enabled = manipulation)
+    if(is.logical(manipulation)){
+      options$manipulation <- list(enabled = manipulation)
+    } else if(is.list(manipulation)){
+      options$manipulation <- manipulation
+    } else {
+      stop("Invalid 'manipulation' argument. logical or list")
+    }
   }
   
   options$height <- height
   options$width <- width
   
   if(!is.null(manipulation)){
-    if(manipulation){
       graph$x$datacss <- paste(readLines(system.file("htmlwidgets/lib/css/dataManipulation.css", package = "visNetwork"), warn = FALSE), collapse = "\n")
-    }
   }
   
   if(!"nodes"%in%names(graph$x) && any(class(graph) %in% "visNetwork")){
     highlight <- list(enabled = FALSE)
     idselection <- list(enabled = FALSE)
     byselection <- list(enabled = FALSE)
-    list_collapse <- list(enabled = FALSE, fit = FALSE, resetHighlight = TRUE)
+    list_collapse <- list(enabled = FALSE, fit = FALSE, resetHighlight = TRUE, 
+                          keepCoord = TRUE, labelSuffix = "(cluster)")
   }else{
     #############################
     # collapse
     #############################
-    list_collapse <- list(enabled = FALSE, fit = FALSE, resetHighlight = TRUE, clusterOptions = NULL)
+    list_collapse <- list(enabled = FALSE, fit = FALSE, resetHighlight = TRUE, 
+                          clusterOptions = NULL, keepCoord = TRUE, labelSuffix = "(cluster)")
     if(is.list(collapse)){
-      if(any(!names(collapse)%in%c("enabled", "fit", "resetHighlight", "clusterOptions"))){
+      if(any(!names(collapse)%in%c("enabled", "fit", "resetHighlight", "clusterOptions", "keepCoord", "labelSuffix"))){
         stop("Invalid 'collapse' argument")
       }
       
@@ -243,6 +275,14 @@ visOptions <- function(graph,
       if("resetHighlight"%in%names(collapse)){
         stopifnot(is.logical(collapse$resetHighlight))
         list_collapse$resetHighlight <- collapse$resetHighlight
+      }
+      if("keepCoord"%in%names(collapse)){
+        stopifnot(is.logical(collapse$keepCoord))
+        list_collapse$keepCoord <- collapse$keepCoord
+      }
+      if("labelSuffix"%in%names(collapse)){
+        stopifnot(is.character(collapse$labelSuffix))
+        list_collapse$labelSuffix <- collapse$labelSuffix
       }
       if("clusterOptions"%in%names(collapse)){
         stopifnot(is.list(collapse$clusterOptions))
@@ -393,8 +433,8 @@ visOptions <- function(graph,
     
     if(!is.null(selectedBy)){
       if(is.list(selectedBy)){
-        if(any(!names(selectedBy)%in%c("variable", "selected", "style", "values", "multiple", "hideColor", "main"))){
-          stop("Invalid 'selectedBy' argument. List can have 'variable', 'selected', 'style', 'values', 'multiple', 'hideColor', 'main'")
+        if(any(!names(selectedBy)%in%c("variable", "selected", "style", "values", "multiple", "hideColor", "main", "sort"))){
+          stop("Invalid 'selectedBy' argument. List can have 'variable', 'selected', 'style', 'values', 'multiple', 'hideColor', 'main', 'sort'")
         }
         if("selected"%in%names(selectedBy)){
           byselection$selected <- as.character(selectedBy$selected)
@@ -467,9 +507,17 @@ visOptions <- function(graph,
                                               do.call("c",strsplit(as.character(byselection$values), split = ","))))
           }
           if(any(c("integer", "numeric") %in% class(graph$x$nodes[, byselection$variable]))){
-            byselection$values <- sort(byselection$values)
+            byselection$values <- byselection$values
           }else{
-            byselection$values <- sort(as.character(byselection$values))
+            byselection$values <- as.character(byselection$values)
+          }
+          
+          if("sort"%in%names(selectedBy)){
+            if(selectedBy$sort){
+              byselection$values <- sort(byselection$values)
+            }
+          } else {
+            byselection$values <- sort(byselection$values)
           }
           
           if("values"%in%names(selectedBy)){

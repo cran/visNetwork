@@ -82,6 +82,9 @@ visClusteringByColor <- function(graph, colors, label = "Cluster on color : ",
     stop("graph must be a visNetwork object")
   }
   
+  shape <- rep(shape, length(colors))[1:length(colors)]
+  force <- rep(force, length(colors))[1:length(colors)]
+  
   if(length(colors) == 1){
     colors <- list(colors)
   }
@@ -145,7 +148,7 @@ visClusteringByHubsize <- function(graph, size = NULL){
 #' @param shape : Character. Shape of cluster(s) if different shapes between nodes or \code{force = T}. "database" per default
 #' @param color : Character. Color of cluster(s) if different colors between nodes or \code{force = T}. "grey" per default
 #' @param force : If \code{force = FALSE}, Set shape and color of nodes if all equal, else directly defaut shape and color
-#' 
+#' @param scale_size : Set size based on cluster population ? Default to TRUE.
 #' 
 #' @examples
 #'
@@ -163,7 +166,8 @@ visClusteringByHubsize <- function(graph, size = NULL){
 #'  
 #' @export
 visClusteringByGroup <- function(graph, groups, label = "Cluster on group : ", 
-                                 shape = "database", color = "grey", force = FALSE){
+                                 shape = "database", color = "grey", 
+                                 force = FALSE, scale_size = TRUE){
   
   if(any(class(graph) %in% "visNetwork_Proxy")){
     stop("Can't use visClusteringByGroup with visNetworkProxy object")
@@ -173,10 +177,15 @@ visClusteringByGroup <- function(graph, groups, label = "Cluster on group : ",
     stop("graph must be a visNetwork object")
   }
   
+  color <- rep(color, length(groups))[1:length(groups)]
+  shape <- rep(shape, length(groups))[1:length(groups)]
+  force <- rep(force, length(groups))[1:length(groups)]
+  scale_size <- rep(scale_size, length(groups))[1:length(groups)]
+  
   if(length(groups) == 1){
     groups <- list(groups)
   }
-  clusteringGroup<- list(groups = groups, label = label, shape = shape, color = color, force = force)
+  clusteringGroup<- list(groups = groups, label = label, shape = shape, color = color, force = force, scale_size = scale_size)
   
   graph$x$clusteringGroup <- clusteringGroup
   

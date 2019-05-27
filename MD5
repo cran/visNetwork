@@ -1,7 +1,7 @@
-2c0b191cb9aed154302542572e9fa702 *DESCRIPTION
+6a6c8ddbc7e6a49ce946034b57093c07 *DESCRIPTION
 33df9c544e24fce34daa94f1763b5283 *LICENSE
 343e52ec4127ff523ba83e83750f7abf *NAMESPACE
-6f341cafc41414d8c48b415a78e2f657 *NEWS
+22855f2c64977cb827ce303905a51596 *NEWS
 add58c93ce49ed2bb69d61254ef39e14 *R/dependencies.R
 e405657918e49b45f261af3925f44d3e *R/utils.R
 e06fd080d96e056848e9ed389ba0a6b0 *R/visClustering.R
@@ -46,12 +46,12 @@ c5aff89e3c3a8e8e7087e7b04714e331 *R/visTreeModule.R
 6688481969a9d0f11e367298c801fe3d *R/visUnselectAll.R
 cf18fd0a5148b194719678f498610cb5 *R/visUpdateEdges.R
 f658fd8d09f672a285f8aa2313646a38 *R/visUpdateNodes.R
-061fefe302070d0218b11cc664a49f15 *README.md
+dc145caa2e48976bac4247ba57c2a48d *README.md
 a876df5cae0039cab7e60b9178a5c48b *build/vignette.rds
 7fb79035b3e39da8872e27332d11e8f2 *inst/NOTICE
 91e87762f9d2fda1f6fbeb2c6098f0af *inst/doc/Introduction-to-visNetwork.R
 dee4e9d1f3ee85ffdf9a9132f67c854e *inst/doc/Introduction-to-visNetwork.Rmd
-162ad8492338b9c28996b062956de739 *inst/doc/Introduction-to-visNetwork.html
+00b092d083ba3b715d954662fa6a0145 *inst/doc/Introduction-to-visNetwork.html
 8c6ad2433e82a311530e4ebe3aebf39f *inst/docjs/css/bootstrap-theme.css
 006d9779ee6076a657daf47fce1a2957 *inst/docjs/css/bootstrap-theme.css.map
 95eb835999f0c2f1f3218d46e6c30137 *inst/docjs/css/bootstrap-theme.min.css
@@ -103,7 +103,7 @@ c0971404ba43e09c15c241ae78804445 *inst/docjs/network/manipulation.html
 5098b4b5555cae67fa2e009f5ea54670 *inst/docjs/network/physics.html
 830c90f67c2576ca9b2b42ac715683f6 *inst/examples/all_examples.R
 d4a91d439495a0f2c37192ebf15908af *inst/fontAwesome/Font_Awesome_Cheatsheet.pdf
-be5a91640458397d1c0c66a541b28459 *inst/htmlwidgets/lib/css/dataManipulation.css
+c756060c61102fc7f0b7cbe0cf7dbebe *inst/htmlwidgets/lib/css/dataManipulation.css
 32484801f9c2b8d2f77a9c22e306761e *inst/htmlwidgets/lib/export/Blob/Blob.js
 5efba255ab472129a7d36c865cc069fd *inst/htmlwidgets/lib/export/Blob/LICENSE.md
 45613e8e2652794fe85fd00f4ab5667f *inst/htmlwidgets/lib/export/Blob/README.md
@@ -175,7 +175,7 @@ f0aa0566b9f39334bd886d27d6a4cfe1 *inst/htmlwidgets/lib/vis/img/network/upArrow.p
 5f78e86f895f5a5cc1472cc57db154c5 *inst/htmlwidgets/lib/vis/img/network/zoomExtends.png
 d17345d880019d3faabe958ac1fbf45e *inst/htmlwidgets/lib/vis/vis.css
 27338978f6befe212d0688c6b56e1b3e *inst/htmlwidgets/lib/vis/vis.min.js
-1331347a8214e409e1ca8e727508e517 *inst/htmlwidgets/visNetwork.js
+d825cc859dea273c858d9efe55fa4765 *inst/htmlwidgets/visNetwork.js
 7bc566d7bfd5b22eadb35e3f1b9948cd *inst/htmlwidgets/visNetwork.yaml
 ea1e9e3cd991851ec445f391490e624f *inst/img/tree_example.png
 18cd6ebb973274f631e46d00eb5d89a7 *inst/shiny/server.R
@@ -202,7 +202,7 @@ ffd09a0bcc552f5868856e995061fa53 *inst/shiny/src/ui/proxy_nodes_ui.R
 f7d55111357e6684813af840bdcfce80 *inst/shiny/ui.R
 7777eda27d041c216152db6f00f5fc33 *inst/tests/get_coefficients_transformation.R
 0c62147d752346801a66bb3cb0059b5f *inst/tests/highlight_combinaison.R
-1cf6be6c938d5b0310fbb7e65ffff640 *inst/tests/shiny_collapsed/app.R
+dc7687acb9351545ba0e13c9f40c0ce5 *inst/tests/shiny_collapsed/app.R
 ed930628f4e8eb3ba8fcf7aa45ec7103 *inst/tests/sparkline.R
 b519aabb1fa302320fe8c4914ca01b9f *inst/tests/understand_coordinates.R
 53771276d8e688c64aa647ffe8217f88 *man/addExport.Rd

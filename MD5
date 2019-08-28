@@ -1,7 +1,7 @@
-6a6c8ddbc7e6a49ce946034b57093c07 *DESCRIPTION
+789e568615f4de2d3b86180e57e90939 *DESCRIPTION
 33df9c544e24fce34daa94f1763b5283 *LICENSE
 343e52ec4127ff523ba83e83750f7abf *NAMESPACE
-22855f2c64977cb827ce303905a51596 *NEWS
+786f6ec2b11c969259e8c8a04de35b6d *NEWS
 add58c93ce49ed2bb69d61254ef39e14 *R/dependencies.R
 e405657918e49b45f261af3925f44d3e *R/utils.R
 e06fd080d96e056848e9ed389ba0a6b0 *R/visClustering.R
@@ -14,10 +14,10 @@ af487f959183c001e09ab09914eea70f *R/visDocumentation.R
 91b9d4a025fbb22517a81cff145df679 *R/visFocus.R
 c5a49561a6171ccb7ea1d5541a48d741 *R/visGetUtils.R
 7a9e741babb116717bd5c33de3f0c3a9 *R/visGroups.R
-dda1863948151f57e67ff369d34e6756 *R/visHclust.R
+96b6fa0446c2f810c8390cf36a94e65a *R/visHclust.R
 f6676567b61c9040d1eb1e445a5b283d *R/visHierarchicalLayout.R
 fd5c8639220cb4539e3b4fe0ea4086f1 *R/visIgraph.R
-ba100eb0b3a045755097af2ebdf414b5 *R/visIgraphLayout.R
+22fb24469010435c40a24e369a678c7e *R/visIgraphLayout.R
 83ec00ee9cb8773cd8e2018d7d14150f *R/visInteraction.R
 5d87cb9a683b71a35a8c2a3843fb86de *R/visLayout.R
 48d6dd6bb6083bd218e1533fc8aa9824 *R/visLegend.R
@@ -46,12 +46,12 @@ c5aff89e3c3a8e8e7087e7b04714e331 *R/visTreeModule.R
 6688481969a9d0f11e367298c801fe3d *R/visUnselectAll.R
 cf18fd0a5148b194719678f498610cb5 *R/visUpdateEdges.R
 f658fd8d09f672a285f8aa2313646a38 *R/visUpdateNodes.R
-dc145caa2e48976bac4247ba57c2a48d *README.md
-a876df5cae0039cab7e60b9178a5c48b *build/vignette.rds
+7e6585d093a516511542d47944b2028b *README.md
+8c2c09e38e0f6ba63ebcbed0577ee961 *build/vignette.rds
 7fb79035b3e39da8872e27332d11e8f2 *inst/NOTICE
 91e87762f9d2fda1f6fbeb2c6098f0af *inst/doc/Introduction-to-visNetwork.R
 dee4e9d1f3ee85ffdf9a9132f67c854e *inst/doc/Introduction-to-visNetwork.Rmd
-00b092d083ba3b715d954662fa6a0145 *inst/doc/Introduction-to-visNetwork.html
+98a3e31c69f1e98e19955a98084c9ed3 *inst/doc/Introduction-to-visNetwork.html
 8c6ad2433e82a311530e4ebe3aebf39f *inst/docjs/css/bootstrap-theme.css
 006d9779ee6076a657daf47fce1a2957 *inst/docjs/css/bootstrap-theme.css.map
 95eb835999f0c2f1f3218d46e6c30137 *inst/docjs/css/bootstrap-theme.min.css
@@ -175,7 +175,7 @@ f0aa0566b9f39334bd886d27d6a4cfe1 *inst/htmlwidgets/lib/vis/img/network/upArrow.p
 5f78e86f895f5a5cc1472cc57db154c5 *inst/htmlwidgets/lib/vis/img/network/zoomExtends.png
 d17345d880019d3faabe958ac1fbf45e *inst/htmlwidgets/lib/vis/vis.css
 27338978f6befe212d0688c6b56e1b3e *inst/htmlwidgets/lib/vis/vis.min.js
-d825cc859dea273c858d9efe55fa4765 *inst/htmlwidgets/visNetwork.js
+aaa92093287b25ad32a75eae430c00c4 *inst/htmlwidgets/visNetwork.js
 7bc566d7bfd5b22eadb35e3f1b9948cd *inst/htmlwidgets/visNetwork.yaml
 ea1e9e3cd991851ec445f391490e624f *inst/img/tree_example.png
 18cd6ebb973274f631e46d00eb5d89a7 *inst/shiny/server.R

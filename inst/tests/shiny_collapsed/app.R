@@ -21,12 +21,11 @@ server <- shinyServer(function(input, output) {
     
     # default css + text-decoration
     visNetwork(nodes, edges) %>% 
-      visOptions(manipulation = TRUE)
+      visInteraction(tooltipStyle = "position: fixed;visibility:hidden;padding: 5px;font-family: verdana;font-size:14px;
+                     font-color:#000000;background-color: #f5f4ed;-moz-border-radius: 3px;-webkit-border-radius: 3px;
+                     border-radius: 3px;border: 1px solid #808074;box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
+                     max-width:400px;word-break: break-all;text-decoration: underline;")
     
-  })
-  
-  observe({
-    print(input$net_graphChange)
   })
 })
 

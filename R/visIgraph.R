@@ -11,7 +11,7 @@
 #'@param layout : Character Name of igraph layout function to use. Default to "layout_nicely"
 #'@param physics : Boolean. Default to FALSE. Enabled physics on nodes ?
 #'@param smooth : Boolean. Default to FALSE. Use smooth edges ?
-#'@param type : Character Type of scale from igrah to vis.js. "square" (defaut) render in a square limit by height. "full" use width and height to scale in a rectangle.
+#'@param type : Character Type of scale from igrah to vis.js. "square" (default) render in a square limit by height. "full" use width and height to scale in a rectangle.
 #'@param randomSeed : Number. The nodes are randomly positioned initially. This means that the settled result is different every time. If you provide a random seed manually, the layout will be the same every time.
 #'@param layoutMatrix : in case of layout = 'layout.norm'. the 'layout' argument (A matrix with two or three columns, the layout to normalize)
 #'@param ... : Adding arguments to layout function
@@ -108,20 +108,25 @@ visIgraph <- function(igraph,
   
   directed <- FALSE
   if(igraph::is.directed(igraph)){
-#     if(any(duplicated(edges[, c("from", "to")]))){
-#       
-#     }else{
-      directed <- TRUE
+    #     if(any(duplicated(edges[, c("from", "to")]))){
+    #       
+    #     }else{
+    directed <- TRUE
     # }
   }
   
-  graph <- visNetwork(nodes = visdata$nodes, edges = visdata$edges) %>%
-    visIgraphLayout(layout = layout, type = type, physics = physics, 
-                    smooth = smooth, randomSeed = randomSeed, 
-                    layoutMatrix = layoutMatrix, ...)
-  if(directed){
-    graph <- visEdges(graph, arrows = "to")
+  graph <- visNetwork(nodes = visdata$nodes, edges = visdata$edges) 
+  
+  if(nrow(visdata$nodes) > 0 | nrow(visdata$edges) > 0){
+    graph <- graph %>%
+      visIgraphLayout(layout = layout, type = type, physics = physics, 
+                      smooth = smooth, randomSeed = randomSeed, 
+                      layoutMatrix = layoutMatrix, ...)
+    if(directed){
+      graph <- visEdges(graph, arrows = "to")
+    }
   }
+
   graph
 }
 
@@ -132,7 +137,7 @@ toVisNetworkData <- function(igraph,
   if(!any(class(igraph) %in% "igraph")){
     stop("igraph must be a igraph object")
   }
-
+  
   if(!requireNamespace("igraph", quietly = TRUE)){
     stop("This function need 'igraph'. Please 
          install it before.")
@@ -141,43 +146,50 @@ toVisNetworkData <- function(igraph,
   igraphdata <- igraph::get.data.frame(igraph, what = "both")
   
   nodes <- igraphdata$vertices
-  if(!"name" %in% colnames(nodes)){
-    nodes$id <- 1:nrow(nodes)
-  }else{
-    colnames(nodes) <- gsub("^name$", "id", colnames(nodes))
-  }
-  
-  if("color" %in% colnames(nodes)){
-    if(class(nodes$color) %in% c("numeric", "integer")){
-      colnames(nodes) <- gsub("^color$", "group", colnames(nodes))
+  if(nrow(nodes) > 0){
+    if(!"name" %in% colnames(nodes)){
+      nodes$id <- 1:nrow(nodes)
+    }else{
+      colnames(nodes) <- gsub("^name$", "id", colnames(nodes))
     }
-  }
-  
-  if("label.cex" %in% colnames(nodes)){
+    
+    if("color" %in% colnames(nodes)){
+      if(class(nodes$color) %in% c("numeric", "integer")){
+        colnames(nodes) <- gsub("^color$", "group", colnames(nodes))
+      }
+    }
+    
+    if("label.cex" %in% colnames(nodes)){
       colnames(nodes) <- gsub("^label.cex$", "font.size", colnames(nodes))
       nodes$font.size <- nodes$font.size*40
-  }
-  
-  if("label.color" %in% colnames(nodes)){
-    colnames(nodes) <- gsub("^label.color$", "font.color", colnames(nodes))
-  }
-  
-  nodes <- nodes[, c("id", setdiff(colnames(nodes), "id")), drop = FALSE]
-  
-  if(idToLabel){
-    nodes$label <- nodes$id
+    }
+    
+    if("label.color" %in% colnames(nodes)){
+      colnames(nodes) <- gsub("^label.color$", "font.color", colnames(nodes))
+    }
+    
+    nodes <- nodes[, c("id", setdiff(colnames(nodes), "id")), drop = FALSE]
+    
+    if(idToLabel){
+      nodes$label <- nodes$id
+    }
+  } else {
+    nodes <- data.frame(id = c())
   }
   
   edges <- igraphdata$edges
-  
-  if("label.cex" %in% colnames(edges)){
-    colnames(edges) <- gsub("^label.cex$", "font.size", colnames(edges))
-    edges$font.size <- edges$font.size*40
+  if(nrow(edges) > 0){
+    if("label.cex" %in% colnames(edges)){
+      colnames(edges) <- gsub("^label.cex$", "font.size", colnames(edges))
+      edges$font.size <- edges$font.size*40
+    }
+    
+    if("label.color" %in% colnames(edges)){
+      colnames(edges) <- gsub("^label.color$", "font.color", colnames(edges))
+    }
+  } else {
+    edges = data.frame(from = c(), to = c())
   }
-  
-  if("label.color" %in% colnames(edges)){
-    colnames(edges) <- gsub("^label.color$", "font.color", colnames(edges))
-  }
-  
+
   list(nodes= nodes, edges = edges)
 }

@@ -18,6 +18,7 @@ visEdges(
   physics = NULL,
   selectionWidth = NULL,
   selfReferenceSize = NULL,
+  selfReference = NULL,
   labelHighlightBold = NULL,
   color = NULL,
   font = NULL,
@@ -27,7 +28,8 @@ visEdges(
   shadow = NULL,
   scaling = NULL,
   widthConstraint = NULL,
-  chosen = NULL
+  chosen = NULL,
+  endPointOffset = NULL
 )
 }
 \arguments{
@@ -55,7 +57,9 @@ visEdges(
 
 \item{selectionWidth}{: Number or Function. Default to 1. The selectionWidth determines the width of the edge when the edge is selected. If a number is supplied, this number will be added to the width. Because the width can be altered by the value and the scaling functions, a constant multiplier or added value may not give the best results. To solve this, you can supply a function.}
 
-\item{selfReferenceSize}{: Number. Default to false.    When the to and from nodes are the same, a circle is drawn. This is the radius of that circle.}
+\item{selfReferenceSize}{: Number. Default to false.    When the to and from nodes are the same, a circle is drawn. This is the radius of that circle. This property is deprecated please use selfReference instead.}
+
+\item{selfReference}{: See \link{visDocumentation}}
 
 \item{labelHighlightBold}{: Boolean. Default to    true. Determines whether or not the label becomes bold when the edge is selected.}
 
@@ -80,18 +84,8 @@ visEdges(
  \item{"vadjust, multi, bold, ital, boldital, mono"}{See \link{visDocumentation}}
 }}
 
-\item{arrows}{: Named list or String. To draw an arrow with default settings a string can be supplied. For example: 'to, from,middle' or 'to;from', any combination with any seperating symbol is fine. If you want to control the size of the arrowheads, you can supply an object.
-\itemize{
- \item{"to"}{ : Named list or Boolean. Default to Named list. When true, an arrowhead on the 'to' side of the edge is drawn, pointing to the 'to' node with default settings. To customize the size of the arrow, supply an object.
-   \itemize{
-     \item{"enabled"}{ : Boolean. Default to false. Toggle the arrow on or off. This option is optional, if undefined and the scaleFactor property is set, enabled will be set to true.}
-     \item{"scaleFactor"}{ : Number. Default to 1. The scale factor allows you to change the size of the arrowhead.}
-     \item{"type"}{ : Character. Default to 'arrow'. The type of endpoint. Also possible is 'circle'.}
-   }
- }
- \item{"middle"}{ : Named list or Boolean. Default to Named list. Exactly the same as the to object but with an arrowhead in the center node of the edge.}
- \item{"from "}{ : Named list or Boolean. Default to Named list. Exactly the same as the to object but with an arrowhead at the from node of the edge.}
-}}
+\item{arrows}{: Named list or String. To draw an arrow with default settings a string can be supplied. For example: 'to, from,middle' or 'to;from', any combination with any seperating symbol is fine. 
+If you want to control the size of the arrowheads, you can supply an object. See \link{visDocumentation}}
 
 \item{arrowStrikethrough}{:    Boolean. Default to True.     When false, the edge stops at the arrow. This can be useful if you have thick lines and you want the arrow to end in a point. Middle arrows are not affected by this.}
 
@@ -128,12 +122,11 @@ visEdges(
  \item{"customScalingFunction"}{ : Function. If nodes have value fields, this function determines how the size of the nodes are scaled based on their values.}
 }}
 
-\item{widthConstraint}{: Number, boolean or list. If false (defaut), no widthConstraint is applied. If a number is specified, the maximum width of the edge's label is set to the value. The edge's label's lines will be broken on spaces to stay below the maximum.
-\itemize{
-  \item{"maximum"}{ : Boolean. If a number is specified, the maximum width of the edge's label is set to the value. The edge's label's lines will be broken on spaces to stay below the maximum.}
-}}
+\item{widthConstraint}{: See \link{visDocumentation}}
 
 \item{chosen}{: See \link{visDocumentation}}
+
+\item{endPointOffset}{: See \link{visDocumentation}}
 }
 \description{
 Network visualization edges options. For full documentation, have a look at \link{visDocumentation}.
@@ -151,9 +144,16 @@ visNetwork(nodes, edges) \%>\%
   visEdges(arrows = list(to = list(enabled = TRUE, 
      scaleFactor = 2, type = 'circle')))
 
-# smooth
+# global smooth
 visNetwork(nodes, edges) \%>\% visEdges(smooth = FALSE)
 visNetwork(nodes, edges) \%>\% visEdges(smooth = list(enabled = TRUE, type = "diagonalCross"))
+
+# individual smooth
+edges <- data.frame(from = c(1,2), to = c(2,3))
+edges$smooth.enabled <- c(TRUE, TRUE)
+edges$smooth.type <- c("discrete", "curvedCW")
+edges$smooth.roundness <- c(0.5, 1)
+visNetwork(nodes, edges)
 
 # width
 visNetwork(nodes, edges) \%>\% visEdges(width = 10)
@@ -168,10 +168,14 @@ visNetwork(nodes, edges) \%>\% visEdges(color = list(color = "red", highlight = 
 visNetwork(nodes, edges) \%>\% visEdges(shadow = TRUE)
 visNetwork(nodes, edges) \%>\% visEdges(shadow = list(enabled = TRUE, size = 5))
 
+# arrows
+visNetwork(nodes, edges) \%>\%
+   visEdges(arrows = list(to = list(enabled = TRUE, type = "bar")))
+   
 # dashes
 # globally
 visNetwork(nodes, edges) \%>\% visEdges(dashes = TRUE)
-
+    
 # set configuration individualy 
 # have to use specific notation...
 nodes <- data.frame(id = 1:3)

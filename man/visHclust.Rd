@@ -110,9 +110,9 @@ So, we add boxplot / pie focus on sub-population vs all population using \code{s
 
 \item{horizontal}{\code{boolean}, default to FALSE}
 
-\item{minNodeSize}{\code{numeric}, in case of \code{nodesPopSize}, minimum size of a node. Defaut to 50. Else \code{minNodeSize + maxNodeSize / 2}.}
+\item{minNodeSize}{\code{numeric}, in case of \code{nodesPopSize}, minimum size of a node. Default to 50. Else \code{minNodeSize + maxNodeSize / 2}.}
 
-\item{maxNodeSize}{\code{numeric}, in case of \code{nodesPopSize}, maximum size of a node. Defaut to 200. Else \code{ minNodeSize + maxNodeSize / 2}.}
+\item{maxNodeSize}{\code{numeric}, in case of \code{nodesPopSize}, maximum size of a node. Default to 200. Else \code{ minNodeSize + maxNodeSize / 2}.}
 
 \item{nodesPopSize}{\code{boolean}, nodes sizes depends on population ? Default to \code{TRUE}.}
 
@@ -158,9 +158,9 @@ visHclust(iris, cutree = 3, export = TRUE)
 
 
 # update group / individual nodes
-visHclust(iris, cutree = 8) %>% 
+visHclust(iris, cutree = 8) \%>\% 
  visGroups(groupname = "group", color ="black", 
-   shape = "triangleDown", size = 75)  %>% 
+   shape = "triangleDown", size = 75)  \%>\% 
  visGroups(groupname = "individual", 
    font = list(size = 150),
    color = list(background = "white", border = "purple", 

@@ -11,14 +11,14 @@
 #'  \item{"degree"}{ : Optional. Integer. Degree of depth of nodes to be colored. Default to 1. Set high number to have the entire sub-network. In case of "hierarchical" algorithm, you can also pass a list(from = 1, to = 1) to control degree in both direction}
 #'  \item{"hover"}{ : Optional. Boolean. Enable highlightNearest alos hovering a node ? Default to FALSE}
 #'  \item{"algorithm"}{ : Optional. String. highlightNearest algorithm. "all" highlight all nodes, without taking direction information. "hierarchical" look only at inputs/outputs nodes.}
-#'  \item{"hideColor"}{ : Optional. String. Color for hidden nodes/edges. Use a rgba definition. Defaut to rgba(200,200,200,0.5)}
+#'  \item{"hideColor"}{ : Optional. String. Color for hidden nodes/edges. Use a rgba definition. Default to rgba(200,200,200,0.5)}
 #'  \item{"labelOnly"}{ : Optional. Boolean. Keep just label for nodes on degree + 1 ? Default to TRUE}
 #'}
 #'@param nodesIdSelection :  Custom Option. Just a Boolean, or a named list. Default to false. Add an id node selection creating an HTML select element. This options use click event. Not available for DOT and Gephi.
 #'\itemize{
 #'  \item{"enabled"}{ : Boolean. Default to false. Activated or not ?.}
-#'  \item{"values}{ : Optional. Vector of possible values (node's id), and so order is preserve. Defaut to all id in nodes data.frame.}
-#'  \item{"selected"}{ : Optional. Integer/Character. Initial id selection. Defaut to NULL}
+#'  \item{"values}{ : Optional. Vector of possible values (node's id), and so order is preserve. Default to all id in nodes data.frame.}
+#'  \item{"selected"}{ : Optional. Integer/Character. Initial id selection. Default to NULL}
 #'  \item{"style"}{ : Optional. Character. HTML style of list. Default to 'width: 150px; height: 26px'.}
 #'  \item{"useLabels"}{ : Optional. Boolean. Use labels instead of id ? Default to TRUE.}
 #'  \item{"main"}{ : Optional. Default to "Select by id"}
@@ -26,28 +26,32 @@
 #'@param selectedBy : Custom option. Character or a named list. Add a multiple selection based on column of node data.frame creating an HTML select element. Not available for DOT and Gephi.
 #'\itemize{
 #'  \item{"variable"}{ : Character. Column name of selection variable.}
-#'  \item{"values}{ : Optional. Vector of possible values. Defaut to all values in nodes data.frame.}
-#'  \item{"selected"}{ : Optional. Integer/Character. Initial selection. Defaut to NULL}
+#'  \item{"values}{ : Optional. Vector of possible values. Default to all values in nodes data.frame.}
+#'  \item{"selected"}{ : Optional. Integer/Character. Initial selection. Default to NULL}
 #'  \item{"style"}{ : Optional. Character. HTML style of list. Default to 'width: 150px; height: 26px'.}
 #'  \item{"multiple"}{ : Optional. Boolean. Default to FALSE. If TRUE, you can affect multiple groups per nodes using a comma ("gr1,gr2")}
-#'  \item{"hideColor"}{ : Optional. String. Color for hidden nodes/edges. Use a rgba definition. Defaut to rgba(200,200,200,0.5)}
+#'  \item{"hideColor"}{ : Optional. String. Color for hidden nodes/edges. Use a rgba definition. Default to rgba(200,200,200,0.5)}
 #'  \item{"main"}{ : Optional. Default to "Select by variable"}
-#'  \item{"sort"}{ : Optional. If values is NULL, sort all possible values ?. Defaut to TRUE}
-#'  \item{"highlight"}{ : Optional. Boolean. Run highlightNearest if defined on each selected node ? Defaut to FALSE}
+#'  \item{"sort"}{ : Optional. If values is NULL, sort all possible values ?. Default to TRUE}
+#'  \item{"highlight"}{ : Optional. Boolean. Run highlightNearest if defined on each selected node ? Default to FALSE}
 #'}
 #'@param collapse : Custom option. Just a Boolean, or a named list. Collapse / Uncollapse nodes using double-click. In dev.
 #'\itemize{
 #'  \item{"enabled"}{ : Boolean. Default to false. Activated or not ?}
 #'  \item{"fit"}{ : Optional. Boolean. Default to FALSE. Call fit method after collapse/uncollapse event ?}
 #'  \item{"resetHighlight"}{ : Optional. Boolean. Default to TRUE to reset highlighted nodes after collapse/uncollapse event.}
-#'  \item{"clusterOptions"}{ : Optional. List. Defaut to NULL. A list of all options you want to pass to cluster collapsed node}
+#'  \item{"clusterOptions"}{ : Optional. List. Default to NULL. A list of all options you want to pass to cluster collapsed node}
 #'  \item{"keepCoord"}{ : Optional. Boolean. Default to TRUE to keep nodes coordinates on collapse}
 #'  \item{"labelSuffix"}{ : Optional. Character. Use node label + suffix or just suffix. Default to '(cluster)'}
 #'}
 #'@param autoResize : Boolean. Default to true. If true, the Network will automatically detect when its container is resized, and redraw itself accordingly. If false, the Network can be forced to repaint after its container has been resized using the function redraw() and setSize(). 
 #'@param clickToUse : Boolean. Default to false. When a Network is configured to be clickToUse, it will react to mouse, touch, and keyboard events only when active. When active, a blue shadow border is displayed around the Network. The Network is set active by clicking on it, and is changed to inactive again by clicking outside the Network or by pressing the ESC key.
-#'@param manipulation : Just a Boolean or a list. See \link{visDocumentation}
-#'
+#'@param manipulation : Just a Boolean or a list. See \link{visDocumentation}. You can also choose the columns to edit : 
+#'\itemize{
+#'  \item{"editEdgeCols"}{ : Optional. Default to NULL, and so you can just move edge. If set, you can't move edge but just edit.}
+#'  \item{"editNodeCols"}{ : Optional. Default to c("id", "label"). See examples.}
+#'  \item{"addNodeCols"}{ : Optional. Default to c("id", "label"). See examples.}
+#'}
 #'@examples
 #' nodes <- data.frame(id = 1:15, label = paste("Label", 1:15),
 #'  group = sample(LETTERS[1:3], 15, replace = TRUE))
@@ -191,10 +195,28 @@
 #'
 #'visNetwork(nodes, edges) %>% 
 #'  visOptions(manipulation = list(enabled = TRUE, editNode = FALSE, editEdge = FALSE))
+#'  
+#' # choose columns to edit
+#' visNetwork(nodes, edges) %>% 
+#'   visOptions(manipulation = list(enabled = TRUE, 
+#'                                  editEdgeCols = c("label"), 
+#'                                  editNodeCols = c("id", "label", "title", "size"), 
+#'                                  addNodeCols = c("label", "group")))
 #'
+#' # choose columns to edit + input html type (text, number, ...)
+#' # https://www.w3schools.com/tags/att_input_type.asp
+#' visNetwork(nodes, edges) %>% 
+#'   visOptions(manipulation = list(enabled = TRUE, 
+#'                                  editEdgeCols = c("label"), 
+#'                                  editNodeCols = list(
+#'                                     "text" = c("id", "label", "title"),
+#'                                     "number" = c("size")
+#'                                  ), 
+#'                                  addNodeCols = c("label", "group")))
 #'visNetwork(nodes, edges)  %>% 
 #'  visOptions(manipulation = list(enabled = TRUE, 
 #'                                 editEdge = htmlwidgets::JS("function(data, callback) {
+#'                                                            callback(data);
 #'                                                            console.info('edit edge')
 #'                                                            }")
 #'                                     )
@@ -237,21 +259,92 @@ visOptions <- function(graph,
   if(is.null(manipulation)){
     options$manipulation <- list(enabled = FALSE)
   }else{
+    
+    graph$x$opts_manipulation$datacss <- paste(readLines(system.file("htmlwidgets/lib/css/dataManipulation.css", package = "visNetwork"), warn = FALSE), collapse = "\n")
+    
     if(is.logical(manipulation)){
       options$manipulation <- list(enabled = manipulation)
+      
     } else if(is.list(manipulation)){
       options$manipulation <- manipulation
     } else {
       stop("Invalid 'manipulation' argument. logical or list")
     }
+    
+    if(!"addNodeCols" %in% names(manipulation)){
+      graph$x$opts_manipulation$addNodeCols <- c("id", "label")
+      addNodeCols_html_input_type <- rep("text", 2)
+    } else {
+      if(is.list(manipulation$addNodeCols)){
+        graph$x$opts_manipulation$addNodeCols <- unname(do.call("c", manipulation$addNodeCols))
+        addNodeCols_html_input_type <- rep(names(manipulation$addNodeCols), sapply(manipulation$addNodeCols, length))
+      } else if(is.vector(manipulation$addNodeCols)){
+        graph$x$opts_manipulation$addNodeCols <- manipulation$addNodeCols
+        addNodeCols_html_input_type <- rep("text", length(manipulation$addNodeCols))
+      }
+      options$manipulation$addNodeCols <- NULL
+    }
+    
+    if(!"editNodeCols" %in% names(manipulation)){
+      graph$x$opts_manipulation$editNodeCols <- c("id", "label")
+      editNodeCols_html_input_type <- rep("text", 2)
+    } else {
+      if(is.list(manipulation$editNodeCols)){
+        graph$x$opts_manipulation$editNodeCols <- unname(do.call("c", manipulation$editNodeCols))
+        editNodeCols_html_input_type <- rep(names(manipulation$editNodeCols), sapply(manipulation$editNodeCols, length))
+      } else if(is.vector(manipulation$editNodeCols)){
+        graph$x$opts_manipulation$editNodeCols <- manipulation$editNodeCols
+        editNodeCols_html_input_type <- rep("text", length(manipulation$editNodeCols))
+      }
+      options$manipulation$editNodeCols <- NULL
+    }
+    
+    if("editEdgeCols" %in% names(manipulation) && !is.null(manipulation$editEdgeCols) && length(manipulation$editEdgeCols) > 0){
+      if(is.list(manipulation$editEdgeCols)){
+        graph$x$opts_manipulation$editEdgeCols <- unname(do.call("c", manipulation$editEdgeCols))
+        editEdgeCols_html_input_type <- rep(names(manipulation$editEdgeCols), sapply(manipulation$editEdgeCols, length))
+      } else if(is.vector(manipulation$editEdgeCols)){
+        graph$x$opts_manipulation$editEdgeCols <- manipulation$editEdgeCols
+        editEdgeCols_html_input_type <- rep("text", length(manipulation$editEdgeCols))
+      } 
+      options$manipulation$editEdgeCols <- NULL
+    } 
+    
+    if(length(graph$x$opts_manipulation$addNodeCols) == 1){
+      graph$x$opts_manipulation$addNodeCols <- list(graph$x$opts_manipulation$addNodeCols)
+    }
+    if(length(graph$x$opts_manipulation$editNodeCols) == 1){
+      graph$x$opts_manipulation$editNodeCols <- list(graph$x$opts_manipulation$editNodeCols)
+    }
+    if(length(graph$x$opts_manipulation$editEdgeCols) == 1){
+      graph$x$opts_manipulation$editEdgeCols <- list(graph$x$opts_manipulation$editEdgeCols)
+    }
+    
+    if(!is.null(graph$x$opts_manipulation$addNodeCols)){
+      graph$x$opts_manipulation$tab_add_node <- build_manipulation_table(
+        col = graph$x$opts_manipulation$addNodeCols, 
+        type = addNodeCols_html_input_type,
+        id = "addnode")
+    }
+    
+    if(!is.null(graph$x$opts_manipulation$editNodeCols)){
+      graph$x$opts_manipulation$tab_edit_node <- build_manipulation_table(
+        col = graph$x$opts_manipulation$editNodeCols, 
+        type = editNodeCols_html_input_type,
+        id = "editnode") 
+    }
+    
+    if(!is.null(graph$x$opts_manipulation$editEdgeCols)){
+      graph$x$opts_manipulation$tab_edit_edge <- build_manipulation_table(
+        col = graph$x$opts_manipulation$editEdgeCols,
+        type = editEdgeCols_html_input_type, 
+        id = "editedge") 
+    }
+    
   }
   
   options$height <- height
   options$width <- width
-  
-  if(!is.null(manipulation)){
-      graph$x$datacss <- paste(readLines(system.file("htmlwidgets/lib/css/dataManipulation.css", package = "visNetwork"), warn = FALSE), collapse = "\n")
-  }
   
   if(!"nodes"%in%names(graph$x) && any(class(graph) %in% "visNetwork")){
     highlight <- list(enabled = FALSE)
@@ -298,7 +391,7 @@ visOptions <- function(graph,
       stopifnot(is.logical(collapse))
       list_collapse$enabled <- collapse
     }
-      
+    
     #############################
     # highlightNearest
     #############################
@@ -466,7 +559,7 @@ visOptions <- function(graph,
         } else {
           byselection$main <- paste0("Select by ", selectedBy$variable)
         }
- 
+        
         if("style"%in%names(selectedBy)){
           byselection$style <- selectedBy$style
         }else if(any(class(graph) %in% "visNetwork_Proxy")){
@@ -607,4 +700,25 @@ visOptions <- function(graph,
     graph$x$options <- mergeLists(graph$x$options, options)
   }
   graph
+}
+
+
+build_manipulation_table <- function(col, type, id = "node"){
+  
+  if(length(col) > 0){
+    table <- paste0('<span id="', id, '-operation" class = "operation">node</span> <br><table style="margin:auto;">')
+    
+    for(i in 1:length(col)){
+      
+      add <- paste0('<tr><td>', col[i], '</td><td><input id="', id, "-", col[i], '"  type= "', type[i], '" value="new value"></td></tr>')
+      table <- paste0(table, add)
+    }
+    
+    table <- paste0(table, '</table><input type="button" value="save" id="', id, '-saveButton"></button><input type="button" value="cancel" id="', id, '-cancelButton"></button>')
+  } else {
+    table <- ""
+  }
+  
+  table
+  
 }

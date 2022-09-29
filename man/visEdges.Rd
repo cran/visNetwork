@@ -140,6 +140,7 @@ edges <- data.frame(from = c(1,2), to = c(1,3))
 visNetwork(nodes, edges) \%>\% visEdges(arrows = 'from')
 visNetwork(nodes, edges) \%>\% visEdges(arrows = 'to, from')
 
+\dontrun{
 visNetwork(nodes, edges) \%>\% 
   visEdges(arrows = list(to = list(enabled = TRUE, 
      scaleFactor = 2, type = 'circle')))
@@ -188,10 +189,10 @@ edges <- data.frame(from = c(1,2), to = c(1,3),
      dashes = c("[10,10,2,2]", "[2]"))
 
 visNetwork(nodes, edges)
-
+}
 }
 \references{
-See online documentation \url{http://datastorm-open.github.io/visNetwork/}
+See online documentation \url{https://datastorm-open.github.io/visNetwork/}
 }
 \seealso{
 \link{visNodes} for nodes options, \link{visEdges} for edges options, \link{visGroups} for groups options, 

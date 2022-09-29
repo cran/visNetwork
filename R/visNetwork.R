@@ -60,6 +60,7 @@
 #'
 #' visNetwork(nodes, edges)
 #'
+#' \dontrun{
 #' # add a title
 #' visNetwork(nodes, edges, main = "visNetwork minimal example")
 #' visNetwork(nodes, edges, main = list(text = "visNetwork minimal example",
@@ -147,7 +148,6 @@
 #'
 #' # use fontAwesome icons using groups or nodes options 
 #' # font-awesome is not part of dependencies. use addFontAwesome() if needed
-#' # http://fortawesome.github.io/Font-Awesome
 #' 
 #' nodes <- data.frame(id = 1:3, group = c("B", "A", "B"))
 #' edges <- data.frame(from = c(1,2), to = c(2,3))
@@ -165,7 +165,7 @@
 #'   addFontAwesome()
 #'
 #' # Save a network
-#' \dontrun{
+#' 
 #' network <- visNetwork(nodes, edges) %>% 
 #'  visOptions(highlightNearest = TRUE, nodesIdSelection = TRUE,
 #'  manipulation = TRUE) %>% visLegend()
@@ -173,19 +173,18 @@
 #' network %>% visSave(file = "network.html")
 #' # same as
 #' visSave(network, file = "network.html")
-#' }
+#' 
 #' 
 #' # Export as png/jpeg (shiny or browser only)
-#' \dontrun{
 #' visNetwork(nodes, edges) %>% 
 #'  visExport()
-#' }
+#' 
 #' 
 #' # DOT language
 #' visNetwork(dot = 'dinetwork {1 -> 1 -> 2; 2 -> 3; 2 -- 4; 2 -> 1 }')
 #' 
 #' # gephi json file
-#' \dontrun{
+#' 
 #' visNetwork(gephi = 'WorldCup2014.json') %>% visPhysics(stabilization = FALSE,   barnesHut = list(
 #'     gravitationalConstant = -10000,
 #'     springConstant = 0.002,
@@ -204,7 +203,7 @@
 #' @importFrom jsonlite fromJSON
 #'
 #' @export
-#' @references See online documentation \url{http://datastorm-open.github.io/visNetwork/}
+#' @references See online documentation \url{https://datastorm-open.github.io/visNetwork/}
 visNetwork <- function(nodes = NULL, edges = NULL, dot = NULL, gephi = NULL,
                        width = NULL, height = NULL, main = NULL, submain = NULL, 
                        footer = NULL, background = 'rgba(0, 0, 0, 0)', ...) {

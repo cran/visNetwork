@@ -1,19 +1,17 @@
 Package: visNetwork
 Title: Network Visualization using 'vis.js' Library
-Version: 2.1.0
+Version: 2.1.2
 Authors@R: c(
     person(family = "Almende B.V. and Contributors", role = c("aut", "cph"),
        comment = "vis.js library in htmlwidgets/lib, https://visjs.org/, https://github.com/visjs/vis-network"),
     person("Benoit", "Thieurmel", role = c("aut", "cre"),
-       comment = "R interface", email = "benoit.thieurmel@datastorm.fr"),
-    person(given = "Titouan", family = "Robert", 
-    email = "titouan.robert@datastorm.fr", role = c("aut", "ctb"))
+       comment = "R interface", email = "bthieurmel@gmail.com")
     )
-Maintainer: Benoit Thieurmel <benoit.thieurmel@datastorm.fr>
+Maintainer: Benoit Thieurmel <bthieurmel@gmail.com>
 Description: Provides an R interface to the 'vis.js' JavaScript charting
     library. It allows an interactive visualization of networks.
 BugReports: https://github.com/datastorm-open/visNetwork/issues
-URL: http://datastorm-open.github.io/visNetwork/
+URL: https://datastorm-open.github.io/visNetwork/
 Depends: R (>= 3.0)
 Imports: htmlwidgets, htmltools, jsonlite, magrittr, utils, methods,
         grDevices, stats
@@ -22,13 +20,12 @@ Suggests: knitr, rmarkdown, webshot, igraph, rpart, shiny,
         shinyWidgets, colourpicker, sparkline, ggraph, tidygraph,
         flashClust
 VignetteBuilder: knitr, rmarkdown
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 NeedsCompilation: no
-Packaged: 2021-09-29 06:52:16 UTC; BenoitThieurmel
+Packaged: 2022-09-29 06:10:20 UTC; BenoitThieurmel
 Author: Almende B.V. and Contributors [aut, cph] (vis.js library in
     htmlwidgets/lib, https://visjs.org/,
     https://github.com/visjs/vis-network),
-  Benoit Thieurmel [aut, cre] (R interface),
-  Titouan Robert [aut, ctb]
+  Benoit Thieurmel [aut, cre] (R interface)
 Repository: CRAN
-Date/Publication: 2021-09-29 07:20:02 UTC
+Date/Publication: 2022-09-29 16:20:02 UTC

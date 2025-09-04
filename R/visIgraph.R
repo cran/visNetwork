@@ -1,9 +1,9 @@
 #' Render a visNetwork object from an igraph object
 #'
-#' Render a visNetwork object from an igraph object. \link{toVisNetworkData} transfrom igraph data to visNetwork data.
+#' Render a visNetwork object from an igraph object.  \link[visNetwork]{toVisNetworkData} transfrom igraph data to visNetwork data.
 #' We actually try to keep color, size and label from igraph to visNetwork.
-#' \link{visIgraph} plot directly an igraph object in visNetwork, using \link{toVisNetworkData} to extract data, and
-#' \link{visIgraphLayout} to compute layout and coordinates before rendering.
+#'  \link[visNetwork]{visIgraph} plot directly an igraph object in visNetwork, using  \link[visNetwork]{toVisNetworkData} to extract data, and
+#'  \link[visNetwork]{visIgraphLayout} to compute layout and coordinates before rendering.
 #' 
 #'
 #'@param igraph : a igraph object
@@ -73,10 +73,10 @@
 #'plot(g)
 #'visIgraph(g)
 #'}
-#'@seealso \link{visNodes} for nodes options, \link{visEdges} for edges options, \link{visGroups} for groups options, 
-#'\link{visLegend} for adding legend, \link{visOptions} for custom option, \link{visLayout} & \link{visHierarchicalLayout} for layout, 
-#'\link{visPhysics} for control physics, \link{visInteraction} for interaction, \link{visNetworkProxy} & \link{visFocus} & \link{visFit} for animation within shiny,
-#'\link{visDocumentation}, \link{visEvents}, \link{visConfigure} ...
+#'@seealso  \link[visNetwork]{visNodes} for nodes options,  \link[visNetwork]{visEdges} for edges options,  \link[visNetwork]{visGroups} for groups options, 
+#' \link[visNetwork]{visLegend} for adding legend,  \link[visNetwork]{visOptions} for custom option,  \link[visNetwork]{visLayout} &  \link[visNetwork]{visHierarchicalLayout} for layout, 
+#' \link[visNetwork]{visPhysics} for control physics,  \link[visNetwork]{visInteraction} for interaction,  \link[visNetwork]{visNetworkProxy} &  \link[visNetwork]{visFocus} &  \link[visNetwork]{visFit} for animation within shiny,
+#' \link[visNetwork]{visDocumentation},  \link[visNetwork]{visEvents},  \link[visNetwork]{visConfigure} ...
 #'
 #' @importFrom  methods findFunction
 #' 

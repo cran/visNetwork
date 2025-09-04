@@ -7,7 +7,7 @@
 visMoveNode(graph, id, x, y)
 }
 \arguments{
-\item{graph}{: a \code{\link{visNetworkProxy}}  object}
+\item{graph}{: a \code{ \link[visNetwork]{visNetworkProxy}}  object}
 
 \item{id}{: a node id}
 
@@ -16,7 +16,7 @@ visMoveNode(graph, id, x, y)
 \item{y}{: Number. y position, in canvas space}
 }
 \description{
-For use moveNode() method in a shiny app. For full documentation, have a look at \link{visDocumentation}.
+For use moveNode() method in a shiny app. For full documentation, have a look at  \link[visNetwork]{visDocumentation}.
 }
 \examples{
 \dontrun{
@@ -31,8 +31,8 @@ shiny::runApp(system.file("shiny", package = "visNetwork"))
 See online documentation \url{https://datastorm-open.github.io/visNetwork/}
 }
 \seealso{
-\link{visNodes} for nodes options, \link{visEdges} for edges options, \link{visGroups} for groups options, 
-\link{visLegend} for adding legend, \link{visOptions} for custom option, \link{visLayout} & \link{visHierarchicalLayout} for layout, 
-\link{visPhysics} for control physics, \link{visInteraction} for interaction, \link{visNetworkProxy} & \link{visFocus} & \link{visFit} for animation within shiny,
-\link{visDocumentation}, \link{visEvents}, \link{visConfigure} ...
+\link[visNetwork]{visNodes} for nodes options,  \link[visNetwork]{visEdges} for edges options,  \link[visNetwork]{visGroups} for groups options, 
+\link[visNetwork]{visLegend} for adding legend,  \link[visNetwork]{visOptions} for custom option,  \link[visNetwork]{visLayout} &  \link[visNetwork]{visHierarchicalLayout} for layout, 
+\link[visNetwork]{visPhysics} for control physics,  \link[visNetwork]{visInteraction} for interaction,  \link[visNetwork]{visNetworkProxy} &  \link[visNetwork]{visFocus} &  \link[visNetwork]{visFit} for animation within shiny,
+\link[visNetwork]{visDocumentation},  \link[visNetwork]{visEvents},  \link[visNetwork]{visConfigure} ...
 }

@@ -2,15 +2,15 @@
 #'
 #' Function to nearest nodes of a target node, with shiny only.
 #' 
-#' @param graph : a \code{\link{visNetworkProxy}}  object
+#' @param graph : a \code{ \link[visNetwork]{visNetworkProxy}}  object
 #' @param target : name of shiny input returning target node id
 #' @param maxpoints : Number of nearest nodes. Default to 5
 #' @param addDist : If TRUE, add a column named dist_ that contains the distance from the coordinate to the point, in pixels.
 #' 
-#'@seealso \link{visNodes} for nodes options, \link{visEdges} for edges options, \link{visGroups} for groups options, 
-#'\link{visLegend} for adding legend, \link{visOptions} for custom option, \link{visLayout} & \link{visHierarchicalLayout} for layout, 
-#'\link{visPhysics} for control physics, \link{visInteraction} for interaction, \link{visNetworkProxy} & \link{visFocus} & \link{visFit} for animation within shiny,
-#'\link{visDocumentation}, \link{visEvents}, \link{visConfigure} ...
+#'@seealso  \link[visNetwork]{visNodes} for nodes options,  \link[visNetwork]{visEdges} for edges options,  \link[visNetwork]{visGroups} for groups options, 
+#' \link[visNetwork]{visLegend} for adding legend,  \link[visNetwork]{visOptions} for custom option,  \link[visNetwork]{visLayout} &  \link[visNetwork]{visHierarchicalLayout} for layout, 
+#' \link[visNetwork]{visPhysics} for control physics,  \link[visNetwork]{visInteraction} for interaction,  \link[visNetwork]{visNetworkProxy} &  \link[visNetwork]{visFocus} &  \link[visNetwork]{visFit} for animation within shiny,
+#' \link[visNetwork]{visDocumentation},  \link[visNetwork]{visEvents},  \link[visNetwork]{visConfigure} ...
 #' 
 #' @examples
 #'\dontrun{
@@ -35,7 +35,7 @@ visNearestNodes <- function(graph, target, maxpoints = 5, addDist = T){
   
   current_nodes <- graph$session$input$tmp_nearest_nodes
   if(is.list(current_nodes)){
-    current_nodes <- rbind.fill.network(lapply(current_nodes, function(x){data.frame(t(unlist(x)))}))
+    current_nodes <- rbind_fill_network(lapply(current_nodes, function(x){data.frame(t(unlist(x)))}))
   } else{
     current_nodes <- NULL
   }
@@ -198,7 +198,7 @@ quickdf_network <- function (list)
   list
 }
 
-rbind.fill.network<- function (...) 
+rbind_fill_network<- function (...) 
 {
   dfs <- list(...)
   if (length(dfs) == 0) 

@@ -1,15 +1,15 @@
 #' Network visualization setData method
 #'
-#' For use setData() method in a shiny app. For full documentation, have a look at \link{visDocumentation}.
+#' For use setData() method in a shiny app. For full documentation, have a look at  \link[visNetwork]{visDocumentation}.
 #' 
-#' @param graph : a \code{\link{visNetworkProxy}}  object
-#' @param nodes : data.frame with nodes informations. Needed at least column "id". See \link{visNodes} 
-#' @param edges : data.frame with edges informations. Needed at least columns "from" and "to". See \link{visEdges} 
+#' @param graph : a \code{ \link[visNetwork]{visNetworkProxy}}  object
+#' @param nodes : data.frame with nodes informations. Needed at least column "id". See  \link[visNetwork]{visNodes} 
+#' @param edges : data.frame with edges informations. Needed at least columns "from" and "to". See  \link[visNetwork]{visEdges} 
 #'
-#'@seealso \link{visNodes} for nodes options, \link{visEdges} for edges options, \link{visGroups} for groups options, 
-#'\link{visLegend} for adding legend, \link{visOptions} for custom option, \link{visLayout} & \link{visHierarchicalLayout} for layout, 
-#'\link{visPhysics} for control physics, \link{visInteraction} for interaction, \link{visNetworkProxy} & \link{visFocus} & \link{visFit} for animation within shiny,
-#'\link{visDocumentation}, \link{visEvents}, \link{visConfigure} ...
+#'@seealso  \link[visNetwork]{visNodes} for nodes options,  \link[visNetwork]{visEdges} for edges options,  \link[visNetwork]{visGroups} for groups options, 
+#' \link[visNetwork]{visLegend} for adding legend,  \link[visNetwork]{visOptions} for custom option,  \link[visNetwork]{visLayout} &  \link[visNetwork]{visHierarchicalLayout} for layout, 
+#' \link[visNetwork]{visPhysics} for control physics,  \link[visNetwork]{visInteraction} for interaction,  \link[visNetwork]{visNetworkProxy} &  \link[visNetwork]{visFocus} &  \link[visNetwork]{visFit} for animation within shiny,
+#' \link[visNetwork]{visDocumentation},  \link[visNetwork]{visEvents},  \link[visNetwork]{visConfigure} ...
 #' 
 #' @examples
 #'\dontrun{

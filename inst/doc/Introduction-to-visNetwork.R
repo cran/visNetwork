@@ -5,12 +5,12 @@ nodes <- data.frame(id = 1:3)
 edges <- data.frame(from = c(1,2), to = c(1,3))
 visNetwork(nodes, edges, width = "100%")
 
-## ---- eval = FALSE------------------------------------------------------------
-#  # javascript api
-#  visDocumentation()
-#  vignette("Introduction-to-visNetwork") # with CRAN version
-#  # shiny examples
-#  shiny::runApp(system.file("shiny", package = "visNetwork"))
+## ----eval = FALSE-------------------------------------------------------------
+# # javascript api
+# visDocumentation()
+# vignette("Introduction-to-visNetwork") # with CRAN version
+# # shiny examples
+# shiny::runApp(system.file("shiny", package = "visNetwork"))
 
 ## -----------------------------------------------------------------------------
 nodes <- data.frame(id = 1:10, 
@@ -49,7 +49,7 @@ visNetwork(nodes, edges, width = "100%") %>%
   visGroups(groupname = "A", color = "darkblue") %>%    # darkblue for group "A"
   visGroups(groupname = "B", color = "red")             # red for group "B"
 
-## ---- echo=TRUE---------------------------------------------------------------
+## ----echo=TRUE----------------------------------------------------------------
 nb <- 10
 nodes <- data.frame(id = 1:nb, label = paste("Label", 1:nb),
  group = sample(LETTERS[1:3], nb, replace = TRUE), value = 1:nb,
@@ -86,7 +86,7 @@ nodes$sel <- sample(c("sel1", "sel2"), nrow(nodes), replace = TRUE)
 visNetwork(nodes, edges, width = "100%") %>%
  visOptions(selectedBy = "sel")
 
-## ---- echo = FALSE------------------------------------------------------------
+## ----echo = FALSE-------------------------------------------------------------
 nodes <- data.frame(id = 1:nb, label = paste("Label", 1:nb),
  group = sample(1:nb, nb, replace = TRUE), value = 1:nb,
  title = paste0("<p>", 1:nb,"<br>Tooltip !</p>"), stringsAsFactors = FALSE)
@@ -107,7 +107,7 @@ visNetwork(nodes, edges, width = "100%") %>%
 visNetwork(nodes, edges, width = "100%") %>% 
   visOptions(manipulation = TRUE)
 
-## ---- echo = TRUE-------------------------------------------------------------
+## ----echo = TRUE--------------------------------------------------------------
 nodes <- data.frame(id = 1:7)
 
 edges <- data.frame(
@@ -129,18 +129,18 @@ visNetwork(nodes, edges, width = "100%") %>%
 visNetwork(nodes, edges, width = "100%") %>% 
   visInteraction(dragNodes = FALSE, dragView = FALSE, zoomView = FALSE)
 
-## ---- eval = FALSE------------------------------------------------------------
-#  # don't run here
-#  nodes <- data.frame(id = 1:3, group = c("B", "A", "B"))
-#  edges <- data.frame(from = c(1,2), to = c(2,3))
-#  
-#  visNetwork(nodes, edges, width = "100%") %>%
-#    visGroups(groupname = "A", shape = "icon", icon = list(code = "f0c0", size = 75)) %>%
-#    visGroups(groupname = "B", shape = "icon", icon = list(code = "f007", color = "red")) %>%
-#    visLegend() %>%
-#    addFontAwesome()
+## ----eval = FALSE-------------------------------------------------------------
+# # don't run here
+# nodes <- data.frame(id = 1:3, group = c("B", "A", "B"))
+# edges <- data.frame(from = c(1,2), to = c(2,3))
+# 
+# visNetwork(nodes, edges, width = "100%") %>%
+#   visGroups(groupname = "A", shape = "icon", icon = list(code = "f0c0", size = 75)) %>%
+#   visGroups(groupname = "B", shape = "icon", icon = list(code = "f007", color = "red")) %>%
+#   visLegend() %>%
+#   addFontAwesome()
 
-## ---- eval = T----------------------------------------------------------------
+## ----eval = T-----------------------------------------------------------------
 library(rpart)
 # Complex tree
 data("solder")
@@ -148,18 +148,18 @@ res <- rpart(Opening~., data = solder, control = rpart.control(cp = 0.00005))
 visTree(res, height = "800px", nodesPopSize = TRUE, minNodeSize = 10, maxNodeSize = 30)
 
 
-## ---- eval = FALSE------------------------------------------------------------
-#  output$mynetwork <- renderVisNetwork({... visOptions(nodesIdSelection = TRUE)}) # created input$mynetwork_selected
-#  
+## ----eval = FALSE-------------------------------------------------------------
+# output$mynetwork <- renderVisNetwork({... visOptions(nodesIdSelection = TRUE)}) # created input$mynetwork_selected
+# 
 
-## ---- eval = FALSE------------------------------------------------------------
-#  network <- visNetwork(nodes, edges, width = "100%")
-#  visSave(network, file = "network.html")
+## ----eval = FALSE-------------------------------------------------------------
+# network <- visNetwork(nodes, edges, width = "100%")
+# visSave(network, file = "network.html")
 
 ## -----------------------------------------------------------------------------
 visNetwork(dot = 'dinetwork {1 -> 1 -> 2; 2 -> 3; 2 -- 4; 2 -> 1 }', width = "100%")
 
-## ---- eval = FALSE------------------------------------------------------------
-#  # don't run here
-#  visNetwork(gephi = 'WorldCup2014.json')
+## ----eval = FALSE-------------------------------------------------------------
+# # don't run here
+# visNetwork(gephi = 'WorldCup2014.json')
 

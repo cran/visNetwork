@@ -1,6 +1,6 @@
 #' Network visualization collapse / uncollapsed method
 #'
-#'@param graph : a \code{\link{visNetworkProxy}}  object
+#'@param graph : a \code{ \link[visNetwork]{visNetworkProxy}}  object
 #'@param nodes : a vector of nodes id. NULL for \code{visUncollapse} for open all collapsed nodes
 #'@param fit : Optional. Boolean. Default to FALSE. Call fit method after collapse/uncollapse event ?
 #'@param resetHighlight : Optional. Boolean. Default to TRUE to reset highlighted nodes after collapse/uncollapse event.
@@ -8,10 +8,10 @@
 #'@param clusterOptions : Optional. List. Default to NULL. A list of all options you want to pass to cluster collapsed node
 #'@param labelSuffix : Optional. Character. Use node label + suffix or just suffix. Default to '(cluster)'
 #'
-#'@seealso \link{visNodes} for nodes options, \link{visEdges} for edges options, \link{visGroups} for groups options, 
-#'\link{visLegend} for adding legend, \link{visOptions} for custom option, \link{visLayout} & \link{visHierarchicalLayout} for layout, 
-#'\link{visPhysics} for control physics, \link{visInteraction} for interaction, \link{visNetworkProxy} & \link{visFocus} & \link{visFit} for animation within shiny,
-#'\link{visDocumentation}, \link{visEvents}, \link{visConfigure} ...
+#'@seealso  \link[visNetwork]{visNodes} for nodes options,  \link[visNetwork]{visEdges} for edges options,  \link[visNetwork]{visGroups} for groups options, 
+#' \link[visNetwork]{visLegend} for adding legend,  \link[visNetwork]{visOptions} for custom option,  \link[visNetwork]{visLayout} &  \link[visNetwork]{visHierarchicalLayout} for layout, 
+#' \link[visNetwork]{visPhysics} for control physics,  \link[visNetwork]{visInteraction} for interaction,  \link[visNetwork]{visNetworkProxy} &  \link[visNetwork]{visFocus} &  \link[visNetwork]{visFit} for animation within shiny,
+#' \link[visNetwork]{visDocumentation},  \link[visNetwork]{visEvents},  \link[visNetwork]{visConfigure} ...
 #' 
 #' @examples
 #'\dontrun{

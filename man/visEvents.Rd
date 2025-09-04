@@ -72,17 +72,17 @@ visEvents(
 
 \item{dragEnd}{: Fired when the drag has finished.}
 
-\item{controlNodeDragging}{: Fired when dragging control node. Control Edge is edge that is being dragged and contains ids of 'from' and 'to' nodes. If control node is not dragged over another node, 'to' field is undefined. See \link{visDocumentation}.}
+\item{controlNodeDragging}{: Fired when dragging control node. Control Edge is edge that is being dragged and contains ids of 'from' and 'to' nodes. If control node is not dragged over another node, 'to' field is undefined. See  \link[visNetwork]{visDocumentation}.}
 
-\item{controlNodeDragEnd}{: Fired when the control node drag has finished. See \link{visDocumentation}.}
+\item{controlNodeDragEnd}{: Fired when the control node drag has finished. See  \link[visNetwork]{visDocumentation}.}
 
-\item{hoverNode}{: Fired interaction:{hover:true} and the mouse hovers over a node.}
+\item{hoverNode}{: Fired interaction (hover:true) and the mouse hovers over a node.}
 
-\item{blurNode}{: Fired interaction:{hover:true} and the mouse moved away from a node it was hovering over before.}
+\item{blurNode}{: Fired interaction (hover:true) and the mouse moved away from a node it was hovering over before.}
 
-\item{hoverEdge}{: Fired interaction:{hover:true} and the mouse hovers over a edge}
+\item{hoverEdge}{: Fired interaction (hover:true) and the mouse hovers over a edge}
 
-\item{blurEdge}{: Fired interaction:{hover:true} and the mouse moved away from a edge it was hovering over before.}
+\item{blurEdge}{: Fired interaction (hover:true) and the mouse moved away from a edge it was hovering over before.}
 
 \item{zoom}{: Fired when the user zooms in or out. The properties tell you which direction the zoom is in. The scale is a number greater than 0, which is the same that you get with network.getScale().}
 
@@ -111,7 +111,7 @@ visEvents(
 \item{configChange}{: Fired when a user changes any option in the configurator. The options object can be used with the setOptions method or stringified using JSON.stringify(). You do not have to manually put the options into the network: this is done automatically. You can use the event to store user options in the database.}
 }
 \description{
-Network visualization events. For full documentation, have a look at \link{visDocumentation}.
+Network visualization events. For full documentation, have a look at  \link[visNetwork]{visDocumentation}.
 Use \code{type = "once"} to set an event listener only once, and \code{type = "off"} to disable all the related events.
 }
 \examples{
@@ -159,8 +159,8 @@ visNetwork(nodes, edges) \%>\%
 See online documentation \url{https://datastorm-open.github.io/visNetwork/}
 }
 \seealso{
-\link{visNodes} for nodes options, \link{visEdges} for edges options, \link{visGroups} for groups options, 
-\link{visLegend} for adding legend, \link{visOptions} for custom option, \link{visLayout} & \link{visHierarchicalLayout} for layout, 
-\link{visPhysics} for control physics, \link{visInteraction} for interaction, \link{visNetworkProxy} & \link{visFocus} & \link{visFit} for animation within shiny,
-\link{visDocumentation}, \link{visEvents}, \link{visConfigure} ...
+\link[visNetwork]{visNodes} for nodes options,  \link[visNetwork]{visEdges} for edges options,  \link[visNetwork]{visGroups} for groups options, 
+\link[visNetwork]{visLegend} for adding legend,  \link[visNetwork]{visOptions} for custom option,  \link[visNetwork]{visLayout} &  \link[visNetwork]{visHierarchicalLayout} for layout, 
+\link[visNetwork]{visPhysics} for control physics,  \link[visNetwork]{visInteraction} for interaction,  \link[visNetwork]{visNetworkProxy} &  \link[visNetwork]{visFocus} &  \link[visNetwork]{visFit} for animation within shiny,
+\link[visNetwork]{visDocumentation},  \link[visNetwork]{visEvents},  \link[visNetwork]{visConfigure} ...
 }

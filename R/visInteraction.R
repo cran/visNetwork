@@ -1,6 +1,6 @@
 #' Network visualization interaction
 #'
-#' Network visualization interaction. For full documentation, have a look at \link{visDocumentation}.
+#' Network visualization interaction. For full documentation, have a look at  \link[visNetwork]{visDocumentation}.
 #'
 #'@param graph : a visNetwork object
 #'@param dragNodes : Boolean. Default to true. When true, the nodes that are not fixed can be dragged by the user.
@@ -12,15 +12,14 @@
 #'@param hoverConnectedEdges : Boolean. Default to true. When true, on hovering over a node, it's connecting edges are highlighted.
 #'@param keyboard : Just a Boolean, or a named list. When true, the keyboard shortcuts are enabled with the default settings. For further customization, you can supply an object.
 #'\itemize{
-#'  \item{"enabled"}{ : Boolean. Default to false.	Toggle the usage of the keyboard shortcuts. If this option is not defined, it is set to true if any of the properties in this object are defined.}
-#'  \item{"speed"}{ : a named list
+#'  \item "enabled" Boolean. Default to false.	Toggle the usage of the keyboard shortcuts. If this option is not defined, it is set to true if any of the properties in this object are defined.
+#'  \item "speed" a named list
 #'   \itemize{
-#'    \item{"x"}{ : Number. Default to 1. This defines the speed of the camera movement in the x direction when using the keyboard navigation.}
-#'    \item{"y"}{ : Number. Default to 1. This defines the speed of the camera movement in the y direction when using the keyboard navigation.}
-#'    \item{"zoom"}{ : Number. Default to 0.02. This defines the zoomspeed when using the keyboard navigation.Number   0.02   This defines the zoomspeed when using the keyboard navigation.}
+#'    \item "x" Number. Default to 1. This defines the speed of the camera movement in the x direction when using the keyboard navigation.
+#'    \item "y" Number. Default to 1. This defines the speed of the camera movement in the y direction when using the keyboard navigation.
+#'    \item "zoom" Number. Default to 0.02. This defines the zoomspeed when using the keyboard navigation.Number   0.02   This defines the zoomspeed when using the keyboard navigation.
 #'    }
-#'  }
-#'  \item{"bindToWindow"}{ : Boolean. Default to true. If this is true, global keyboard events will be used. If it is false, the keyboard events are only used when the network is active. It is activated on mouseOver automatically.}
+#'  \item "bindToWindow" Boolean. Default to true. If this is true, global keyboard events will be used. If it is false, the keyboard events are only used when the network is active. It is activated on mouseOver automatically.
 #'}
 #'@param multiselect : Boolean. Default to false. When true, a longheld click (or touch) as well as a control-click will add to the selection.
 #'@param navigationButtons : Boolean. Default to false. When true, navigation buttons are drawn on the network canvas. These are HTML buttons and can be completely customized using CSS.
@@ -32,10 +31,10 @@
 #'@param zoomView : Boolean. Default to true. When true, the user can zoom in.
 #'@param zoomSpeed : Number. Default to 1. 	How fast/rough or slow/precise zooming is.
 #'
-#'@seealso \link{visNodes} for nodes options, \link{visEdges} for edges options, \link{visGroups} for groups options, 
-#'\link{visLegend} for adding legend, \link{visOptions} for custom option, \link{visLayout} & \link{visHierarchicalLayout} for layout, 
-#'\link{visPhysics} for control physics, \link{visInteraction} for interaction, \link{visNetworkProxy} & \link{visFocus} & \link{visFit} for animation within shiny,
-#'\link{visDocumentation}, \link{visEvents}, \link{visConfigure} ...
+#'@seealso  \link[visNetwork]{visNodes} for nodes options,  \link[visNetwork]{visEdges} for edges options,  \link[visNetwork]{visGroups} for groups options, 
+#' \link[visNetwork]{visLegend} for adding legend,  \link[visNetwork]{visOptions} for custom option,  \link[visNetwork]{visLayout} &  \link[visNetwork]{visHierarchicalLayout} for layout, 
+#' \link[visNetwork]{visPhysics} for control physics,  \link[visNetwork]{visInteraction} for interaction,  \link[visNetwork]{visNetworkProxy} &  \link[visNetwork]{visFocus} &  \link[visNetwork]{visFit} for animation within shiny,
+#' \link[visNetwork]{visDocumentation},  \link[visNetwork]{visEvents},  \link[visNetwork]{visConfigure} ...
 #'
 #' @examples
 #'

@@ -1,6 +1,6 @@
 Package: visNetwork
 Title: Network Visualization using 'vis.js' Library
-Version: 2.1.2
+Version: 2.1.4
 Authors@R: c(
     person(family = "Almende B.V. and Contributors", role = c("aut", "cph"),
        comment = "vis.js library in htmlwidgets/lib, https://visjs.org/, https://github.com/visjs/vis-network"),
@@ -16,16 +16,17 @@ Depends: R (>= 3.0)
 Imports: htmlwidgets, htmltools, jsonlite, magrittr, utils, methods,
         grDevices, stats
 License: MIT + file LICENSE
+Encoding: UTF-8
 Suggests: knitr, rmarkdown, webshot, igraph, rpart, shiny,
         shinyWidgets, colourpicker, sparkline, ggraph, tidygraph,
         flashClust
 VignetteBuilder: knitr, rmarkdown
-RoxygenNote: 7.1.2
+RoxygenNote: 7.3.3
 NeedsCompilation: no
-Packaged: 2022-09-29 06:10:20 UTC; BenoitThieurmel
+Packaged: 2025-09-04 09:23:19 UTC; BenoîtThieurmel
 Author: Almende B.V. and Contributors [aut, cph] (vis.js library in
     htmlwidgets/lib, https://visjs.org/,
     https://github.com/visjs/vis-network),
   Benoit Thieurmel [aut, cre] (R interface)
 Repository: CRAN
-Date/Publication: 2022-09-29 16:20:02 UTC
+Date/Publication: 2025-09-04 10:10:02 UTC
